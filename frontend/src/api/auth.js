@@ -6,7 +6,7 @@ import apiClient from './client';
 export const register = (email, username, password) =>
   apiClient.post('/auth/register/', { email, username, password }).then((r) => r.data);
 
-export const login = (email, password) =>
+export const loginRequest = (email, password) =>
   apiClient.post('/auth/login/', { email, password }).then((r) => r.data);
 
 export const refreshToken = (refresh) =>

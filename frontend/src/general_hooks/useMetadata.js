@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { metadataAPI } from '../api';
+import { getMetadata } from '../api/metadata';
 
+// Loads backend app constants (event types, gift strategies) and caches them.
+// Shared by gift-finder and chat, so it lives in general_hooks.
 export const useMetadata = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['metadata'],
-    queryFn: () => metadataAPI.getMetadata().then((res) => res.data),
+    queryFn: getMetadata,
     staleTime: 30 * 60 * 1000, // 30 minutes
   });
 

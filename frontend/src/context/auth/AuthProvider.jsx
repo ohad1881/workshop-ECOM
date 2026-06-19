@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useReducer } from 'react';
-import { getToken, setTokens, clearTokens } from '../api/client';
-
-const AuthContext = createContext();
+import { useEffect, useReducer } from 'react';
+import { getToken, getRefreshToken, setTokens, clearTokens } from '../../api/client';
+import { logout as logoutRequest, getCurrentUser } from '../../api/auth';
+import { AuthContext } from './AuthContext';
 
 const initialState = {
   user: null,
@@ -11,12 +11,6 @@ const initialState = {
 
 const authReducer = (state, action) => {
   switch (action.type) {
-    case 'INIT_AUTH':
-      return {
-        ...state,
-        isAuthenticated: action.payload,
-        loading: false,
-      };
     case 'LOGIN':
       return {
         user: action.payload.user,
@@ -37,13 +31,20 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Check if user is already logged in on mount
+  // On mount, restore the session from a stored token by fetching the current
+  // user. A bad/expired token clears the session so we don't strand the app in
+  // an authenticated-but-userless state.
   useEffect(() => {
-    const token = getToken();
-    dispatch({
-      type: 'INIT_AUTH',
-      payload: !!token,
-    });
+    if (!getToken()) {
+      dispatch({ type: 'LOGOUT' });
+      return;
+    }
+    getCurrentUser()
+      .then((user) => dispatch({ type: 'LOGIN', payload: { user } }))
+      .catch(() => {
+        clearTokens();
+        dispatch({ type: 'LOGOUT' });
+      });
   }, []);
 
   const login = (userData, accessToken, refreshToken) => {
@@ -63,6 +64,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Best-effort blacklist of the refresh token; clear locally regardless of outcome.
+    const refresh = getRefreshToken();
+    if (refresh) {
+      logoutRequest(refresh).catch(() => {});
+    }
     clearTokens();
     dispatch({ type: 'LOGOUT' });
   };
@@ -81,12 +87,4 @@ export const AuthProvider = ({ children }) => {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
 };

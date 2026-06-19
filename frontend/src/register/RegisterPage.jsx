@@ -1,13 +1,5 @@
-import React from 'react';
-import Layout from '../components/Layout';
-import RegisterForm from './RegisterForm';
+import RegisterForm from './RegisterForm/RegisterForm';
 
-const RegisterPage = () => {
-  return (
-    <Layout>
-      <RegisterForm />
-    </Layout>
-  );
-};
+const RegisterPage = () => <RegisterForm />;
 
 export default RegisterPage;
