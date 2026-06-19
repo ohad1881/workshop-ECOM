@@ -70,7 +70,7 @@ The AI is the **core feature** of this project. It doesn't just answer questions
 
 | Technology | Version | Purpose |
 |---|---|---|
-| **React** | 18.3+ | UI framework |
+| **React** | 19.2+ | UI framework |
 | **Vite** | 5+ | Dev server and bundler |
 | **React Router** | 6.20+ | Client-side routing |
 | **TanStack Query** | 5+ | Server state management & caching |
@@ -1516,7 +1516,15 @@ Session context:
 """
 ```
 
-**Chat flow with streaming**:
+**Chat flow with token streaming**:
+
+Use the SDK's `client.messages.stream()` helper so the user sees the AI's reply
+appear **token by token**, not all at once. The helper exposes `text_stream`
+(an iterator of incremental text deltas) and `get_final_message()` (the fully
+assembled response, used to detect tool calls and continue the tool-use loop).
+The model is `claude-sonnet-4-6` — the current Sonnet: cheap, capable, and
+supports streaming + tool use. `messages.stream()` defaults to a 10-minute
+timeout, which comfortably covers AI calls.
 
 ```python
 import anthropic
@@ -1524,8 +1532,9 @@ import json
 
 def stream_chat_response(session, user_message):
     """
-    Process a user message. Uses Claude's streaming API with tool use loop.
-    Yields text chunks for StreamingHttpResponse.
+    Process a user message using Claude's streaming API with a tool-use loop.
+    Yields text deltas (tokens) for StreamingHttpResponse — the frontend sees
+    the response render in real time.
     """
     client = anthropic.Anthropic()  # Reads ANTHROPIC_API_KEY from env
 
@@ -1540,27 +1549,30 @@ def stream_chat_response(session, user_message):
 
     full_response = ""
 
-    # Tool-use loop (may need multiple round trips)
+    # Tool-use loop (may need multiple round trips). Each model turn is streamed
+    # token-by-token; tool calls happen between streamed turns.
     while True:
-        response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+        with client.messages.stream(
+            model="claude-sonnet-4-6",   # current Sonnet — cheap, capable, supports streaming
             max_tokens=2048,
             system=system_prompt,
             messages=history,
             tools=TOOLS,
-            timeout=90.0  # Large timeout for AI calls
-        )
+        ) as stream:
+            # Yield text tokens as they arrive
+            for text in stream.text_stream:
+                full_response += text
+                yield text
+
+            response = stream.get_final_message()
 
         tool_use_blocks = [b for b in response.content if b.type == "tool_use"]
 
         if not tool_use_blocks:
-            # Final text response — yield it
-            text = "".join(b.text for b in response.content if b.type == "text")
-            full_response += text
-            yield text
+            # No tools requested — the streamed text above was the final answer
             break
 
-        # Execute tools
+        # Execute tools, then loop to stream the model's next turn
         history.append({"role": "assistant", "content": response.content})
         tool_results = []
         for block in tool_use_blocks:
@@ -1644,7 +1656,7 @@ def update_giver_preferences_async(user_id, preference_type, value, context):
 ### Acceptance Criteria — Phase 9
 
 - [ ] Chat session creation works with recipient/budget/event
-- [ ] Sending a message returns a streamed AI response via SSE
+- [ ] Sending a message returns a token-streamed AI response via SSE (text renders incrementally, not all at once)
 - [ ] Claude uses `search_products` tool (calls ProductService — no duplication)
 - [ ] Claude uses `get_recommendations` tool (calls RecommendationService)
 - [ ] Claude uses `optimize_gift_bundle` tool (calls RecommendationService)
@@ -1655,7 +1667,7 @@ def update_giver_preferences_async(user_id, preference_type, value, context):
 - [ ] Conversation history is preserved and sent to Claude on each message
 - [ ] Message cap (50) is enforced per session
 - [ ] API key from env, never hardcoded
-- [ ] Timeout is at least 90 seconds
+- [ ] Uses `client.messages.stream()` with `text_stream` for token-level streaming (the SDK's 10-minute default timeout covers AI calls)
 
 ---
 
