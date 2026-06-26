@@ -226,8 +226,9 @@ giftgraph/
 │   │   ├── urls.py
 │   │   ├── wsgi.py
 │   │   └── celery.py           # Celery app configuration
-│   ├── apps/
+│   ├── apps/                       # one Django app per domain (CSR layers as files)
 │   │   ├── __init__.py
+│   │   ├── admin.py
 │   │   ├── users/
 │   │   │   ├── __init__.py
 │   │   │   ├── models.py
@@ -235,15 +236,13 @@ giftgraph/
 │   │   │   ├── services.py
 │   │   │   ├── controllers.py      # DRF views (the HTTP layer)
 │   │   │   ├── serializers.py
-│   │   │   ├── urls.py
+│   │   │   ├── urls.py             # /api/users/* routes
+│   │   │   ├── auth_urls.py        # /api/auth/* routes (register, login, me, ...)
 │   │   │   ├── permissions.py
+│   │   │   ├── signals.py          # auto-create UserProfile on User create
 │   │   │   ├── admin.py
-│   │   │   ├── signals.py
-│   │   │   └── tests/
-│   │   │       ├── __init__.py
-│   │   │       ├── test_repositories.py
-│   │   │       ├── test_services.py
-│   │   │       └── test_controllers.py
+│   │   │   ├── apps.py
+│   │   │   └── migrations/
 │   │   ├── products/
 │   │   │   ├── __init__.py
 │   │   │   ├── models.py
@@ -251,16 +250,15 @@ giftgraph/
 │   │   │   ├── services.py
 │   │   │   ├── controllers.py
 │   │   │   ├── serializers.py
-│   │   │   ├── urls.py
+│   │   │   ├── urls.py             # /api/products/* routes
+│   │   │   ├── category_urls.py    # /api/categories/* routes
+│   │   │   ├── tag_urls.py         # /api/tags/* routes
 │   │   │   ├── admin.py
-│   │   │   ├── management/
-│   │   │   │   └── commands/
-│   │   │   │       └── import_products.py
-│   │   │   └── tests/
-│   │   │       ├── __init__.py
-│   │   │       ├── test_repositories.py
-│   │   │       ├── test_services.py
-│   │   │       └── test_controllers.py
+│   │   │   ├── apps.py
+│   │   │   ├── migrations/
+│   │   │   └── management/
+│   │   │       └── commands/
+│   │   │           └── import_products.py
 │   │   ├── wishlists/
 │   │   │   ├── __init__.py
 │   │   │   ├── models.py
@@ -270,13 +268,11 @@ giftgraph/
 │   │   │   ├── serializers.py
 │   │   │   ├── urls.py
 │   │   │   ├── admin.py
-│   │   │   └── tests/
-│   │   │       ├── __init__.py
-│   │   │       ├── test_repositories.py
-│   │   │       ├── test_services.py
-│   │   │       └── test_controllers.py
-│   │   ├── recommendations/
+│   │   │   ├── apps.py
+│   │   │   └── migrations/
+│   │   ├── recommendations/        # no DB models — operates on in-memory data
 │   │   │   ├── __init__.py
+│   │   │   ├── models.py           # intentionally empty (documents the no-model design)
 │   │   │   ├── constants.py        # Scoring weights, event mappings, strategies
 │   │   │   ├── engine.py           # Scoring engine
 │   │   │   ├── optimizer.py        # Knapsack solver
@@ -285,32 +281,29 @@ giftgraph/
 │   │   │   ├── controllers.py
 │   │   │   ├── serializers.py
 │   │   │   ├── urls.py
-│   │   │   └── tests/
-│   │   │       ├── __init__.py
-│   │   │       ├── test_engine.py
-│   │   │       ├── test_optimizer.py
-│   │   │       └── test_services.py
+│   │   │   └── apps.py
 │   │   └── chat/
 │   │       ├── __init__.py
 │   │       ├── models.py
 │   │       ├── repositories.py
-│   │       ├── services.py
+│   │       ├── services.py          # includes the Claude API integration
 │   │       ├── controllers.py
 │   │       ├── serializers.py
 │   │       ├── urls.py
-│   │       ├── ai_service.py       # Claude API integration
-│   │       ├── tools.py            # Tool definitions for Claude
-│   │       ├── tasks.py            # Celery async tasks
+│   │       ├── tools.py             # Tool definitions for Claude
 │   │       ├── admin.py
-│   │       └── tests/
-│   │           ├── __init__.py
-│   │           ├── test_ai_service.py
-│   │           ├── test_services.py
-│   │           └── test_controllers.py
+│   │       ├── apps.py
+│   │       └── migrations/
 │   └── common/
 │       ├── __init__.py
 │       ├── constants.py            # App-wide constants (event types, strategies)
+│       ├── exceptions.py           # custom DRF exception handler ({ message, errors })
 │       └── pagination.py
+│
+│   # NOTE: tests/ (per-app, mirroring the layers) and Celery task modules
+│   #       (services tasks.py) are planned — see Phase 15 — but NOT yet implemented.
+│   #       The Claude integration currently lives in chat/services.py rather than a
+│   #       separate ai_service.py.
 │
 ├── frontend/
 │   ├── package.json
