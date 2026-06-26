@@ -39,13 +39,23 @@ export const useRegisterForm = () => {
         data.email,
         data.username,
         data.password,
+        data.confirmPassword,
       );
       setAuth(user, access, refresh);
       navigate('/profile');
     } catch (error) {
       // DRF field errors go inline on the inputs; anything else (detail, network) as a banner.
       const hadFieldErrors = applyFieldErrors(error, form.setError, ['email', 'username', 'password']);
-      if (!hadFieldErrors) {
+      const passwordConfirmError = error.response?.data?.errors?.password_confirm;
+      if (passwordConfirmError) {
+        form.setError('confirmPassword', {
+          type: 'server',
+          message: Array.isArray(passwordConfirmError)
+            ? passwordConfirmError[0]
+            : String(passwordConfirmError),
+        });
+      }
+      if (!hadFieldErrors && !passwordConfirmError) {
         setApiError(error.response?.data?.message || 'Registration failed. Please try again.');
       }
     } finally {

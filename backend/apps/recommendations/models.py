@@ -1,6 +1,4 @@
 from django.db import models
 
-
-class Recommendation(models.Model):
-    """Placeholder for Recommendation model."""
-    pass
+# The recommendation engine (engine.py, optimizer.py) uses no database models.
+# Scoring and optimization operate on in-memory data fetched via repositories.
