@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'rest_framework_simplejwt.token_blacklist',
+    'django.contrib.postgres',
     
     # Local apps
     'apps.users',
@@ -124,13 +125,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.StandardPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+    'EXCEPTION_HANDLER': 'common.exceptions.custom_exception_handler',
 }
 
 # JWT Configuration
