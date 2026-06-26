@@ -388,7 +388,8 @@ giftgraph/
 │       │   ├── ProductGrid.jsx          # Used in wishlist, gift-finder
 │       │   ├── UserCard.jsx             # Used in gift-finder, home
 │       │   ├── Spinner.jsx
-│       │   └── EmptyState.jsx
+│       │   ├── EmptyState.jsx
+│       │   └── LegalDocument.jsx        # Renders Privacy/Terms pages from data
 │       │
 │       └── utils/
 │           ├── constants.js
