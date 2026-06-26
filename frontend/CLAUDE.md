@@ -3,6 +3,23 @@
 React 19 + Vite + MUI (Material UI) + TanStack Query + React Router + React Hook Form + Zod + Axios.
 Talks to the Django backend described in the root `README.md` (API contract = README Appendix B).
 
+## Keep the root docs in sync (do this with every change)
+
+The root `README.md` and `../API.md` are the shared source of truth — keep them current as part of
+the same change, never as a follow-up. Before finishing any task, update them when you have:
+
+- **Added / removed / renamed a page, folder, or shared module**, or changed how code is organized
+  → update the frontend structure in **`README.md` §4** (and the directory map below). Reflect what
+  is *actually built*, not what was planned.
+- **Changed how the frontend consumes an endpoint** (new `api/` call, changed params or response
+  handling) → confirm it matches **`../API.md`**; if the backend contract actually changed, update
+  `../API.md` and **`README.md` Appendix B** too (and flag the backend side).
+- **Added a dependency or env var** → update `package.json` / `.env.example` and the **README.md**
+  tech-stack table / Appendix C as applicable.
+
+If code and docs disagree, the code is the truth — fix the docs to match in the same commit. When a
+change touches the API contract, also check `../backend/CLAUDE.md` and the backend stays consistent.
+
 ## Directory map (`src/`)
 
 The layout sorts code by **scope of use** — how widely a piece is shared decides where it lives.
