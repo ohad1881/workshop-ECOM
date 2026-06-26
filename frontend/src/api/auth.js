@@ -3,8 +3,15 @@ import apiClient from './client';
 // Account & session. Endpoints mirror README Appendix B (/api/auth/*).
 // Every function returns parsed response data (callers never touch the axios envelope).
 
-export const register = (email, username, password) =>
-  apiClient.post('/auth/register/', { email, username, password }).then((r) => r.data);
+export const register = (email, username, password, passwordConfirm) =>
+  apiClient
+    .post('/auth/register/', {
+      email,
+      username,
+      password,
+      password_confirm: passwordConfirm,
+    })
+    .then((r) => r.data);
 
 export const loginRequest = (email, password) =>
   apiClient.post('/auth/login/', { email, password }).then((r) => r.data);
