@@ -55,7 +55,9 @@ backend/
 Domain-specific extras that exist today:
 - `apps/users/` — `auth_urls.py` (JWT routes), `permissions.py`, `signals.py` (wired via `apps.py`'s
   `ready()`).
-- `apps/products/` — `category_urls.py`, `tag_urls.py`, and `management/commands/import_products.py`.
+- `apps/products/` — `category_urls.py`, `tag_urls.py`, and `management/commands/import_products.py`
+  + `management/commands/seed_dummy_data.py` (local-dev seeder reading the gitignored
+  `seed_data/dummy_data.json`).
 - `apps/recommendations/` — `engine.py`, `optimizer.py`, `constants.py` (scoring/OR-Tools split out).
   Note: no `migrations/` directory yet.
 - `apps/chat/` — `tools.py` (Claude tool definitions); the Claude integration currently lives in
@@ -129,5 +131,24 @@ python manage.py migrate
 python manage.py runserver           # http://localhost:8000  (admin at /admin/)
 python manage.py check               # validates the app registry / config
 ```
+
+### Seeding local dummy data (products / categories / tags — no users)
+
+`seed_dummy_data` populates the DB with dummy categories, tags, and products for local dev. It
+reads a **gitignored** JSON data file (`seed_data/dummy_data.json`) — no seed data is committed.
+The command is idempotent: categories matched by `slug`, tags by `slug`, products by `name`
+(re-running updates existing products and re-sets their tags). It never creates users.
+
+```
+python manage.py seed_dummy_data            # seed from seed_data/dummy_data.json
+python manage.py seed_dummy_data --clear    # wipe products/tags/categories first, then seed
+python manage.py seed_dummy_data --file path/to/other.json   # use a different data file
+```
+
+The JSON shape is `{ "categories": [{name, slug, icon}], "tags": ["name", ...],
+"products": [{name, description, price, category_slug, tags: [...], image_url, purchase_url,
+is_active}] }`. If `seed_data/dummy_data.json` is missing (it's gitignored, so a fresh clone
+won't have it), generate one matching that shape, or seed products instead via
+`import_products` from a CSV.
 
 Env: see `.env.example`. JWT auth routes are wired in `config/urls.py` (`/api/auth/token/...`).

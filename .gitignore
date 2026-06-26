@@ -26,3 +26,5 @@ dist-ssr
 __pycache__/
 *.pyc
 .neon
+
+backend/seed_data/

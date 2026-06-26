@@ -257,7 +257,8 @@ giftgraph/
 │   │   │   ├── migrations/
 │   │   │   └── management/
 │   │   │       └── commands/
-│   │   │           └── import_products.py
+│   │   │           ├── import_products.py
+│   │   │           └── seed_dummy_data.py   # local-dev seeding (reads gitignored seed_data/)
 │   │   ├── wishlists/
 │   │   │   ├── __init__.py
 │   │   │   ├── models.py
