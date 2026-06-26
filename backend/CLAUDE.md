@@ -50,7 +50,6 @@ backend/
     migrations/            schema migrations
   config/                Django core: settings.py, urls.py, wsgi.py, celery.py
   common/                shared helpers: pagination.py, constants.py, exceptions.py
-  api/  services/  data/   ⚠️ EMPTY LEGACY STUBS from an earlier layer-first design — see note below
 ```
 
 Domain-specific extras that exist today:
@@ -80,14 +79,6 @@ CRUD — keep the chain consistent so the seam is there when logic grows.
   migration app-labels stay clean (`users`, `products`, …, **not** `apps_users`).
 - `INSTALLED_APPS` lists `apps.users`, `apps.products`, `apps.wishlists`, `apps.recommendations`,
   `apps.chat`.
-
-### ⚠️ Legacy `api/`, `services/`, `data/` stubs
-
-The top-level `api/`, `services/`, and `data/` folders are **vestigial** — remnants of an earlier
-layer-first plan that was never adopted. They contain only empty `__init__.py` files (plus a couple
-of trivial placeholder `apps.py`/`repositories.py` under `data/`), are **not** in `INSTALLED_APPS`,
-and nothing imports from them. Do **not** put new code there. They're safe to delete (see notes at
-the bottom).
 
 ## Conventions — where new code goes
 

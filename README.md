@@ -228,7 +228,6 @@ giftgraph/
 │   │   └── celery.py           # Celery app configuration
 │   ├── apps/                       # one Django app per domain (CSR layers as files)
 │   │   ├── __init__.py
-│   │   ├── admin.py
 │   │   ├── users/
 │   │   │   ├── __init__.py
 │   │   │   ├── models.py
