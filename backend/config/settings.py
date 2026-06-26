@@ -73,11 +73,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='giftgraph'),
-        'USER': config('DB_USER', default='giftgraph_user'),
-        'PASSWORD': config('DB_PASSWORD', default='giftgraph_pass'),
-        'HOST': config('DB_HOST', default='localhost'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT', default='5432'),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
+        'CONN_MAX_AGE': config('DB_CONN_MAX_AGE', default=0, cast=int),
     }
 }
 
@@ -150,11 +154,15 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173', cast=Csv())
 
 # Celery Configuration
-CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://localhost:6379/0')
+CELERY_BROKER_URL = config('REDIS_URL')
+CELERY_RESULT_BACKEND = config('REDIS_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+import ssl
+CELERY_BROKER_USE_SSL = {'ssl_cert_reqs': ssl.CERT_REQUIRED}
+CELERY_REDIS_BACKEND_USE_SSL = {'ssl_cert_reqs': ssl.CERT_REQUIRED}
 
 # Anthropic API
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
