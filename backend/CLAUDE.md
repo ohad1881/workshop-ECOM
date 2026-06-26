@@ -5,77 +5,118 @@ Google OR-Tools. Serves the React frontend described in `../frontend/CLAUDE.md`.
 The authoritative build plan and API contract live in the root `README.md` (architecture = §3,
 structure = §4, endpoints = Appendix B) and `../API.md`.
 
-## Architecture: layer-first (transport → service → data)
+## Keep the root docs in sync (do this with every change)
 
-The backend is organized **by layer, not by feature**. The three top-level folders **are** the
-architectural layers; each domain (`users`, `products`, `wishlists`, `recommendations`, `chat`) is a
-subfolder inside each layer it needs. Dependencies flow **one way only**:
+The root `README.md` and `../API.md` are the shared source of truth — keep them current as part of
+the same change, never as a follow-up. Before finishing any task, update them when you have:
+
+- **Added / removed / renamed a file or directory**, changed an app's layout, or added a new domain
+  → update the structure tree in **`README.md` §4** (and this file's structure map). Reflect what is
+  *actually built* — don't leave planned-but-absent files (e.g. `tests/`, Celery `tasks.py`) implying
+  they exist; annotate them as planned if you keep them.
+- **Added / changed / removed an HTTP endpoint** (route, method, params, request/response shape, auth,
+  status codes) → update **`../API.md`** and **`README.md` Appendix B**.
+- **Changed the architecture, layering rules, or build order** → update **`README.md` §3** and the
+  relevant section here.
+- **Added a dependency, env var, model, constant, or command** → update `requirements.txt` notes /
+  `.env.example` / **README.md** Appendices C & D as applicable.
+
+If a code change and the docs disagree, the code is the truth — fix the docs to match in the same
+commit. When a change spans both layers, also check `../frontend/CLAUDE.md` stays consistent.
+
+## Architecture: feature-first apps, layered by file (controller → service → repository)
+
+The backend is organized **by feature/domain**, not by layer. Each domain (`users`, `products`,
+`wishlists`, `recommendations`, `chat`) is a single Django app under `apps/<domain>/` that holds
+**all of its layers as sibling files**. The transport → service → data layering is preserved *inside*
+each app by file naming, and dependencies still flow **one way only**:
 
 ```
-api/  ──imports──▶  services/  ──imports──▶  data/
-(transport/HTTP)    (business logic)         (models + ORM)
+controllers.py  ──imports──▶  services.py  ──imports──▶  repositories.py  ──▶  models.py (ORM)
+(transport/HTTP)              (business logic)            (data access)
 ```
 
 ```
 backend/
-  api/<domain>/          TRANSPORT — DRF views (the "controllers"), serializers, urls, permissions
-  services/<domain>/     SERVICE   — business logic; services.py (+ engine/optimizer/ai_service/tools/tasks)
-  data/<domain>/         DATA      — each domain IS a Django app: models.py, repositories.py, migrations/, admin.py
+  apps/<domain>/         the Django app — everything for the domain lives here:
+    controllers.py         TRANSPORT — DRF APIViews (classes named *Controller), call services only
+    services.py            SERVICE   — business logic & cross-domain orchestration
+    repositories.py        DATA      — all ORM access (filter/get/create/…) confined to repo classes
+    serializers.py         DRF input/output schemas
+    models.py              models for this domain
+    urls.py                routes (mounted in config/urls.py under /api/<domain>/)
+    admin.py               Django admin registration
+    apps.py                AppConfig (name = 'apps.<domain>')
+    migrations/            schema migrations
   config/                Django core: settings.py, urls.py, wsgi.py, celery.py
-  common/                shared helpers (pagination, app-wide constants) — revisit later
-  tests/                 mirrors the layers — NOT IMPLEMENTED YET
+  common/                shared helpers: pagination.py, constants.py, exceptions.py
+  api/  services/  data/   ⚠️ EMPTY LEGACY STUBS from an earlier layer-first design — see note below
 ```
+
+Domain-specific extras that exist today:
+- `apps/users/` — `auth_urls.py` (JWT routes), `permissions.py`, `signals.py` (wired via `apps.py`'s
+  `ready()`).
+- `apps/products/` — `category_urls.py`, `tag_urls.py`, and `management/commands/import_products.py`.
+- `apps/recommendations/` — `engine.py`, `optimizer.py`, `constants.py` (scoring/OR-Tools split out).
+  Note: no `migrations/` directory yet.
+- `apps/chat/` — `tools.py` (Claude tool definitions); the Claude integration currently lives in
+  `services.py` (there is no separate `ai_service.py`).
 
 ### The layering rule (the one thing to get right)
 
-- **`api/` imports from `services/` only** — never touches the ORM, models, or repositories.
-- **`services/` imports from `data/` only** — never touches HTTP, `request`, or `Response`.
-- **`data/` imports nothing from the layers above it.**
+- **`controllers.py` imports from `services.py` only** — never touches the ORM, models, or repositories.
+- **`services.py` imports from `repositories.py` only** — never touches HTTP, `request`, or `Response`.
+- **`repositories.py` is the only place ORM calls happen.**
 
-A request flows: **view** parses input (via a serializer) → calls a **service** function → service
-applies business rules and calls one or more **repositories** → repository runs the ORM query. The
-view then serializes the result. Thin pass-through services are fine for trivial CRUD — keep the
-chain consistent so the seam is there when logic grows.
+A request flows: **controller** parses input (via a serializer) → calls a **service** function →
+service applies business rules and calls one or more **repositories** → repository runs the ORM
+query. The controller then serializes the result. Thin pass-through services are fine for trivial
+CRUD — keep the chain consistent so the seam is there when logic grows.
 
-### Why `data/` holds the Django apps
+### App registration
 
-Django requires models to live inside a **registered app** (migrations, `AUTH_USER_MODEL`, admin
-autodiscovery all depend on it). So each `data/<domain>/` is a Django app:
+- Each `apps/<domain>/apps.py` declares `name = 'apps.<domain>'`; the **app label defaults to the
+  last path component** (`apps.users` → `users`), which is why `AUTH_USER_MODEL = 'users.User'` and
+  migration app-labels stay clean (`users`, `products`, …, **not** `apps_users`).
+- `INSTALLED_APPS` lists `apps.users`, `apps.products`, `apps.wishlists`, `apps.recommendations`,
+  `apps.chat`.
 
-- `apps.py` declares `name = 'data.<domain>'`; the **app label defaults to the last path component**
-  (`data.users` → `users`), which is why `AUTH_USER_MODEL = 'users.User'` and migration app-labels
-  stay clean (`users`, `products`, …, **not** `data_users`).
-- Only the `data.*` packages appear in `INSTALLED_APPS`.
-- `api/` and `services/` are **plain Python packages** — no `AppConfig`.
+### ⚠️ Legacy `api/`, `services/`, `data/` stubs
+
+The top-level `api/`, `services/`, and `data/` folders are **vestigial** — remnants of an earlier
+layer-first plan that was never adopted. They contain only empty `__init__.py` files (plus a couple
+of trivial placeholder `apps.py`/`repositories.py` under `data/`), are **not** in `INSTALLED_APPS`,
+and nothing imports from them. Do **not** put new code there. They're safe to delete (see notes at
+the bottom).
 
 ## Conventions — where new code goes
 
-- **A new HTTP endpoint** → `api/<domain>/views.py` (a DRF `APIView`/`ViewSet`), its input/output
-  schemas in `api/<domain>/serializers.py`, route in `api/<domain>/urls.py` (registered in
-  `config/urls.py` under `/api/<domain>/`), and any access rules in `api/<domain>/permissions.py`.
-  The view must call a service — never a repository or the ORM directly.
-- **Business logic** → `services/<domain>/services.py`. Cross-domain orchestration lives here. For
+- **A new HTTP endpoint** → `apps/<domain>/controllers.py` (a DRF `APIView`/`ViewSet`, named
+  `*Controller`), its input/output schemas in `apps/<domain>/serializers.py`, route in
+  `apps/<domain>/urls.py` (mounted in `config/urls.py` under `/api/<domain>/`), and any access rules
+  in `apps/<domain>/permissions.py`. The controller must call a service — never a repository or the
+  ORM directly.
+- **Business logic** → `apps/<domain>/services.py`. Cross-domain orchestration lives here. For
   recommendations the scoring/optimization code is split out: `engine.py`, `optimizer.py`,
-  `constants.py`. For chat the Claude integration is `ai_service.py` + `tools.py`.
-- **A DB query** → a method on a repository class in `data/<domain>/repositories.py`. All ORM access
+  `constants.py`. For chat the Claude tool definitions are in `tools.py`.
+- **A DB query** → a method on a repository class in `apps/<domain>/repositories.py`. All ORM access
   (`filter`, `get`, `create`, …) is confined here. One repository per model (usually).
-- **A model / schema change** → `data/<domain>/models.py`, then `makemigrations` (writes to
-  `data/<domain>/migrations/`).
-- **A Celery task** → `services/<domain>/tasks.py` (e.g. `services/chat/tasks.py`). Because the
-  service layer is **not** a registered Django app, these packages are listed explicitly in
-  `config/celery.py` via `autodiscover_tasks([...])` — add the package there when a new layer task
-  module appears.
-- **A management command** (e.g. `import_products`) → must live in a Django app, so it goes under
-  `data/<domain>/management/commands/`. Keep the command thin: parse args → call a service.
-- **App-wide constants / pagination** → `common/`.
+- **A model / schema change** → `apps/<domain>/models.py`, then `makemigrations` (writes to
+  `apps/<domain>/migrations/`).
+- **A Celery task** → `apps/<domain>/tasks.py`. `config/celery.py` uses bare `autodiscover_tasks()`,
+  so a `tasks.py` in any registered app is picked up automatically (no explicit registration). No
+  task modules exist yet.
+- **A management command** (e.g. `import_products`) → `apps/<domain>/management/commands/`. Keep the
+  command thin: parse args → call a service.
+- **App-wide constants / pagination / exceptions** → `common/`.
 
 ## Build order (per feature: bottom-up)
 
-1. **Repository** (`data/<domain>/repositories.py`) — ORM methods, tested against the real DB.
-2. **Service** (`services/<domain>/services.py`) — logic calling repositories, tested with mocks.
-3. **View** (`api/<domain>/views.py`) — thin HTTP wrapper, tested with DRF's `APIClient`.
+1. **Repository** (`apps/<domain>/repositories.py`) — ORM methods, tested against the real DB.
+2. **Service** (`apps/<domain>/services.py`) — logic calling repositories, tested with mocks.
+3. **Controller** (`apps/<domain>/controllers.py`) — thin HTTP wrapper, tested with DRF's `APIClient`.
 
-Tests are **not implemented yet**; when added they go under `tests/` mirroring the three layers.
+Tests are **not implemented yet** — there is no `tests/` directory.
 
 ## Security / org constraints (always)
 
