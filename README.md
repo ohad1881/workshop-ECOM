@@ -1187,11 +1187,21 @@ class RecommendationService:
         # Check if recipient has any public data
         has_public_data = (
             (recipient_profile.interests_privacy == 'public' and recipient_profile.interests.exists()) or
-            (recipient_profile.preferences_privacy == 'public' and recipient_profile.preferred_categories.exists()) or
+            (recipient_profile.preferences_privacy == 'public' and (
+                recipient_profile.preferred_categories.exists()
+                or recipient_profile.excluded_categories.exists()
+            )) or
             recipient_profile.user.wishlist_items.filter(privacy='public').exists()
         )
         if not has_public_data:
             return {"message": "This user has no public profile data for recommendations", "items": []}
+
+        # Private preferences (preferred/excluded categories) are only used when
+        # the caller is the recipient themselves (self-gift) or the session owner.
+        include_private_preferences = (
+            self_gift
+            or bool(giver_user and giver_user.id == recipient_profile.user_id)
+        )
 
         # Fetch giver preferences (AI memory) if giver is known
         giver_preferences = []
@@ -1207,7 +1217,8 @@ class RecommendationService:
         scored = []
         for product in products:
             score, explanation = compute_score(
-                product, recipient_profile, event_type, giver_preferences
+                product, recipient_profile, event_type, giver_preferences,
+                include_private_preferences=include_private_preferences,
             )
             scored.append({
                 'product': product,
@@ -1473,124 +1484,63 @@ def execute_tool(tool_name, tool_input, giver_user, recipient_id=None):
         return {"status": "saved", "preference": GiftGiverPreferenceSerializer(pref).data}
 ```
 
-### 9.3 AI Service — `apps/chat/ai_service.py`
+### 9.3 AI Service — `apps/chat/services.py`
 
-System prompt for Claude:
+The Claude integration lives in `ChatService` inside `services.py` (no separate `ai_service.py`).
+The model is `claude-3-5-sonnet-latest` (constant `ANTHROPIC_MODEL`). The tool-use loop runs up
+to `MAX_TOOL_ROUNDS = 3` round trips; if tools are still being called after that the service
+returns a fallback message asking the user to narrow the request.
+
+The system prompt is built dynamically per request from session and user context:
 
 ```python
-SYSTEM_PROMPT = """You are GiftGraph's gift recommendation assistant. You help users find 
-perfect gifts for others (or themselves).
+ANTHROPIC_MODEL = 'claude-3-5-sonnet-latest'
+MAX_TOOL_ROUNDS = 3
+MAX_TOKENS = 1024
 
-CRITICAL RULES:
-1. Before running heavy computations (get_recommendations, optimize_gift_bundle), ALWAYS 
-   verify you have ALL required information:
-   - Who is the gift for? (you need a valid recipient user ID)
-   - What is the budget?
-   - What is the occasion? (optional but helpful)
-   Ask the user for any missing information BEFORE calling those tools.
-
-2. You have MEMORY. Before making recommendations, call get_giver_preferences to check 
-   what this user likes and dislikes about gifting. Use this to give better suggestions.
-
-3. When the user expresses a preference about gifting (positive or negative), call 
-   update_giver_preference to remember it. Examples:
-   - "I don't like gifting tech" → update_giver_preference(avoid_category, electronics, "User said they don't like gifting tech")
-   - "I prefer handmade things" → update_giver_preference(prefer_tag, handmade, "User prefers handmade gifts")
-
-4. Explain WHY you recommend each item. Be conversational and concise.
-
-5. If the user asks to adjust (different budget, style, more/fewer items), use the tools 
-   again with updated parameters.
-
-Session context:
-- Recipient: {recipient_info}
-- Budget: {budget}
-- Event: {event_type}
-"""
+def _build_system_prompt(session, user, mentioned_user_ids):
+    parts = [
+        "You are GiftGraph's gifting assistant.",
+        "Help users choose thoughtful gifts using the available tools.",
+        "Respect privacy: use only public recipient data exposed by tools, "
+        "unless the session is self-gift mode for the current user.",
+        f"Current user id: {user.id}.",
+    ]
+    if session.recipient_id:
+        parts.append(f"Session recipient id: {session.recipient_id}.")
+    if session.budget is not None:
+        parts.append(f"Session budget: {session.budget}.")
+    if session.event_type:
+        parts.append(f"Session event type: {session.event_type}.")
+    if session.is_self_gift:
+        parts.append("This is a self-gift session.")
+    if mentioned_user_ids:
+        parts.append("User IDs mentioned in the latest message: " + ", ".join(...) + ".")
+    return "\n".join(parts)
 ```
 
-**Chat flow with token streaming**:
-
-Use the SDK's `client.messages.stream()` helper so the user sees the AI's reply
-appear **token by token**, not all at once. The helper exposes `text_stream`
-(an iterator of incremental text deltas) and `get_final_message()` (the fully
-assembled response, used to detect tool calls and continue the tool-use loop).
-The model is `claude-sonnet-4-6` — the current Sonnet: cheap, capable, and
-supports streaming + tool use. `messages.stream()` defaults to a 10-minute
-timeout, which comfortably covers AI calls.
+**Chat flow**: `stream_message` saves the user message, calls `_generate_assistant_reply`
+(which runs the tool-use loop via `client.messages.create`), saves the assistant reply, trims
+the message history to `MAX_MESSAGES_PER_SESSION`, then yields the response as SSE chunks.
+On any exception the service yields a safe fallback string instead of surfacing the error.
 
 ```python
-import anthropic
-import json
+def stream_message(session_id, user, content, mentioned_user_ids=None):
+    try:
+        session = ChatService.get_session(session_id, user)
+        ChatRepository.create_message(session_id=session.id, role='user', content=content, ...)
+        assistant_text, metadata = ChatService._generate_assistant_reply(session, user, ...)
+    except Exception:
+        assistant_text = "Sorry, I couldn't complete that chat request right now. ..."
+        metadata = {'error': 'assistant_generation_failed'}
 
-def stream_chat_response(session, user_message):
-    """
-    Process a user message using Claude's streaming API with a tool-use loop.
-    Yields text deltas (tokens) for StreamingHttpResponse — the frontend sees
-    the response render in real time.
-    """
-    client = anthropic.Anthropic()  # Reads ANTHROPIC_API_KEY from env
+    if session:
+        ChatRepository.create_message(session_id=session.id, role='assistant', ...)
+        ChatRepository.trim_oldest_messages(session.id, keep=session.MAX_MESSAGES_PER_SESSION)
 
-    # Build conversation history from stored messages
-    history = ChatRepository.get_messages_for_api(session.id)
-    history.append({"role": "user", "content": user_message})
-
-    system_prompt = build_system_prompt(session)
-
-    # Save user message
-    ChatRepository.create_message(session.id, 'user', user_message)
-
-    full_response = ""
-
-    # Tool-use loop (may need multiple round trips). Each model turn is streamed
-    # token-by-token; tool calls happen between streamed turns.
-    while True:
-        with client.messages.stream(
-            model="claude-sonnet-4-6",   # current Sonnet — cheap, capable, supports streaming
-            max_tokens=2048,
-            system=system_prompt,
-            messages=history,
-            tools=TOOLS,
-        ) as stream:
-            # Yield text tokens as they arrive
-            for text in stream.text_stream:
-                full_response += text
-                yield text
-
-            response = stream.get_final_message()
-
-        tool_use_blocks = [b for b in response.content if b.type == "tool_use"]
-
-        if not tool_use_blocks:
-            # No tools requested — the streamed text above was the final answer
-            break
-
-        # Execute tools, then loop to stream the model's next turn
-        history.append({"role": "assistant", "content": response.content})
-        tool_results = []
-        for block in tool_use_blocks:
-            result = execute_tool(
-                block.name, block.input,
-                giver_user=session.owner,
-                recipient_id=session.recipient_id
-            )
-            tool_results.append({
-                "type": "tool_result",
-                "tool_use_id": block.id,
-                "content": json.dumps(result, default=str)
-            })
-        history.append({"role": "user", "content": tool_results})
-
-    # Save assistant response
-    ChatRepository.create_message(
-        session.id, 'assistant', full_response,
-        metadata=extract_product_ids(full_response)
-    )
-
-    # Enforce message cap
-    msg_count = ChatRepository.count_messages(session.id)
-    if msg_count > ChatSession.MAX_MESSAGES_PER_SESSION:
-        ChatRepository.trim_oldest_messages(session.id, keep=ChatSession.MAX_MESSAGES_PER_SESSION)
+    for chunk in ChatService._chunk_text(assistant_text):
+        yield ChatService._sse({'text': chunk})
+    yield 'data: [DONE]\n\n'
 ```
 
 ### 9.4 Chat Controller with StreamingHttpResponse — `apps/chat/controllers.py`
@@ -1602,19 +1552,30 @@ class ChatMessageController(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, session_id):
-        session = ChatService.get_session(session_id, request.user)
-        content = request.data.get('content', '').strip()
-        if not content:
-            return Response({"error": "Message content required"}, status=400)
+        serializer = SendMessageSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        def event_stream():
-            for chunk in stream_chat_response(session, content):
-                yield f"data: {json.dumps({'text': chunk})}\n\n"
-            yield "data: [DONE]\n\n"
+        if not ChatService.is_ai_configured():
+            return Response(
+                {'message': 'Anthropic API key is not configured.'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
+        try:
+            ChatService.get_session(session_id, request.user)
+        except ValueError as e:
+            return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except PermissionError as e:
+            return Response({'message': str(e)}, status=status.HTTP_403_FORBIDDEN)
 
         response = StreamingHttpResponse(
-            event_stream(),
-            content_type='text/event-stream'
+            ChatService.stream_message(
+                session_id=session_id,
+                user=request.user,
+                content=serializer.validated_data['content'],
+                mentioned_user_ids=serializer.validated_data['mentioned_user_ids'],
+            ),
+            content_type='text/event-stream',
         )
         response['Cache-Control'] = 'no-cache'
         response['X-Accel-Buffering'] = 'no'
