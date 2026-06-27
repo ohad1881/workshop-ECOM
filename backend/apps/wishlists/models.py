@@ -14,7 +14,7 @@ class WishlistItem(models.Model):
     privacy = models.CharField(
         max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC
     )
-    priority = models.IntegerField(default=0)  # 0 = no priority, 5 = most wanted
+    priority = models.IntegerField(default=5)  # 5 = most wanted (default to max for scoring impact)
     note = models.TextField(blank=True, max_length=200)
     added_at = models.DateTimeField(auto_now_add=True)
 

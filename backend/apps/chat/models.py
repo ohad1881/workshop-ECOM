@@ -12,6 +12,7 @@ class ChatSession(models.Model):
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     event_type = models.CharField(max_length=50, blank=True)
     is_self_gift = models.BooleanField(default=False)
+    stranger_description = models.TextField(blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

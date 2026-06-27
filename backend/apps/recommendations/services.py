@@ -5,6 +5,7 @@ from django.db.models import Count
 from apps.products.repositories import ProductRepository
 from apps.users.repositories import UserRepository
 from apps.wishlists.models import WishlistItem
+from .constants import MIN_RELEVANCE_THRESHOLD, QUANTITY_STRATEGY_THRESHOLD
 from .engine import compute_score
 from .optimizer import optimize_gift_bundle
 from .repositories import GiftGiverPreferenceRepository
@@ -92,10 +93,29 @@ class RecommendationService:
         if isinstance(scored, dict) and 'message' in scored:
             return scored
 
+        # Premium pool: used by max_score and balanced (quality over quantity).
+        premium_candidates = [p for p in scored if p['score'] >= MIN_RELEVANCE_THRESHOLD]
+        # Quantity pool: used by max_items (wider net to fill budget with more gifts).
+        quantity_candidates = [p for p in scored if p['score'] >= QUANTITY_STRATEGY_THRESHOLD]
+
+        # If even the loose pool is empty there is nothing useful to return.
+        if not quantity_candidates:
+            return {
+                'message': 'No relevant products found within this budget.',
+                'items': [],
+            }
+
+        strategy_candidates = {
+            'max_score': premium_candidates,
+            'balanced':  premium_candidates,
+            'max_items': quantity_candidates,
+        }
+
         budget_decimal = Decimal(str(budget))
         results = {}
         for strategy in ('max_score', 'max_items', 'balanced'):
-            bundle = optimize_gift_bundle(scored, budget_decimal, strategy)
+            candidates = strategy_candidates[strategy]
+            bundle = optimize_gift_bundle(candidates, budget_decimal, strategy)
             total_price = sum(Decimal(str(p['product'].price)) for p in bundle)
             total_score = sum(p['score'] for p in bundle)
             results[strategy] = {

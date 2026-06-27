@@ -19,7 +19,8 @@ class ChatRepository:
 
     @staticmethod
     def create_session(owner_id, recipient_id=None, budget=None,
-                       event_type='', is_self_gift=False, title=''):
+                       event_type='', is_self_gift=False, title='',
+                       stranger_description=''):
         return ChatSession.objects.create(
             owner_id=owner_id,
             recipient_id=recipient_id,
@@ -27,6 +28,7 @@ class ChatRepository:
             event_type=event_type,
             is_self_gift=is_self_gift,
             title=title,
+            stranger_description=stranger_description,
         )
 
     @staticmethod

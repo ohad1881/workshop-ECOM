@@ -10,9 +10,9 @@ from .repositories import ChatRepository
 from .tools import TOOLS, execute_tool
 
 
-ANTHROPIC_MODEL = 'claude-3-5-sonnet-latest'
-MAX_TOOL_ROUNDS = 3
-MAX_TOKENS = 1024
+ANTHROPIC_MODEL = 'claude-sonnet-4-6'
+MAX_TOOL_ROUNDS = 5
+MAX_TOKENS = 2048
 
 
 class ChatService:
@@ -27,7 +27,8 @@ class ChatService:
 
     @staticmethod
     def create_session(owner, recipient_id=None, budget=None,
-                       event_type='', is_self_gift=False, title=''):
+                       event_type='', is_self_gift=False, title='',
+                       stranger_description=''):
         if is_self_gift and recipient_id is None:
             recipient_id = owner.id
         if recipient_id and not UserRepository.get_by_id(recipient_id):
@@ -39,6 +40,7 @@ class ChatService:
             event_type=event_type,
             is_self_gift=is_self_gift,
             title=title,
+            stranger_description=stranger_description,
         )
 
     @staticmethod
@@ -161,27 +163,64 @@ class ChatService:
 
     @staticmethod
     def _build_system_prompt(session, user, mentioned_user_ids):
+        is_stranger_mode = bool(session.stranger_description and not session.recipient_id)
+
         parts = [
-            "You are GiftGraph's gifting assistant.",
-            "Help users choose thoughtful gifts using the available tools.",
-            "Respect privacy: use only public recipient data exposed by tools, "
-            "unless the session is self-gift mode for the current user.",
-            f"Current user id: {user.id}.",
+            "You are GiftGraph's gifting assistant. Help users find thoughtful, personalised gifts.",
+            "",
+            "## Core rules",
+            "1. Before making any recommendation, call `get_giver_preferences` to load the user's gifting history.",
+            "2. When the user expresses a like or dislike (e.g. 'I never buy tech gifts', 'she loves candles'), "
+            "immediately call `update_giver_preference` with the appropriate type and value.",
+            "3. Always explain WHY each gift matches the recipient.",
+            "4. Respect privacy: only use public recipient data from tools.",
+            f"5. Current user id: {user.id}.",
         ]
-        if session.recipient_id:
-            parts.append(f"Session recipient id: {session.recipient_id}.")
+
         if session.budget is not None:
-            parts.append(f"Session budget: {session.budget}.")
+            parts.append(f"6. Session budget: ${session.budget}. Never recommend items above this budget.")
         if session.event_type:
-            parts.append(f"Session event type: {session.event_type}.")
-        if session.is_self_gift:
-            parts.append("This is a self-gift session.")
+            parts.append(f"7. Occasion: {session.event_type}.")
+
+        if is_stranger_mode:
+            parts += [
+                "",
+                "## Stranger Mode",
+                "The recipient is NOT a registered GiftGraph user. Their description is:",
+                f'  "{session.stranger_description}"',
+                "",
+                "Follow this flow:",
+                "  a. Acknowledge the description, then ask 1–2 targeted clarifying questions "
+                "(e.g. age range, specific hobbies, things they already own) before suggesting anything.",
+                "  b. After the user answers, build a Temporary Profile in your reasoning: "
+                "infer likely interests, preferred categories, and price sensitivity.",
+                "  c. Use `search_products` filtered by those inferred categories/tags to find candidates.",
+                "  d. Use `optimize_gift_bundle` if the user wants a multi-item bundle.",
+                "  e. Do NOT call `get_recipient_profile` or `get_recommendations` — "
+                "those require a registered recipient_id which does not exist here.",
+            ]
+        elif session.is_self_gift:
+            parts += [
+                "",
+                "## Self-gift mode",
+                "The user is shopping for themselves. You have access to their full private profile data.",
+                "Use `get_recommendations` and `optimize_gift_bundle` with their own user id as recipient.",
+            ]
+        elif session.recipient_id:
+            parts += [
+                "",
+                f"## Recipient",
+                f"Registered recipient id: {session.recipient_id}.",
+                "Call `get_recipient_profile` first to understand their interests, then "
+                "`get_recommendations` to score products, then `optimize_gift_bundle` for bundles.",
+            ]
+
         if mentioned_user_ids:
             parts.append(
-                "User IDs mentioned in the latest message: "
-                + ", ".join(str(user_id) for user_id in mentioned_user_ids)
-                + "."
+                "\nUser IDs mentioned in the latest message: "
+                + ", ".join(str(uid) for uid in mentioned_user_ids) + "."
             )
+
         return "\n".join(parts)
 
     @staticmethod

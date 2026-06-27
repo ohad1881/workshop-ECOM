@@ -19,7 +19,7 @@ def optimize_gift_bundle(scored_products, budget, strategy='balanced'):
     budget_cents = int(float(budget) * 100)
 
     SCORE_SCALE = 1000
-    ITEM_BONUS = 200
+    ITEM_BONUS = 300  # raised: all candidates already pass MIN_RELEVANCE_THRESHOLD
 
     if strategy == 'max_score':
         values = [int(p['score'] * SCORE_SCALE) for p in scored_products]

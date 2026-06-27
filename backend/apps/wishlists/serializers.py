@@ -15,7 +15,7 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 class AddWishlistItemSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     privacy = serializers.ChoiceField(choices=['public', 'private'], default='public')
-    priority = serializers.IntegerField(min_value=0, max_value=5, default=0)
+    priority = serializers.IntegerField(min_value=0, max_value=5, default=5)
     note = serializers.CharField(required=False, allow_blank=True, max_length=200, default='')
 
 

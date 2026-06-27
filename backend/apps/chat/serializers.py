@@ -13,7 +13,7 @@ class ChatSessionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatSession
         fields = ['id', 'title', 'recipient_id', 'budget', 'event_type',
-                  'is_self_gift', 'created_at', 'updated_at']
+                  'is_self_gift', 'stranger_description', 'created_at', 'updated_at']
 
 
 class ChatSessionDetailSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class ChatSessionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatSession
         fields = ['id', 'title', 'recipient_id', 'budget', 'event_type',
-                  'is_self_gift', 'messages', 'created_at', 'updated_at']
+                  'is_self_gift', 'stranger_description', 'messages', 'created_at', 'updated_at']
 
 
 class CreateSessionSerializer(serializers.Serializer):
@@ -33,6 +33,14 @@ class CreateSessionSerializer(serializers.Serializer):
     )
     event_type = serializers.CharField(required=False, allow_blank=True, default='')
     is_self_gift = serializers.BooleanField(required=False, default=False)
+    stranger_description = serializers.CharField(required=False, allow_blank=True, default='')
+
+    def validate(self, data):
+        if not data.get('recipient_id') and not data.get('stranger_description') and not data.get('is_self_gift'):
+            raise serializers.ValidationError(
+                "Provide recipient_id, stranger_description, or set is_self_gift=true."
+            )
+        return data
 
 
 class SendMessageSerializer(serializers.Serializer):
