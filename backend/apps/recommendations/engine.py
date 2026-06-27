@@ -21,12 +21,15 @@ _TOTAL_WEIGHT = (
 
 
 def compute_score(product, recipient_profile, event_type=None,
-                  giver_preferences=None, max_wishlist_count=None):
+                  giver_preferences=None, max_wishlist_count=None,
+                  include_private_preferences=False):
     """
     Score a single product for a recipient (0.0 – 1.0).
 
     max_wishlist_count: precomputed across all products by the caller to avoid
     an N+1 query on the community signal.
+    include_private_preferences: True only when the caller is allowed to use
+    the recipient's private preferred/excluded categories (self/owner flows).
 
     Returns: (score: float, explanation: str)
     """
@@ -46,12 +49,17 @@ def compute_score(product, recipient_profile, event_type=None,
         )
 
     # ── 2. Category preference match (CATEGORY_WEIGHT) ──────────────────────
-    if product.category in recipient_profile.preferred_categories.all():
-        score += CATEGORY_WEIGHT
-        explanations.append(f"Matches interest in {product.category.name}")
-    elif product.category in recipient_profile.excluded_categories.all():
-        score -= 0.15
-        explanations.append(f"In excluded category: {product.category.name}")
+    can_use_preferences = (
+        include_private_preferences
+        or recipient_profile.preferences_privacy == 'public'
+    )
+    if can_use_preferences:
+        if product.category in recipient_profile.preferred_categories.all():
+            score += CATEGORY_WEIGHT
+            explanations.append(f"Matches interest in {product.category.name}")
+        elif product.category in recipient_profile.excluded_categories.all():
+            score -= 0.15
+            explanations.append(f"In excluded category: {product.category.name}")
 
     # ── 3. Tag overlap with recipient's wishlist products (TAG_OVERLAP_WEIGHT)
     product_tag_ids = set(product.tags.values_list('id', flat=True))

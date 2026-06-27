@@ -30,11 +30,19 @@ class RecommendationService:
                 (recipient_profile.interests_privacy == 'public'
                  and recipient_profile.interests.exists())
                 or (recipient_profile.preferences_privacy == 'public'
-                    and recipient_profile.preferred_categories.exists())
+                    and (
+                        recipient_profile.preferred_categories.exists()
+                        or recipient_profile.excluded_categories.exists()
+                    ))
                 or recipient_profile.user.wishlist_items.filter(privacy='public').exists()
             )
             if not has_public_data:
                 return {'message': 'This user has no public profile data for recommendations', 'items': []}
+
+        include_private_preferences = (
+            self_gift
+            or bool(giver_user and giver_user.id == recipient_profile.user_id)
+        )
 
         giver_preferences = []
         if giver_user:
@@ -55,7 +63,12 @@ class RecommendationService:
         scored = []
         for product in products:
             score, explanation = compute_score(
-                product, recipient_profile, event_type, giver_preferences, max_wishlist_count
+                product,
+                recipient_profile,
+                event_type,
+                giver_preferences,
+                max_wishlist_count,
+                include_private_preferences=include_private_preferences,
             )
             scored.append({'product': product, 'score': score, 'explanation': explanation})
 
