@@ -35,6 +35,15 @@ class CreateSessionSerializer(serializers.Serializer):
     is_self_gift = serializers.BooleanField(required=False, default=False)
 
 
+class SendMessageSerializer(serializers.Serializer):
+    content = serializers.CharField(allow_blank=False, trim_whitespace=True)
+    mentioned_user_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        default=list,
+    )
+
+
 class GiftGiverPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = GiftGiverPreference

@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from .models import ChatMessage, ChatSession
 
 
@@ -43,12 +45,18 @@ class ChatRepository:
 
     @staticmethod
     def create_message(session_id, role, content, metadata=None):
-        return ChatMessage.objects.create(
+        message = ChatMessage.objects.create(
             session_id=session_id,
             role=role,
             content=content,
             metadata=metadata or {},
         )
+        ChatRepository.touch_session(session_id)
+        return message
+
+    @staticmethod
+    def touch_session(session_id):
+        ChatSession.objects.filter(id=session_id).update(updated_at=timezone.now())
 
     @staticmethod
     def count_messages(session_id):
