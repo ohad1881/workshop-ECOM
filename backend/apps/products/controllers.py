@@ -46,6 +46,7 @@ class ProductListController(APIView):
         tag_ids_raw = request.query_params.get('tag_ids', '')
         min_price = request.query_params.get('min_price')
         max_price = request.query_params.get('max_price')
+        search = request.query_params.get('search', '').strip() or None
 
         tag_ids = (
             [int(t) for t in tag_ids_raw.split(',') if t.strip().isdigit()]
@@ -57,6 +58,7 @@ class ProductListController(APIView):
             tag_ids=tag_ids,
             min_price=float(min_price) if min_price else None,
             max_price=float(max_price) if max_price else None,
+            search=search,
         )
 
         paginator = StandardPagination()

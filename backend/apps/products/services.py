@@ -26,12 +26,13 @@ class ProductService:
         return product
 
     @staticmethod
-    def list_products(category_id=None, tag_ids=None, min_price=None, max_price=None):
+    def list_products(category_id=None, tag_ids=None, min_price=None, max_price=None, search=None):
         return ProductRepository.list_active(
             category_id=category_id,
             tag_ids=tag_ids,
             min_price=min_price,
             max_price=max_price,
+            search=search,
         )
 
     @staticmethod

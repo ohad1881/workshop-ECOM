@@ -61,6 +61,9 @@ const Navbar = () => {
             <Button component={RouterLink} to="/gift-finder" color="inherit">
               Find a Gift
             </Button>
+            <Button component={RouterLink} to="/products" color="inherit">
+              Products
+            </Button>
             <Button component={RouterLink} to="/wishlist" color="inherit">
               My Wishlist
             </Button>

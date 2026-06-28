@@ -16,6 +16,7 @@ import GiftFinderPage from './gift-finder/GiftFinderPage';
 import ChatPage from './chat/ChatPage';
 import PrivacyPolicyPage from './privacy/PrivacyPolicyPage';
 import TermsOfServicePage from './terms/TermsOfServicePage';
+import ProductsPage from './products/ProductsPage';
 import NotFoundPage from './not-found/NotFoundPage';
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
 
               {/* Protected */}
               <Route element={<ProtectedRoute />}>
+                <Route path="/products" element={<ProductsPage />} />
                 <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/users/:id" element={<UserProfilePage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />

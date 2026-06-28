@@ -36,8 +36,10 @@ class ProductRepository:
         )
 
     @staticmethod
-    def list_active(category_id=None, tag_ids=None, min_price=None, max_price=None):
+    def list_active(category_id=None, tag_ids=None, min_price=None, max_price=None, search=None):
         qs = Product.objects.select_related('category').prefetch_related('tags').filter(is_active=True)
+        if search:
+            qs = qs.filter(name__icontains=search)
         if category_id:
             qs = qs.filter(category_id=category_id)
         if min_price is not None:
