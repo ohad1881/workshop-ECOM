@@ -1,11 +1,5 @@
 import HeroSection from './HeroSection';
-import FeaturedUsers from './FeaturedUsers';
 
-const HomePage = () => (
-  <>
-    <HeroSection />
-    <FeaturedUsers />
-  </>
-);
+const HomePage = () => <HeroSection />;
 
 export default HomePage;
