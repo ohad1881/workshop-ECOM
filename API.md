@@ -65,7 +65,7 @@ Two PATCH surfaces are split by concern: **settings** (identity/account) vs **pr
 
 ## Users (`/api/users/*`)
 
-No list-all endpoint. Discover users via search (used for the gift-finder recipient picker and chat `@mentions`); fetch a specific user by ID.
+No list-all endpoint. Discover users via search (used for the gift-builder recipient picker and chat `@mentions`); fetch a specific user by ID.
 
 | Endpoint | Method | Auth | Request | Returns (example) |
 |---|---|---|---|---|

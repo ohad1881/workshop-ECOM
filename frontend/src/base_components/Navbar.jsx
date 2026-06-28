@@ -59,8 +59,8 @@ const Navbar = () => {
             <Button component={RouterLink} to="/" color="inherit">
               Home
             </Button>
-            <Button component={RouterLink} to="/gift-finder" color="inherit">
-              Find a Gift
+            <Button component={RouterLink} to="/gift-builder" color="inherit">
+              Build a Gift
             </Button>
             <Button component={RouterLink} to="/products" color="inherit">
               Products

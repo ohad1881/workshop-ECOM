@@ -28,8 +28,8 @@ const HeroSection = () => {
         </Stack>
       ) : (
         <>
-          <Button variant="contained" size="large" onClick={() => navigate('/gift-finder')}>
-            Find a Gift
+          <Button variant="contained" size="large" onClick={() => navigate('/gift-builder')}>
+            Build a Gift
           </Button>
           <UserSearch />
         </>

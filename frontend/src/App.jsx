@@ -12,7 +12,7 @@ import RegisterPage from './register/RegisterPage';
 import MyProfilePage from './profile/MyProfilePage';
 import UserProfilePage from './profile/UserProfilePage';
 import WishlistPage from './wishlist/WishlistPage';
-import GiftFinderPage from './gift-finder/GiftFinderPage';
+import GiftBuilderPage from './gift-builder/GiftBuilderPage';
 import ChatPage from './chat/ChatPage';
 import PrivacyPolicyPage from './privacy/PrivacyPolicyPage';
 import TermsOfServicePage from './terms/TermsOfServicePage';
@@ -43,7 +43,7 @@ const App = () => (
                 <Route path="/profile" element={<MyProfilePage />} />
                 <Route path="/users/:id" element={<UserProfilePage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
-                <Route path="/gift-finder" element={<GiftFinderPage />} />
+                <Route path="/gift-builder" element={<GiftBuilderPage />} />
                 <Route path="/chat" element={<ChatPage />} />
               </Route>
             </Route>

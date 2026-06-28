@@ -2,14 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
-// Flashy CTA at the top of a profile. Routes to the gift-finder with the
-// recipient preselected, skipping the finder's "Select Recipient" step.
+// Flashy CTA at the top of a profile. Routes to the gift-builder with the
+// recipient preselected, skipping the builder's "Select Recipient" step.
 const CreateGiftButton = ({ isOwner, recipientId, recipientName }) => {
   const navigate = useNavigate();
   const label = isOwner ? 'Create a gift for myself' : `Create a gift for ${recipientName}`;
 
   const handleClick = () =>
-    navigate(`/gift-finder?recipientId=${recipientId}`);
+    navigate(`/gift-builder?recipientId=${recipientId}`);
 
   return (
     <Button

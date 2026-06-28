@@ -22,7 +22,7 @@
 14. [Phase 10 — Frontend: Core Layout & Auth](#phase-10--frontend-core-layout--auth)
 15. [Phase 11 — Frontend: Profile Pages](#phase-11--frontend-profile-pages)
 16. [Phase 12 — Frontend: Wishlist](#phase-12--frontend-wishlist)
-17. [Phase 13 — Frontend: Gift Finder & Recommendations](#phase-13--frontend-gift-finder--recommendations)
+17. [Phase 13 — Frontend: Gift Builder & Recommendations](#phase-13--frontend-gift-builder--recommendations)
 18. [Phase 14 — Frontend: AI Chat Interface](#phase-14--frontend-ai-chat-interface)
 19. [Phase 15 — Testing](#phase-15--testing)
 20. [Appendix A — Full Database Schema](#appendix-a--full-database-schema)
@@ -343,8 +343,7 @@ giftgraph/
 │       ├── home/
 │       │   ├── HomePage.jsx
 │       │   ├── HeroSection.jsx         # Only used on home page
-│       │   ├── UserSearch.jsx          # Search a user → navigate to their profile (home only)
-│       │   └── FeaturedUsers.jsx        # Only used on home page
+│       │   └── UserSearch.jsx          # Search a user → navigate to their profile (home only)
 │       ├── login/
 │       │   ├── LoginPage.jsx
 │       │   └── LoginForm/               # Graduated to a folder (hook companion)
@@ -364,7 +363,7 @@ giftgraph/
 │       │   ├── AddWishlistItemDialog.jsx  # Owner-only product search → add to wishlist
 │       │   ├── PreferenceSection.jsx      # Editable category chips (interests / preferred categories)
 │       │   ├── AddCategoryDialog.jsx      # Owner-only category search → add to a preference list
-│       │   ├── CreateGiftButton.jsx       # Flashy CTA → /gift-finder with recipient context
+│       │   ├── CreateGiftButton.jsx       # Flashy CTA → /gift-builder with recipient context
 │       │   ├── useWishlistEditing.js      # Owner wishlist mutations (add/update/delete, optimistic)
 │       │   └── useProfileEdit.js          # Owner bio + category preferences
 │       ├── products/
@@ -373,8 +372,8 @@ giftgraph/
 │       │   ├── WishlistPage.jsx
 │       │   ├── WishlistItem.jsx
 │       │   └── AddToWishlistModal.jsx
-│       ├── gift-finder/
-│       │   ├── GiftFinderPage.jsx
+│       ├── gift-builder/
+│       │   ├── GiftBuilderPage.jsx
 │       │   ├── UserSearchPanel.jsx
 │       │   ├── GiftConfigPanel.jsx      # Budget, event type, strategy selector
 │       │   ├── RecommendationCard.jsx
@@ -401,7 +400,7 @@ giftgraph/
 │       │   # Generic, reusable across 2+ pages.
 │       │
 │       ├── general_components/
-│       │   ├── UserCard.jsx             # Used in gift-finder, home
+│       │   ├── UserCard.jsx             # Used in gift-builder, home
 │       │   ├── CustomSelect.jsx
 │       │   ├── CustomSnackbar.jsx
 │       │   ├── FormTextField.jsx
@@ -927,7 +926,7 @@ Read-only endpoints. Categories and tags are managed via Django admin.
 
 This endpoint returns backend-defined constants so the frontend can render dropdowns and info panels without hardcoding values. The data comes from `common/constants.py` (see Appendix D).
 
-The frontend calls this once on app load (or on entering the gift finder page) and caches it via TanStack Query with a long `staleTime`.
+The frontend calls this once on app load (or on entering the gift builder page) and caches it via TanStack Query with a long `staleTime`.
 
 ### Acceptance Criteria — Phase 4
 
@@ -1658,7 +1657,7 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 
 **`components/Navbar.jsx`**: MUI `AppBar` with:
 - Logo (left)
-- Navigation: Home, Find a Gift, My Wishlist (MUI `Button` or `Tab` components)
+- Navigation: Home, Build a Gift, My Wishlist (MUI `Button` or `Tab` components)
 - User menu (right): MUI `Avatar` + `Menu` dropdown with My Profile, Logout
 - Unauthenticated: Login / Register buttons
 
@@ -1703,7 +1702,7 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 - Interests shown only if `interests_privacy == 'public'`.
 - Preferred categories shown only if `preferences_privacy == 'public'`.
 - Public wishlist preview (first 6 public items).
-- **"Find a gift for {name}" CTA button** → navigates to gift finder with user pre-selected.
+- **"Create a gift for {name}" CTA button** → navigates to gift builder with user pre-selected.
 - No edit controls.
 
 ### 11.2 Supporting Components
@@ -1723,7 +1722,7 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 - [ ] Privacy toggles persist and take effect immediately
 - [ ] "Show as Stranger" mode correctly hides private fields
 - [ ] Banner and back button work in stranger mode
-- [ ] "Find a gift" CTA appears on other users' profiles
+- [ ] "Create a gift" CTA appears on other users' profiles
 - [ ] Wishlist preview shows first 6 items with "See all" link
 
 ---
@@ -1770,19 +1769,19 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 
 ---
 
-## Phase 13 — Frontend: Gift Finder & Recommendations
+## Phase 13 — Frontend: Gift Builder & Recommendations
 
 ### 13.1 Metadata Loading
 
-On entering the gift finder page (or on app load), fetch `/api/metadata/` using TanStack Query with a long `staleTime` (e.g., 30 minutes). This returns:
+On entering the gift builder page (or on app load), fetch `/api/metadata/` using TanStack Query with a long `staleTime` (e.g., 30 minutes). This returns:
 - `event_types`: list of `{ value, label, description }` for the event dropdown
 - `gift_strategies`: list of `{ value, label, description }` for the strategy selector
 
 Cache this in the React Query cache so the data is available instantly on subsequent visits.
 
-### 13.2 Gift Finder Page
+### 13.2 Gift Builder Page
 
-**`gift-finder/GiftFinderPage.jsx`**:
+**`gift-builder/GiftBuilderPage.jsx`**:
 
 **Step 1 — Select recipient**: `UserSearchPanel` with a debounced (300ms) MUI `TextField` + autocomplete for searching users. Results display as `UserCard` components. Clicking a card selects the recipient. A `?recipientId=` query param (set by a profile's `CreateGiftButton`) preloads that recipient and skips straight to Step 2.
 
@@ -1796,9 +1795,9 @@ Cache this in the React Query cache so the data is available instantly on subseq
 - "Best Bundle" — knapsack-optimized set for selected strategy
 - "All Strategies" — side-by-side comparison of all 3 strategies
 
-**`gift-finder/RecommendationCard.jsx`**: MUI `Card` with product image, name, price, score (MUI `LinearProgress` bar), and explanation text.
+**`gift-builder/RecommendationCard.jsx`**: MUI `Card` with product image, name, price, score (MUI `LinearProgress` bar), and explanation text.
 
-**`gift-finder/BundleView.jsx`**: MUI `Card` showing selected bundle items, total price vs. budget (MUI `LinearProgress`), total score, budget utilization percentage.
+**`gift-builder/BundleView.jsx`**: MUI `Card` showing selected bundle items, total price vs. budget (MUI `LinearProgress`), total score, budget utilization percentage.
 
 **"Refine with AI" button**: Opens the chat panel / navigates to chat with the session pre-populated.
 
@@ -1820,7 +1819,7 @@ Cache this in the React Query cache so the data is available instantly on subseq
 ### 14.1 Chat Window
 
 **`chat/ChatWindow.jsx`**:
-- Full-height panel (or drawer alongside gift finder).
+- Full-height panel (or drawer alongside gift builder).
 - Message list with auto-scroll to bottom.
 - User messages right-aligned (MUI `Paper` with primary color).
 - AI messages left-aligned (MUI `Paper` with grey/secondary).
@@ -1871,7 +1870,7 @@ The AI's system prompt ensures it validates information before heavy calls. But 
 - [ ] MUI CircularProgress shows while waiting
 - [ ] Conversation history persists within a session
 - [ ] Product cards render inline in AI messages
-- [ ] Chat is contextually pre-populated from gift finder
+- [ ] Chat is contextually pre-populated from gift builder
 - [ ] Past sessions listed and resumable
 - [ ] Suggested prompts appear for new sessions
 - [ ] Error states (timeout, API failure) show MUI Alert messages
@@ -1991,7 +1990,7 @@ Frontend end-to-end testing will be performed **manually** using the following s
 1. **Auth flow**: Register → Login → Verify navbar shows user info → Logout.
 2. **Profile flow**: Edit profile → Change privacy settings → View "as Stranger" → Verify fields hidden.
 3. **Wishlist flow**: Add product → Verify appears → Delete → Verify undo snackbar → Undo → Verify restored.
-4. **Gift finder flow**: Search user → Set budget + event → View recommendations → View bundles → Open chat.
+4. **Gift builder flow**: Search user → Set budget + event → View recommendations → View bundles → Open chat.
 5. **AI chat flow**: Send message → Verify streaming response → Express preference → Verify AI remembers in next message.
 6. **Privacy flow**: Set interests to private → Login as different user → View profile → Verify interests hidden.
 

@@ -16,7 +16,7 @@ import Spinner from '../general_components/Spinner';
 
 const STEPS = ['Select Recipient', 'Configure Gift', 'Results'];
 
-const GiftFinderPage = () => {
+const GiftBuilderPage = () => {
   const [searchParams] = useSearchParams();
   const { giftStrategies } = useMetadata();
 
@@ -91,7 +91,7 @@ const GiftFinderPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3" sx={{ mb: 3 }}>Find a Gift</Typography>
+      <Typography variant="h3" sx={{ mb: 3 }}>Build a Gift</Typography>
 
       <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
         {STEPS.map((label, i) => (
@@ -183,4 +183,4 @@ const GiftFinderPage = () => {
   );
 };
 
-export default GiftFinderPage;
+export default GiftBuilderPage;
