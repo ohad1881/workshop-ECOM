@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getMyWishlist, addWishlistItem, removeWishlistItem } from '../api/wishlists';
 import WishlistItem from './WishlistItem';
-import AddToWishlistModal from './AddToWishlistModal';
+import AddWishlistItemDialog from '../profile/AddWishlistItemDialog';
 import Spinner from '../general_components/Spinner';
 import EmptyState from '../general_components/EmptyState';
 
@@ -54,8 +54,8 @@ const WishlistPage = () => {
     setUndoItem(null);
   };
 
-  const handleAdd = (productId) => {
-    addMutation.mutate({ product_id: productId, priority: 5 });
+  const handleAdd = (product) => {
+    addMutation.mutate({ product_id: product.id, privacy: 'public', priority: 3 });
   };
 
   if (isLoading) return <Spinner fullHeight />;
@@ -90,11 +90,12 @@ const WishlistPage = () => {
         </Grid>
       )}
 
-      <AddToWishlistModal
+      <AddWishlistItemDialog
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        onSelect={handleAdd}
+        adding={addMutation.isPending}
         existingProductIds={items.map((i) => i.product.id)}
-        onAdd={handleAdd}
       />
 
       <Snackbar

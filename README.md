@@ -370,8 +370,7 @@ giftgraph/
 │       │   └── ProductsPage.jsx           # Searchable, category-filtered product grid (+ wishlist toggle)
 │       ├── wishlist/
 │       │   ├── WishlistPage.jsx
-│       │   ├── WishlistItem.jsx
-│       │   └── AddToWishlistModal.jsx
+│       │   └── WishlistItem.jsx       # public items show a globe, private a lock
 │       ├── gift-builder/
 │       │   ├── GiftBuilderPage.jsx
 │       │   ├── UserSearchPanel.jsx
@@ -1733,7 +1732,7 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 
 **`wishlist/WishlistPage.jsx`**:
 - MUI `Grid` of wishlist items (each a MUI `Card` with product image, name, price, privacy badge, priority stars).
-- "Add from Catalog" button → opens `AddToWishlistModal`.
+- "Add Item" button → opens the shared `profile/AddWishlistItemDialog`.
 - Each item has:
   - Privacy toggle (MUI `Switch` — public/private)
   - Priority (MUI `Rating` component, 0-5 stars)
@@ -1749,19 +1748,19 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 - If the snackbar times out, the deletion is final.
 - Implementation: on delete click, call the DELETE API immediately but keep the item data in local state. If "Undo" is clicked, call POST to re-add. If snackbar closes without undo, discard the saved data.
 
-### 12.3 AddToWishlistModal
+### 12.3 Add Item Dialog
 
-**`wishlist/AddToWishlistModal.jsx`**: MUI `Dialog` with:
-- Search input (MUI `TextField`) to search products.
-- Product results as an MUI `List` of `ListItem`s (name + price), not cards.
-- Click a product to add it (default: public, priority 0).
-- Products already in wishlist show a "Already in wishlist" MUI `Chip`.
+**`profile/AddWishlistItemDialog.jsx`** (shared by the profile and wishlist pages): MUI `Dialog` with:
+- Search input (MUI `TextField`).
+- Loads the first 20 products on open (instant); typing runs a debounced full-catalog search (`/products/search/`).
+- Product results as an MUI `List` of `ListItemButton`s (name + price), not cards.
+- Click a product to add it (default: public, priority 3).
+- Products already on the wishlist are disabled and show an "Already added" MUI `Chip`.
 
 ### Acceptance Criteria — Phase 12
 
 - [ ] Wishlist displays with cards, privacy badges, priority stars
-- [ ] Adding a product works via search modal
-- [ ] Duplicate add shows "Already in wishlist" chip
+- [ ] Adding a product works via the search dialog
 - [ ] Deleting is instant with no confirmation dialog
 - [ ] Undo snackbar appears for 5 seconds after deletion
 - [ ] Clicking "Undo" restores the item

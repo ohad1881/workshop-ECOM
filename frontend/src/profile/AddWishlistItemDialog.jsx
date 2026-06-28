@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Dialog,
@@ -9,28 +9,29 @@ import {
   ListItemButton,
   ListItemText,
   Box,
+  Chip,
   Typography,
 } from '@mui/material';
-import { searchProducts } from '../api/products';
+import { listProducts, searchProducts } from '../api/products';
+import { useDebounce } from '../general_hooks/useDebounce';
 import { formatCurrency } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
 
-// Owner-only: search the catalog and pick a product to add to the wishlist.
-const AddWishlistItemDialog = ({ open, onClose, onSelect, adding }) => {
+const LIMIT = 20;
+
+// Owner-only: show the first products on open, search the full catalog as you type.
+const AddWishlistItemDialog = ({ open, onClose, onSelect, adding, existingProductIds = [] }) => {
   const [query, setQuery] = useState('');
-  const [term, setTerm] = useState('');
+  const term = useDebounce(query.trim(), 300);
 
-  // Debounce the search term so we don't hit the API on every keystroke.
-  useEffect(() => {
-    const t = setTimeout(() => setTerm(query.trim()), 300);
-    return () => clearTimeout(t);
-  }, [query]);
-
-  const { data: results = [], isFetching } = useQuery({
-    queryKey: ['product-search', term],
-    queryFn: () => searchProducts(term),
-    enabled: open && term.length >= 2,
+  const { data, isFetching } = useQuery({
+    queryKey: term ? ['products', 'search', term] : ['products', 'basic', LIMIT],
+    queryFn: () => (term ? searchProducts(term) : listProducts({ limit: LIMIT })),
+    enabled: open,
   });
+
+  // search returns an array; list returns a paginated { results } envelope.
+  const results = Array.isArray(data) ? data : data?.results ?? [];
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -48,31 +49,29 @@ const AddWishlistItemDialog = ({ open, onClose, onSelect, adding }) => {
 
         {isFetching && <Spinner />}
 
-        {!isFetching && term.length >= 2 && results.length === 0 && (
+        {!isFetching && results.length === 0 && (
           <Typography variant="body2" sx={{ color: 'text.secondary', py: 2, textAlign: 'center' }}>
-            No products match “{term}”.
-          </Typography>
-        )}
-
-        {!isFetching && term.length < 2 && (
-          <Typography variant="body2" sx={{ color: 'text.secondary', py: 2, textAlign: 'center' }}>
-            Type at least 2 characters to search.
+            {term ? `No products match “${term}”.` : 'No products available.'}
           </Typography>
         )}
 
         <List>
-          {results.map((product) => (
-            <ListItemButton
-              key={product.id}
-              onClick={() => onSelect(product)}
-              disabled={adding}
-            >
-              <ListItemText
-                primary={product.name}
-                secondary={formatCurrency(Number(product.price))}
-              />
-            </ListItemButton>
-          ))}
+          {results.map((product) => {
+            const alreadyAdded = existingProductIds.includes(product.id);
+            return (
+              <ListItemButton
+                key={product.id}
+                onClick={() => onSelect(product)}
+                disabled={adding || alreadyAdded}
+              >
+                <ListItemText
+                  primary={product.name}
+                  secondary={formatCurrency(Number(product.price))}
+                />
+                {alreadyAdded && <Chip label="Already added" size="small" />}
+              </ListItemButton>
+            );
+          })}
         </List>
 
         {adding && (

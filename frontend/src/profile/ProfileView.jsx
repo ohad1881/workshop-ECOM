@@ -168,10 +168,7 @@ const ProfileView = ({ profile, wishlist, isOwner, wishlistLoading }) => {
     editing.add.mutate(
       { product_id: product.id, privacy: 'public', priority: 3 },
       {
-        onSuccess: () => {
-          setAddOpen(false);
-          notify(`Added ${product.name}`);
-        },
+        onSuccess: () => notify(`Added ${product.name}`),
         onError: (e) =>
           e?.response?.status === 409
             ? notify(`${product.name} is already on your wishlist`, 'info')
@@ -286,6 +283,7 @@ const ProfileView = ({ profile, wishlist, isOwner, wishlistLoading }) => {
           onClose={() => setAddOpen(false)}
           onSelect={handleAdd}
           adding={editing.add.isPending}
+          existingProductIds={(wishlist ?? []).map((i) => i.product.id)}
         />
       )}
 

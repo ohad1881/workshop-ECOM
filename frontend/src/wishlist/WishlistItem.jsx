@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
+import PublicIcon from '@mui/icons-material/Public';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateWishlistItem } from '../api/wishlists';
 import { formatCurrency } from '../utils/formatters';
@@ -71,7 +72,9 @@ const WishlistItem = ({ item, onDelete }) => {
           }
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              {item.privacy === 'private' && <LockIcon sx={{ fontSize: 12 }} />}
+              {item.privacy === 'private'
+                ? <LockIcon sx={{ fontSize: 12 }} />
+                : <PublicIcon sx={{ fontSize: 12 }} />}
               <Typography variant="caption">
                 {item.privacy === 'public' ? 'Public' : 'Private'}
               </Typography>
