@@ -1784,7 +1784,7 @@ Cache this in the React Query cache so the data is available instantly on subseq
 
 **`gift-finder/GiftFinderPage.jsx`**:
 
-**Step 1 — Select recipient**: `UserSearchPanel` with a debounced (300ms) MUI `TextField` + autocomplete for searching users. Results display as `UserCard` components. Clicking a card selects the recipient.
+**Step 1 — Select recipient**: `UserSearchPanel` with a debounced (300ms) MUI `TextField` + autocomplete for searching users. Results display as `UserCard` components. Clicking a card selects the recipient. A `?recipientId=` query param (set by a profile's `CreateGiftButton`) preloads that recipient and skips straight to Step 2.
 
 **Step 2 — Configure gift parameters**: `GiftConfigPanel` with:
 - Budget input (MUI `TextField` type number)
