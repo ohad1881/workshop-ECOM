@@ -1,0 +1,49 @@
+frontend/src/base_components/Navbar.jsx
+  s_ee29a2e85ea90a::t_29ff845cd674ca 64-66
+frontend/src/products/ProductsPage.jsx
+  s_ee29a2e85ea90a::t_bcd246d6f4e8b6 123
+  s_ee29a2e85ea90a::t_cdd0e224c9d7da 8,15-16,21-22,25,27-68
+  h_48054a6077c2eb 153
+  s_ee29a2e85ea90a::t_d53a38746c9e79 73-74,94-122,185-191
+  s_ee29a2e85ea90a::t_958734faea1911 82,86-91
+  s_ee29a2e85ea90a::t_ee34d8a6aeabd9 1,3-7,9-14,19-20,23,26,69-71,75,92-93,124-135,137-146,165-184,192-194,209-213
+  s_ee29a2e85ea90a::t_d5acb11d7f972a 17-18,24,72,76-81,83-85,136,147-152,154-164
+  s_ee29a2e85ea90a::t_1c4f6af3c9650a 195-208
+  s_ee29a2e85ea90a::t_8e476f99cb1bfa 2
+backend/apps/products/services.py
+  s_ee29a2e85ea90a::t_e05936c78c829f 29,35
+backend/apps/products/controllers.py
+  s_ee29a2e85ea90a::t_20ec61e750d13f 49,61
+frontend/src/App.jsx
+  s_ee29a2e85ea90a::t_dff44513d56596 19
+  s_ee29a2e85ea90a::t_e4ca14566b4d6d 42
+backend/apps/products/repositories.py
+  s_ee29a2e85ea90a::t_6a202ccdb5dede 39,41-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "c26ceb08bee86b9cbb2b60898525f49a17a9e655",
+  "prompts": {},
+  "humans": {
+    "h_48054a6077c2eb": {
+      "author": "ohad shushan <ohad.s@mstone.ai>"
+    }
+  },
+  "sessions": {
+    "s_ee29a2e85ea90a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "804cbd32-2247-4168-bc35-f4a96213a088",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "ohad shushan <ohad.s@mstone.ai>",
+      "token_usage": {
+        "input_tokens": 275,
+        "output_tokens": 48431,
+        "cache_creation_tokens": 228885,
+        "cache_read_tokens": 10690576
+      }
+    }
+  }
+}
