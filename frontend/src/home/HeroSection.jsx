@@ -1,6 +1,7 @@
 import { Box, Button, Typography, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth/useAuth';
+import UserSearch from './UserSearch';
 
 // Home-only hero block (single-use; lives directly in the home/ page folder).
 const HeroSection = () => {
@@ -26,9 +27,12 @@ const HeroSection = () => {
           </Button>
         </Stack>
       ) : (
-        <Button variant="contained" size="large" onClick={() => navigate('/gift-finder')}>
-          Find a Gift
-        </Button>
+        <>
+          <Button variant="contained" size="large" onClick={() => navigate('/gift-finder')}>
+            Find a Gift
+          </Button>
+          <UserSearch />
+        </>
       )}
     </Box>
   );

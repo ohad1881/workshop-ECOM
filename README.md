@@ -343,6 +343,7 @@ giftgraph/
 │       ├── home/
 │       │   ├── HomePage.jsx
 │       │   ├── HeroSection.jsx         # Only used on home page
+│       │   ├── UserSearch.jsx          # Search a user → navigate to their profile (home only)
 │       │   └── FeaturedUsers.jsx        # Only used on home page
 │       ├── login/
 │       │   ├── LoginPage.jsx
