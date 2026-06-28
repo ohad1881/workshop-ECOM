@@ -28,3 +28,6 @@ __pycache__/
 .neon
 
 backend/seed_data/
+
+.media/
+*.png

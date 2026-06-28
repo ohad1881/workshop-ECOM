@@ -24,9 +24,6 @@ export const logout = (refresh) =>
 
 export const getCurrentUser = () => apiClient.get('/auth/me/').then((r) => r.data);
 
-// Account settings: username, email, avatar (avatar = multipart file).
-export const updateSettings = (data) => apiClient.patch('/auth/me/', data).then((r) => r.data);
-
 // Profile preferences: bio, interest_ids, preferred/excluded_category_ids, privacy flags.
 export const updatePreferences = (data) =>
   apiClient.patch('/auth/me/preferences/', data).then((r) => r.data);

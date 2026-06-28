@@ -11,7 +11,7 @@ const Footer = () => {
         bgcolor: 'background.paper',
         borderTop: 1,
         borderColor: 'divider',
-        py: 4,
+        py: 2,
         mt: 'auto',
       }}
     >
@@ -20,12 +20,12 @@ const Footer = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
-            gap: 4,
-            mb: 3,
+            gap: 3,
+            mb: 1.5,
           }}
         >
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: 'primary.main' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5, color: 'primary.main' }}>
               GiftGraph
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -34,10 +34,10 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
               Links
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
               <Link component={RouterLink} to="/" underline="hover" color="text.secondary">
                 Home
               </Link>
@@ -51,10 +51,10 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
               Legal
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
               <Link component={RouterLink} to="/privacy" underline="hover" color="text.secondary">
                 Privacy Policy
               </Link>
@@ -65,7 +65,7 @@ const Footer = () => {
           </Box>
         </Box>
 
-        <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 2 }}>
+        <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 1.5 }}>
           <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>
             &copy; {year} GiftGraph. All rights reserved.
           </Typography>
