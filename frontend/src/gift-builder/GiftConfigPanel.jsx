@@ -1,15 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box, TextField, FormControl, InputLabel, Select, MenuItem,
   ToggleButtonGroup, ToggleButton, Button, Typography, FormHelperText,
 } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useMetadata } from '../general_hooks/useMetadata';
 
-const GiftConfigPanel = ({ recipient, onFind, loading }) => {
+const GiftConfigPanel = ({ recipient, initialConfig = {}, onFind, loading, onBack }) => {
   const { eventTypes, giftStrategies } = useMetadata();
-  const [budget, setBudget] = useState('');
-  const [eventType, setEventType] = useState('');
-  const [strategy, setStrategy] = useState('balanced');
+  const [budget, setBudget] = useState(initialConfig?.budget ?? '');
+  const [eventType, setEventType] = useState(initialConfig?.event_type ?? '');
+  const [strategy, setStrategy] = useState(initialConfig?.strategy ?? 'balanced');
+
+  useEffect(() => {
+    setBudget(initialConfig?.budget ?? '');
+    setEventType(initialConfig?.event_type ?? '');
+    setStrategy(initialConfig?.strategy ?? 'balanced');
+  }, [initialConfig]);
 
   const budgetNum = parseFloat(budget);
   const isValid = !isNaN(budgetNum) && budgetNum > 0;
@@ -70,15 +77,28 @@ const GiftConfigPanel = ({ recipient, onFind, loading }) => {
         ))}
       </ToggleButtonGroup>
 
-      <Button
-        fullWidth
-        variant="contained"
-        size="large"
-        onClick={() => onFind({ budget: budgetNum, event_type: eventType || undefined, strategy })}
-        disabled={!isValid || loading}
-      >
-        {loading ? 'Finding Gifts…' : 'Find Gifts'}
-      </Button>
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+        {onBack && (
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIosNewIcon />}
+            onClick={onBack}
+            sx={{ borderRadius: '12px', textTransform: 'none' }}
+          >
+            Back
+          </Button>
+        )}
+        <Button
+          fullWidth
+          variant="contained"
+          size="large"
+          onClick={() => onFind({ budget: budgetNum, event_type: eventType || undefined, strategy })}
+          disabled={!isValid || loading}
+          sx={{ borderRadius: '12px', textTransform: 'none' }}
+        >
+          {loading ? 'Finding Gifts…' : 'Find Gifts'}
+        </Button>
+      </Box>
     </Box>
   );
 };
