@@ -312,29 +312,33 @@ giftgraph/
 │   ├── .env.example
 │   └── src/
 │       ├── main.jsx
-│       ├── App.jsx
-│       ├── theme.js                # MUI theme configuration
-│       ├── api/
-│       │   ├── client.js           # Axios instance with JWT interceptors
+│       ├── App.jsx                 # Composition root: providers + all routes
+│       ├── theme.js                # MUI theme configuration (design tokens)
+│       ├── index.css               # Global reset only
+│       ├── api/                    # The data layer — the ONLY place HTTP happens
+│       │   ├── client.js           # Axios instance with JWT/refresh interceptors
 │       │   ├── auth.js
 │       │   ├── users.js
 │       │   ├── products.js
 │       │   ├── wishlists.js
 │       │   ├── recommendations.js
+│       │   ├── taxonomy.js         # Categories / interests
 │       │   ├── chat.js
 │       │   └── metadata.js         # Event types, strategies (cached)
-│       ├── hooks/
-│       │   ├── useAuth.js
+│       ├── context/                # One folder per context (object / provider / hook)
+│       │   └── auth/
+│       │       ├── AuthContext.js
+│       │       ├── AuthProvider.jsx
+│       │       └── useAuth.js
+│       ├── general_hooks/          # Hooks shared across pages
 │       │   ├── useMetadata.js      # Loads & caches app constants
 │       │   └── useDebounce.js
-│       ├── context/
-│       │   └── AuthContext.jsx
 │       │
 │       │   # ── Page folders ──────────────────────────────
-│       │   # Each page is a folder. Single-use components
-│       │   # live INSIDE the page folder that uses them.
-│       │   # Only truly shared/generic components go in
-│       │   # the top-level components/ folder.
+│       │   # Each page is a folder at src/ root. Single-use
+│       │   # components live INSIDE the page folder that uses
+│       │   # them; only generic shared widgets go in
+│       │   # general_components/.
 │       │
 │       ├── home/
 │       │   ├── HomePage.jsx
@@ -342,10 +346,14 @@ giftgraph/
 │       │   └── FeaturedUsers.jsx        # Only used on home page
 │       ├── login/
 │       │   ├── LoginPage.jsx
-│       │   └── LoginForm.jsx
+│       │   └── LoginForm/               # Graduated to a folder (hook companion)
+│       │       ├── LoginForm.jsx
+│       │       └── useLoginForm.js
 │       ├── register/
 │       │   ├── RegisterPage.jsx
-│       │   └── RegisterForm.jsx
+│       │   └── RegisterForm/
+│       │       ├── RegisterForm.jsx
+│       │       └── useRegisterForm.js
 │       ├── profile/
 │       │   ├── MyProfilePage.jsx          # Own (editable) profile loader → ProfileView
 │       │   ├── UserProfilePage.jsx        # Read-only view of another user (/users/:id)
@@ -358,56 +366,63 @@ giftgraph/
 │       │   ├── CreateGiftButton.jsx       # Flashy CTA → /gift-finder with recipient context
 │       │   ├── useWishlistEditing.js      # Owner wishlist mutations (add/update/delete, optimistic)
 │       │   └── useProfileEdit.js          # Owner bio + category preferences
+│       ├── products/
+│       │   └── ProductsPage.jsx           # Searchable, category-filtered product grid (+ wishlist toggle)
 │       ├── wishlist/
 │       │   ├── WishlistPage.jsx
-│       │   ├── WishlistGrid.jsx
 │       │   ├── WishlistItem.jsx
-│       │   ├── AddToWishlistModal.jsx
-│       │   └── UndoSnackbar.jsx         # "Deleted. Undo?" hover snackbar
+│       │   └── AddToWishlistModal.jsx
 │       ├── gift-finder/
 │       │   ├── GiftFinderPage.jsx
 │       │   ├── UserSearchPanel.jsx
 │       │   ├── GiftConfigPanel.jsx      # Budget, event type, strategy selector
 │       │   ├── RecommendationCard.jsx
-│       │   ├── BundleView.jsx
-│       │   └── ScoreExplanation.jsx
+│       │   └── BundleView.jsx
 │       ├── chat/
-│       │   ├── ChatPage.jsx
-│       │   ├── ChatWindow.jsx
-│       │   ├── ChatMessage.jsx
-│       │   ├── ChatInput.jsx
-│       │   └── ChatSidebar.jsx
+│       │   └── ChatPage.jsx
+│       ├── privacy/
+│       │   └── PrivacyPolicyPage.jsx
+│       ├── terms/
+│       │   └── TermsOfServicePage.jsx
 │       ├── not-found/
 │       │   └── NotFoundPage.jsx
 │       │
-│       │   # ── Shared components ─────────────────────────
-│       │   # Generic, reusable across 2+ pages.
-│       │   # Pages may compose these into page-specific
-│       │   # components stored inside their own folder.
+│       │   # ── App-shell & structural pieces ─────────────
+│       │   # Used once, app-wide (layout / routing).
 │       │
-│       ├── components/
-│       │   ├── Layout.jsx               # Navbar + content + footer wrapper
+│       ├── base_components/
+│       │   ├── MainLayout.jsx           # Navbar + content + footer wrapper
 │       │   ├── Navbar.jsx
 │       │   ├── Footer.jsx
-│       │   ├── ProtectedRoute.jsx
-│       │   ├── ProductGrid.jsx          # Used in wishlist, gift-finder
+│       │   └── ProtectedRoute.jsx
+│       │
+│       │   # ── Shared widgets ───────────────────────────
+│       │   # Generic, reusable across 2+ pages.
+│       │
+│       ├── general_components/
 │       │   ├── UserCard.jsx             # Used in gift-finder, home
+│       │   ├── CustomSelect.jsx
+│       │   ├── CustomSnackbar.jsx
+│       │   ├── FormTextField.jsx
 │       │   ├── Spinner.jsx
 │       │   ├── EmptyState.jsx
 │       │   └── LegalDocument.jsx        # Renders Privacy/Terms pages from data
 │       │
-│       └── utils/
+│       └── utils/                       # Pure, dependency-free helpers
 │           ├── constants.js
 │           ├── formatters.js
-│           ├── gravatar.js               # Build a Gravatar image URL from a user's gravatar_hash
+│           ├── apiError.js              # Normalize API error payloads
+│           ├── gravatar.js              # Build a Gravatar image URL from a user's gravatar_hash
 │           └── media.js                 # Resolve relative media/image paths to absolute URLs
 ```
 
 ### Frontend Folder Convention — Rule
 
-> If a component is used by **only one page**, it lives **inside that page's folder**.
-> If a component is used by **two or more pages**, it lives in `components/`.
-> When in doubt, start inside the page folder. Move to `components/` only when a second page needs it.
+> Code is sorted by **scope of use**. A component used by **only one page** lives **inside that
+> page's folder**. A generic widget used by **two or more pages** lives in `general_components/`.
+> App-shell / structural pieces (layout, routing) used once app-wide live in `base_components/`.
+> When in doubt, start inside the page folder; promote to `general_components/` only when a second
+> page needs it. Files start flat and earn a folder once they gain companion files (a hook, sub-components).
 
 ---
 
@@ -1738,7 +1753,7 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 
 **`wishlist/AddToWishlistModal.jsx`**: MUI `Dialog` with:
 - Search input (MUI `TextField`) to search products.
-- Product results as a list of `ProductCard` components.
+- Product results as an MUI `List` of `ListItem`s (name + price), not cards.
 - Click a product to add it (default: public, priority 0).
 - Products already in wishlist show a "Already in wishlist" MUI `Chip`.
 
