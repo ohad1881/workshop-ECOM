@@ -120,7 +120,7 @@ const ProfileView = ({ profile, wishlist, isOwner, wishlistLoading }) => {
 
   const handleAdd = (product) => {
     editing.add.mutate(
-      { product_id: product.id, privacy: 'public', priority: 0 },
+      { product_id: product.id, privacy: 'public', priority: 3 },
       {
         onSuccess: () => {
           setAddOpen(false);
