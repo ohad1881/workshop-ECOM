@@ -60,7 +60,7 @@ Two PATCH surfaces are split by concern: **settings** (identity/account) vs **pr
 | `/auth/logout/` | POST | Yes | body: **`refresh`** | `204 No Content` |
 | `/auth/me/` | GET | Yes | _(Bearer only)_ | `{ "id": 1, "email": "ada@example.com", "username": "ada", "gravatar_hash": "...", "date_joined": "2026-01-15T10:00:00Z", "preferences": { "bio": "", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [], "interests_privacy": "public", "preferences_privacy": "public" } }` |
 | `/auth/me/` | PATCH | Yes | **settings** (partial): `username`, `email` | `{ "id": 1, "username": "ada2", "email": "ada@example.com", "gravatar_hash": "..." }` |
-| `/auth/me/preferences/` | PATCH | Yes | **preferences** (partial): `bio`, `interest_ids` `[ids]`, `preferred_category_ids` `[ids]`, `excluded_category_ids` `[ids]`, `interests_privacy`, `preferences_privacy` | `{ "bio": "Loves gadgets", "interest_ids": [1, 2, 3], "preferences_privacy": "private" }` |
+| `/auth/me/preferences/` | PATCH | Yes | **preferences** (partial): `bio`, `interest_ids` `[ids]` (Tag IDs from `/tags/`), `preferred_category_ids` `[ids]` (Category IDs from `/categories/`), `excluded_category_ids` `[ids]` (Category IDs), `interests_privacy`, `preferences_privacy` | `{ "bio": "Loves gadgets", "interest_ids": [1, 2, 3], "preferences_privacy": "private" }` |
 | `/auth/change-password/` | POST | Yes | body: **`old_password`**, **`new_password`** | `{ "detail": "Password updated." }` |
 
 ## Users (`/api/users/*`)

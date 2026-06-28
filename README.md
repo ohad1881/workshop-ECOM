@@ -322,7 +322,7 @@ giftgraph/
 │       │   ├── products.js
 │       │   ├── wishlists.js
 │       │   ├── recommendations.js
-│       │   ├── taxonomy.js         # Categories / interests
+│       │   ├── taxonomy.js         # Categories / tags
 │       │   ├── chat.js
 │       │   └── metadata.js         # Event types, strategies (cached)
 │       ├── context/                # One folder per context (object / provider / hook)
@@ -361,8 +361,8 @@ giftgraph/
 │       │   ├── ProfileSidebar.jsx         # Avatar, name, member-since, bio, interest/category chips
 │       │   ├── WishlistItemRow.jsx        # One item; editable want/privacy/delete when owner
 │       │   ├── AddWishlistItemDialog.jsx  # Owner-only product search → add to wishlist
-│       │   ├── PreferenceSection.jsx      # Editable category chips (interests / preferred categories)
-│       │   ├── AddCategoryDialog.jsx      # Owner-only category search → add to a preference list
+│       │   ├── PreferenceSection.jsx      # Editable chips (preferred/disliked categories, interest tags)
+│       │   ├── AddPreferenceDialog.jsx    # Owner-only category/tag search → add to a preference list
 │       │   ├── CreateGiftButton.jsx       # Flashy CTA → /gift-builder with recipient context
 │       │   ├── useWishlistEditing.js      # Owner wishlist mutations (add/update/delete, optimistic)
 │       │   └── useProfileEdit.js          # Owner bio + category preferences
@@ -617,7 +617,7 @@ class UserProfile(Model):
     user = OneToOneField(User, on_delete=CASCADE, related_name='profile')
 
     # Interests & Preferences
-    interests = ManyToManyField(Category, blank=True, related_name='interested_users')
+    interests = ManyToManyField('products.Tag', blank=True, related_name='interested_users')
     preferred_categories = ManyToManyField(Category, blank=True, related_name='preferred_by')
     excluded_categories = ManyToManyField(Category, blank=True, related_name='excluded_by')
 

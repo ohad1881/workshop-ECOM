@@ -40,6 +40,7 @@ const UserProfilePage = () => {
     // Absent when the user keeps these private — ProfileSidebar hides empty sections.
     interestIds: data.interest_ids || null,
     preferredCategoryIds: data.preferred_category_ids || null,
+    excludedCategoryIds: data.excluded_category_ids || null,
   };
 
   return (

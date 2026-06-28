@@ -28,6 +28,7 @@ const MyProfilePage = () => {
     dateJoined: me.date_joined,
     interestIds: prefs.interest_ids || [],
     preferredCategoryIds: prefs.preferred_category_ids || [],
+    excludedCategoryIds: prefs.excluded_category_ids || [],
     interestsPrivacy: prefs.interests_privacy,
     preferencesPrivacy: prefs.preferences_privacy,
   };

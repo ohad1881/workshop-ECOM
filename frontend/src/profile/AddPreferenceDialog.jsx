@@ -10,12 +10,19 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { getCategories } from '../api/taxonomy';
+import { getCategories, getTags } from '../api/taxonomy';
 import Spinner from '../general_components/Spinner';
 
-// Owner-only: search categories to add to a preference list. Already-selected
-// categories are filtered out.
-const AddCategoryDialog = ({ open, onClose, onSelect, excludeIds = [], saving }) => {
+// Owner-only search to add an item to a preference list. `source` picks the
+// taxonomy: categories (preferred/disliked) or tags (interests). Already-selected
+// items are filtered out via excludeIds.
+const SOURCES = {
+  categories: { fetch: getCategories, title: 'Add category', placeholder: 'Search categories…', empty: 'No categories to add.' },
+  tags: { fetch: getTags, title: 'Add tag', placeholder: 'Search tags…', empty: 'No tags to add.' },
+};
+
+const AddPreferenceDialog = ({ open, onClose, onSelect, source = 'categories', excludeIds = [], saving }) => {
+  const cfg = SOURCES[source] ?? SOURCES.categories;
   const [query, setQuery] = useState('');
   const [term, setTerm] = useState('');
 
@@ -25,21 +32,21 @@ const AddCategoryDialog = ({ open, onClose, onSelect, excludeIds = [], saving })
   }, [query]);
 
   const { data, isFetching } = useQuery({
-    queryKey: ['categories', 'search', term],
-    queryFn: () => getCategories(term ? { q: term, limit: 20 } : { limit: 50 }),
+    queryKey: [source, 'search', term],
+    queryFn: () => cfg.fetch(term ? { q: term, limit: 20 } : { limit: 50 }),
     enabled: open,
   });
 
-  const results = (data?.results ?? data ?? []).filter((c) => !excludeIds.includes(c.id));
+  const results = (data?.results ?? data ?? []).filter((item) => !excludeIds.includes(item.id));
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>Add category</DialogTitle>
+      <DialogTitle>{cfg.title}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
           autoFocus
-          placeholder="Search categories…"
+          placeholder={cfg.placeholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           sx={{ mt: 1, mb: 2 }}
@@ -50,18 +57,18 @@ const AddCategoryDialog = ({ open, onClose, onSelect, excludeIds = [], saving })
 
         {!isFetching && results.length === 0 && (
           <Typography variant="body2" sx={{ color: 'text.secondary', py: 2, textAlign: 'center' }}>
-            No categories to add.
+            {cfg.empty}
           </Typography>
         )}
 
         <List>
-          {results.map((category) => (
+          {results.map((item) => (
             <ListItemButton
-              key={category.id}
-              onClick={() => onSelect(category)}
+              key={item.id}
+              onClick={() => onSelect(item)}
               disabled={saving}
             >
-              <ListItemText primary={`${category.icon ? `${category.icon} ` : ''}${category.name}`} />
+              <ListItemText primary={`${item.icon ? `${item.icon} ` : ''}${item.name}`} />
             </ListItemButton>
           ))}
         </List>
@@ -70,4 +77,4 @@ const AddCategoryDialog = ({ open, onClose, onSelect, excludeIds = [], saving })
   );
 };
 
-export default AddCategoryDialog;
+export default AddPreferenceDialog;

@@ -40,7 +40,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
-    interests = models.ManyToManyField(Category, blank=True, related_name='interested_users')
+    interests = models.ManyToManyField('products.Tag', blank=True, related_name='interested_users')
     preferred_categories = models.ManyToManyField(Category, blank=True, related_name='preferred_by')
     excluded_categories = models.ManyToManyField(Category, blank=True, related_name='excluded_by')
 
