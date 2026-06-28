@@ -1,3 +1,5 @@
+import hashlib
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -18,13 +20,14 @@ class Category(models.Model):
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     bio = models.TextField(blank=True, max_length=500)
-    avatar = models.ImageField(
-        upload_to='avatars/',
-        default='avatars/default_avatar.png'
-    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    @property
+    def gravatar_hash(self):
+        # MD5 of the normalized email; lets clients build a Gravatar URL without exposing the email.
+        return hashlib.md5(self.email.strip().lower().encode('utf-8')).hexdigest()
 
     def __str__(self):
         return self.username

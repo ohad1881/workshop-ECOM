@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCurrentUser } from '../api/auth';
 import { getMyWishlist } from '../api/wishlists';
-import { resolveMediaUrl } from '../utils/media';
+import { gravatarUrl } from '../utils/gravatar';
 import Spinner from '../general_components/Spinner';
 import EmptyState from '../general_components/EmptyState';
 import ProfileView from './ProfileView';
@@ -23,7 +23,7 @@ const MyProfilePage = () => {
   const profile = {
     id: me.id,
     username: me.username,
-    avatarUrl: resolveMediaUrl(me.avatar),
+    avatarUrl: gravatarUrl(me.gravatar_hash, { size: 320 }),
     bio: prefs.bio || '',
     dateJoined: me.date_joined,
     interestIds: prefs.interest_ids || [],

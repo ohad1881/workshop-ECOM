@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useAuth } from '../context/auth/useAuth';
+import { gravatarUrl } from '../utils/gravatar';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const Navbar = () => {
             <>
               <Avatar
                 onClick={openMenu}
+                src={gravatarUrl(user?.gravatar_hash, { size: 80 })}
                 sx={{ cursor: 'pointer', bgcolor: 'primary.main' }}
               >
                 {avatarInitial}

@@ -347,12 +347,17 @@ giftgraph/
 │       │   ├── RegisterPage.jsx
 │       │   └── RegisterForm.jsx
 │       ├── profile/
-│       │   ├── MyProfilePage.jsx        # Logged-in user viewing their own profile
-│       │   ├── UserProfilePage.jsx      # Viewing someone else's profile
-│       │   ├── ProfileCard.jsx
-│       │   ├── InterestTags.jsx
-│       │   ├── PrivacyToggle.jsx
-│       │   └── StrangerPreviewBanner.jsx
+│       │   ├── MyProfilePage.jsx          # Own (editable) profile loader → ProfileView
+│       │   ├── UserProfilePage.jsx        # Read-only view of another user (/users/:id)
+│       │   ├── ProfileView.jsx            # Shared template both pages render (layout, CTA, wishlist)
+│       │   ├── ProfileSidebar.jsx         # Avatar, name, member-since, bio, interest/category chips
+│       │   ├── WishlistItemRow.jsx        # One item; editable want/privacy/delete when owner
+│       │   ├── AddWishlistItemDialog.jsx  # Owner-only product search → add to wishlist
+│       │   ├── PreferenceSection.jsx      # Editable category chips (interests / preferred categories)
+│       │   ├── AddCategoryDialog.jsx      # Owner-only category search → add to a preference list
+│       │   ├── CreateGiftButton.jsx       # Flashy CTA → /gift-finder with recipient context
+│       │   ├── useWishlistEditing.js      # Owner wishlist mutations (add/update/delete, optimistic)
+│       │   └── useProfileEdit.js          # Owner bio + category preferences
 │       ├── wishlist/
 │       │   ├── WishlistPage.jsx
 │       │   ├── WishlistGrid.jsx
@@ -385,7 +390,6 @@ giftgraph/
 │       │   ├── Navbar.jsx
 │       │   ├── Footer.jsx
 │       │   ├── ProtectedRoute.jsx
-│       │   ├── ProductCard.jsx          # Used in wishlist, gift-finder, chat
 │       │   ├── ProductGrid.jsx          # Used in wishlist, gift-finder
 │       │   ├── UserCard.jsx             # Used in gift-finder, home
 │       │   ├── Spinner.jsx
@@ -394,7 +398,9 @@ giftgraph/
 │       │
 │       └── utils/
 │           ├── constants.js
-│           └── formatters.js
+│           ├── formatters.js
+│           ├── gravatar.js               # Build a Gravatar image URL from a user's gravatar_hash
+│           └── media.js                 # Resolve relative media/image paths to absolute URLs
 ```
 
 ### Frontend Folder Convention — Rule
@@ -455,7 +461,6 @@ ortools>=9.9
 celery>=5.4,<6.0
 redis>=5.0,<6.0
 python-decouple>=3.8
-Pillow>=10.0
 ```
 
 5. Create `.env.example`:
@@ -486,7 +491,6 @@ CORS_ALLOWED_ORIGINS=http://localhost:5173
    - Configure PostgreSQL database using env vars.
    - Set `AUTH_USER_MODEL = 'users.User'`.
    - CORS: `CORS_ALLOWED_ORIGINS` from env.
-   - `MEDIA_ROOT` and `MEDIA_URL` for avatar uploads.
 
 7. Create all five Django apps under `apps/`.
 
@@ -573,16 +577,12 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     email = EmailField(unique=True)
     bio = TextField(blank=True, max_length=500)
-    avatar = ImageField(
-        upload_to='avatars/',
-        default='avatars/default_avatar.png'  # Every new user gets this
-    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 ```
 
-**IMPORTANT**: Place a `default_avatar.png` image file in `backend/media/avatars/default_avatar.png`. Every newly registered user will reference this file as their avatar until they upload a custom one.
+> User avatars are not stored. The backend exposes a `gravatar_hash` (MD5 of the normalized email — the email itself is never leaked in public responses), and the frontend builds a Gravatar URL from it. When a user has no Gravatar the image 404s and the UI falls back to an initial-based placeholder.
 
 ```python
 class Category(Model):
@@ -750,7 +750,6 @@ python manage.py migrate
 
 - [ ] All migrations run cleanly on a fresh database
 - [ ] `UserProfile` is auto-created when a `User` is created (test via shell)
-- [ ] New users have `default_avatar.png` as their avatar
 - [ ] Tag model supports M2M with Product
 - [ ] All models visible in Django admin with useful columns
 - [ ] `WishlistItem` enforces unique (user, product) constraint
@@ -857,7 +856,7 @@ class AuthService:
 
 ### Acceptance Criteria — Phase 3
 
-- [ ] Registration creates user + auto-created profile with default avatar
+- [ ] Registration creates user + auto-created profile
 - [ ] `create_user()` hashes the password (verify via Django shell: `user.password` starts with `pbkdf2_`)
 - [ ] Login with email + password returns JWT tokens
 - [ ] Access token expires after 15 minutes
@@ -877,7 +876,7 @@ Build using CSR: UserRepository → UserService → UserController.
 
 | Endpoint | Method | Auth | Description |
 |---|---|---|---|
-| `/api/users/` | GET | Yes | List users (public info only: username, avatar, public interests) |
+| `/api/users/` | GET | Yes | List users (public info only: username, public interests) |
 | `/api/users/<id>/` | GET | Yes | Get user's public profile (respects privacy settings) |
 | `/api/users/search/?q=<query>` | GET | Yes | Search users by username. Uses `icontains` for partial matching. |
 
@@ -2002,7 +2001,6 @@ Frontend end-to-end testing will be performed **manually** using the following s
 │ username (unique)│       │ slug (unique)    │
 │ password (hash)  │       │ icon             │
 │ bio              │       └──────┬───────────┘
-│ avatar (default) │              │
 └──────┬───────────┘              │
        │                          │
        │ 1:1                      │ M:M (interests,

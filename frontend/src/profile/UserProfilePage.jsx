@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getUserProfile, getUserPublicWishlist } from '../api/users';
 import { useAuth } from '../context/auth/useAuth';
-import { resolveMediaUrl } from '../utils/media';
+import { gravatarUrl } from '../utils/gravatar';
 import Spinner from '../general_components/Spinner';
 import EmptyState from '../general_components/EmptyState';
 import ProfileView from './ProfileView';
@@ -34,7 +34,7 @@ const UserProfilePage = () => {
   const profile = {
     id: data.id,
     username: data.username,
-    avatarUrl: resolveMediaUrl(data.avatar),
+    avatarUrl: gravatarUrl(data.gravatar_hash, { size: 320 }),
     bio: data.bio || '',
     dateJoined: data.date_joined,
     // Absent when the user keeps these private — ProfileSidebar hides empty sections.

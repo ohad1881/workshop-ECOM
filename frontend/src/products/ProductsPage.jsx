@@ -23,6 +23,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { listProducts } from '../api/products';
 import { getCategories } from '../api/taxonomy';
 import { getMyWishlist, addWishlistItem, removeWishlistItem } from '../api/wishlists';
+import { resolveMediaUrl } from '../utils/media';
 
 const ProductCard = ({ product, wishlistItemId, onAdd, onRemove, isMutating }) => {
   const inWishlist = wishlistItemId != null;
@@ -33,7 +34,7 @@ const ProductCard = ({ product, wishlistItemId, onAdd, onRemove, isMutating }) =
         <CardMedia
           component="img"
           height="180"
-          image={product.image_url}
+          image={resolveMediaUrl(product.image_url)}
           alt={product.name}
           sx={{ objectFit: 'cover' }}
         />

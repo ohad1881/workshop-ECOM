@@ -1,4 +1,5 @@
 import { Card, CardContent, Avatar, Typography, Box } from '@mui/material';
+import { gravatarUrl } from '../utils/gravatar';
 
 const UserCard = ({ user, onClick, selected = false }) => (
   <Card
@@ -13,7 +14,7 @@ const UserCard = ({ user, onClick, selected = false }) => (
   >
     <CardContent>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Avatar src={user.avatar} alt={user.username} sx={{ width: 36, height: 36 }}>
+        <Avatar src={gravatarUrl(user.gravatar_hash, { size: 72 })} alt={user.username} sx={{ width: 36, height: 36 }}>
           {user.username?.[0]?.toUpperCase()}
         </Avatar>
         <Typography variant="body1" fontWeight={500} noWrap>

@@ -25,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_staff', 'is_active')
     search_fields = ('username', 'email')
     fieldsets = BaseUserAdmin.fieldsets + (
-        ('Extra', {'fields': ('bio', 'avatar')}),
+        ('Extra', {'fields': ('bio',)}),
     )
 
 

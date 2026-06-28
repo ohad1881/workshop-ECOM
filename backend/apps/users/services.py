@@ -28,8 +28,9 @@ class UserService:
         data = {
             'id': user.id,
             'username': user.username,
+            'gravatar_hash': user.gravatar_hash,
             'bio': user.bio,
-            'avatar': user.avatar.url if user.avatar else None,
+            'date_joined': user.date_joined,
             'interests_privacy': profile.interests_privacy,
             'preferences_privacy': profile.preferences_privacy,
         }

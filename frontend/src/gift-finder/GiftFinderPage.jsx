@@ -31,7 +31,7 @@ const GiftFinderPage = () => {
     if (!preloadId) return;
     getUserProfile(preloadId)
       .then((profile) => {
-        setRecipient({ id: profile.id, username: profile.username, avatar: profile.avatar });
+        setRecipient({ id: profile.id, username: profile.username, gravatar_hash: profile.gravatar_hash });
         setActiveStep(1);
       })
       .catch(() => {});

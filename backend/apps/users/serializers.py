@@ -54,6 +54,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user'] = {
             'id': self.user.id,
             'username': self.user.username,
+            'gravatar_hash': self.user.gravatar_hash,
         }
         return data
 
@@ -61,11 +62,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSettingsUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'avatar']
+        fields = ['username', 'email']
         extra_kwargs = {
             'username': {'required': False},
             'email': {'required': False},
-            'avatar': {'required': False},
         }
 
 

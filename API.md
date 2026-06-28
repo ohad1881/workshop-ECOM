@@ -4,7 +4,7 @@ This document describes the HTTP API between the **frontend** (`frontend/src/api
 
 - **Base URL:** `http://localhost:8000/api` (configurable via `VITE_API_BASE_URL`)
 - **Auth:** JWT Bearer tokens. The access token is sent as `Authorization: Bearer <access_token>` on every authenticated request. On a `401`, the client transparently refreshes via `/auth/token/refresh/`.
-- **Content type:** `application/json`, except avatar upload (`multipart/form-data`) and the chat endpoint (a Server-Sent Events stream).
+- **Content type:** `application/json`, except the chat endpoint (a Server-Sent Events stream).
 - **IDs only.** All filtering, fetching, and cross-references use numeric **IDs**, never names or slugs — e.g. `category_id=1`, `tag_ids=1,2`, `mentioned_user_ids=[2]`.
 - **No bulk fetch.** There is no "list everything" endpoint for users, tags, or categories. These are queried by type-ahead **search** (`?q=`), are paginated/capped, and the frontend selects results by ID.
 - **Reading the `Request` column.** `**bold**` = required; everything else is optional (default in parentheses). `<id>` / `<user_id>` path segments are always required. `[ids]` denotes a comma-separated list of IDs.
@@ -54,12 +54,12 @@ Two PATCH surfaces are split by concern: **settings** (identity/account) vs **pr
 
 | Endpoint | Method | Auth | Request | Returns (example) |
 |---|---|---|---|---|
-| `/auth/register/` | POST | No | body: **`email`**, **`username`**, **`password`** | `{ "user": { "id": 1, "email": "ada@example.com", "username": "ada" }, "access": "eyJ...", "refresh": "eyJ..." }` |
-| `/auth/login/` | POST | No | body: **`email`**, **`password`** | `{ "access": "eyJ...", "refresh": "eyJ...", "user": { "id": 1, "username": "ada" } }` |
+| `/auth/register/` | POST | No | body: **`email`**, **`username`**, **`password`** | `{ "user": { "id": 1, "email": "ada@example.com", "username": "ada", "gravatar_hash": "..." }, "access": "eyJ...", "refresh": "eyJ..." }` |
+| `/auth/login/` | POST | No | body: **`email`**, **`password`** | `{ "access": "eyJ...", "refresh": "eyJ...", "user": { "id": 1, "username": "ada", "gravatar_hash": "..." } }` |
 | `/auth/token/refresh/` | POST | No | body: **`refresh`** | `{ "access": "eyJ..." }` |
 | `/auth/logout/` | POST | Yes | body: **`refresh`** | `204 No Content` |
-| `/auth/me/` | GET | Yes | _(Bearer only)_ | `{ "id": 1, "email": "ada@example.com", "username": "ada", "avatar": null, "preferences": { "bio": "", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [], "interests_privacy": "public", "preferences_privacy": "public" } }` |
-| `/auth/me/` | PATCH | Yes | **settings** (partial): `username`, `email`, `avatar` _(avatar = multipart file)_ | `{ "id": 1, "username": "ada2", "email": "ada@example.com", "avatar": "/media/avatars/ada.png" }` |
+| `/auth/me/` | GET | Yes | _(Bearer only)_ | `{ "id": 1, "email": "ada@example.com", "username": "ada", "gravatar_hash": "...", "date_joined": "2026-01-15T10:00:00Z", "preferences": { "bio": "", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [], "interests_privacy": "public", "preferences_privacy": "public" } }` |
+| `/auth/me/` | PATCH | Yes | **settings** (partial): `username`, `email` | `{ "id": 1, "username": "ada2", "email": "ada@example.com", "gravatar_hash": "..." }` |
 | `/auth/me/preferences/` | PATCH | Yes | **preferences** (partial): `bio`, `interest_ids` `[ids]`, `preferred_category_ids` `[ids]`, `excluded_category_ids` `[ids]`, `interests_privacy`, `preferences_privacy` | `{ "bio": "Loves gadgets", "interest_ids": [1, 2, 3], "preferences_privacy": "private" }` |
 | `/auth/change-password/` | POST | Yes | body: **`old_password`**, **`new_password`** | `{ "detail": "Password updated." }` |
 
@@ -69,8 +69,8 @@ No list-all endpoint. Discover users via search (used for the gift-finder recipi
 
 | Endpoint | Method | Auth | Request | Returns (example) |
 |---|---|---|---|---|
-| `/users/search/` | GET | Yes | query: **`q`**, `limit` (20) | `[ { "id": 2, "username": "grace", "avatar": null } ]` |
-| `/users/<id>/` | GET | Yes | path **`id`** | `{ "id": 2, "username": "grace", "bio": "Hi", "interests_privacy": "public" }` |
+| `/users/search/` | GET | Yes | query: **`q`**, `limit` (20) | `[ { "id": 2, "username": "grace", "gravatar_hash": "..." } ]` |
+| `/users/<id>/` | GET | Yes | path **`id`** | `{ "id": 2, "username": "grace", "gravatar_hash": "...", "bio": "Hi", "date_joined": "2026-01-15T10:00:00Z", "interests_privacy": "public" }` |
 | `/users/<id>/wishlist/` | GET | Yes | path **`id`** | `[ { "id": 10, "product": { "id": 5, "name": "Headphones", "price": "199.00" } } ]` |
 
 ## Taxonomy & Metadata

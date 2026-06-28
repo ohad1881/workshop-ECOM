@@ -18,12 +18,6 @@ from .serializers import (
 from .services import AuthService, UserService
 
 
-def _user_avatar_url(request, user):
-    if user.avatar:
-        return request.build_absolute_uri(user.avatar.url)
-    return None
-
-
 class RegisterController(APIView):
     permission_classes = [AllowAny]
 
@@ -33,7 +27,12 @@ class RegisterController(APIView):
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
         return Response({
-            'user': {'id': user.id, 'email': user.email, 'username': user.username},
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'username': user.username,
+                'gravatar_hash': user.gravatar_hash,
+            },
             'access': str(refresh.access_token),
             'refresh': str(refresh),
         }, status=status.HTTP_201_CREATED)
@@ -65,7 +64,8 @@ class MeController(APIView):
             'id': user.id,
             'email': user.email,
             'username': user.username,
-            'avatar': _user_avatar_url(request, user),
+            'gravatar_hash': user.gravatar_hash,
+            'date_joined': user.date_joined,
             'preferences': {
                 'bio': user.bio,
                 'interest_ids': list(profile.interests.values_list('id', flat=True)),
@@ -86,7 +86,7 @@ class MeController(APIView):
             'id': user.id,
             'username': user.username,
             'email': user.email,
-            'avatar': _user_avatar_url(request, user),
+            'gravatar_hash': user.gravatar_hash,
         })
 
 
@@ -138,7 +138,7 @@ class UserSearchController(APIView):
         limit = min(int(request.query_params.get('limit', 20)), 100)
         users = UserRepository.search_by_username(q, limit=limit)
         return Response([
-            {'id': u.id, 'username': u.username, 'avatar': _user_avatar_url(request, u)}
+            {'id': u.id, 'username': u.username, 'gravatar_hash': u.gravatar_hash}
             for u in users
         ])
 
