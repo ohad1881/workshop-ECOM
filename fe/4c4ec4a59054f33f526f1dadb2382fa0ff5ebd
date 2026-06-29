@@ -1,0 +1,42 @@
+frontend/src/products/ProductsPage.jsx
+  s_ee29a2e85ea90a::t_f88183617b8ab9 267,269
+  s_ee29a2e85ea90a::t_e1daa00c1cc915 192
+  s_ee29a2e85ea90a::t_ba4d02ac3a8141 255,257
+  s_ee29a2e85ea90a::t_7dbae8e485e100 18,25,29-33,35-38,40,43-49,64-66,105-106,109-110,114-115,122-130,140,172-189,218,221-222,242-249,256,260-261,271,276-278,280
+  h_48054a6077c2eb 34
+  s_ee29a2e85ea90a::t_2e5d9545e0b572 50-63
+backend/apps/recommendations/urls.py
+  s_ee29a2e85ea90a::t_c4610624e7cbdc 3,7
+frontend/src/api/recommendations.js
+  s_ee29a2e85ea90a::t_e2f8a9fa1f7b2a 10-14
+backend/apps/recommendations/controllers.py
+  s_ee29a2e85ea90a::t_414e3e81190856 60-84
+  s_ee29a2e85ea90a::t_a253a2e5f4e6bc 8,11-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "fe4c4ec4a59054f33f526f1dadb2382fa0ff5ebd",
+  "prompts": {},
+  "humans": {
+    "h_48054a6077c2eb": {
+      "author": "ohad shushan <ohad.s@mstone.ai>"
+    }
+  },
+  "sessions": {
+    "s_ee29a2e85ea90a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "804cbd32-2247-4168-bc35-f4a96213a088",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "ohad shushan <ohad.s@mstone.ai>",
+      "token_usage": {
+        "input_tokens": 24623,
+        "output_tokens": 50965,
+        "cache_creation_tokens": 195728,
+        "cache_read_tokens": 9148688
+      }
+    }
+  }
+}
