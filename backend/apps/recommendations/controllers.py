@@ -5,8 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import GiftSuggestionsSerializer
+from .serializers import GiftSuggestionsSerializer, RecommendationItemSerializer
 from .services import RecommendationService
+
+# Effectively "no budget cap" — large enough to include the entire catalog when
+# scoring a user's whole feed (vs. a real gift budget).
+UNCAPPED_BUDGET = Decimal('1000000000')
 
 
 def _parse_budget(value):
@@ -53,3 +57,28 @@ class GiftSuggestionsController(APIView):
             return Response({'message': result['message'], 'recommendations': [], 'bundles': {}})
 
         return Response(GiftSuggestionsSerializer(result).data)
+
+
+class RecommendedForMeController(APIView):
+    """
+    The current user's entire catalog scored against their own profile, sorted by
+    match score — powers the products page "Recommended" tab. Self-gift scoring is
+    triggered automatically (giver == recipient), so private wishlist data counts.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        limit = min(int(request.query_params.get('limit', 200)), 500)
+
+        result = RecommendationService.get_recommendations(
+            recipient_id=request.user.id,
+            budget=UNCAPPED_BUDGET,
+            giver_user=request.user,
+            limit=limit,
+        )
+
+        # No profile data yet → service returns a {'message': ..., 'items': []} dict.
+        if isinstance(result, dict):
+            return Response({'message': result['message'], 'results': []})
+
+        return Response({'results': RecommendationItemSerializer(result, many=True).data})

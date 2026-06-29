@@ -6,7 +6,6 @@ import {
   CardContent,
   CardMedia,
   CardActions,
-  Grid,
   Typography,
   CircularProgress,
   Alert,
@@ -16,20 +15,55 @@ import {
   Tooltip,
   ToggleButton,
   ToggleButtonGroup,
+  Chip,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { listProducts } from '../api/products';
 import { getCategories } from '../api/taxonomy';
+import { getRecommendedForMe } from '../api/recommendations';
 import { getMyWishlist, addWishlistItem, removeWishlistItem } from '../api/wishlists';
 import { resolveMediaUrl } from '../utils/media';
 
-const ProductCard = ({ product, wishlistItemId, onAdd, onRemove, isMutating }) => {
+// 0–1 match score → a color for the "% match" badge.
+const scoreColor = (score) => {
+  if (score >= 0.6) return 'success';
+  if (score >= 0.35) return 'primary';
+  if (score >= 0.15) return 'warning';
+  if (score < 0.15) return 'secondary';
+  return 'default';
+};
+
+const ProductCard = ({ product, score, explanation, wishlistItemId, onAdd, onRemove, isMutating }) => {
   const inWishlist = wishlistItemId != null;
+  const hasScore = typeof score === 'number';
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {hasScore && (
+        <Tooltip title={explanation || ''}>
+          <Chip
+            label={`${Math.round(score * 100)}% match`}
+            color={scoreColor(score)}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              zIndex: 1,
+              fontWeight: 600,
+              cursor: 'help',
+              transition: 'transform 0.15s, box-shadow 0.15s',
+              boxShadow: 1,
+              '&:hover': {
+                transform: 'scale(1.08)',
+                boxShadow: 3,
+              },
+            }}
+          />
+        </Tooltip>
+      )}
       {product.image_url && (
         <CardMedia
           component="img"
@@ -68,11 +102,16 @@ const ProductCard = ({ product, wishlistItemId, onAdd, onRemove, isMutating }) =
   );
 };
 
+const RECOMMENDED = 'recommended';
+
 const ProductsPage = () => {
   const [search, setSearch] = useState('');
-  const [categoryId, setCategoryId] = useState(null);
+  // Default view is the personalized "Recommended" feed; category ids switch to plain catalog.
+  const [categoryId, setCategoryId] = useState(RECOMMENDED);
   const [mutatingIds, setMutatingIds] = useState(new Set());
   const queryClient = useQueryClient();
+
+  const isRecommended = categoryId === RECOMMENDED;
 
   const { data: categoriesData } = useQuery({
     queryKey: ['categories'],
@@ -80,7 +119,15 @@ const ProductsPage = () => {
   });
   const categories = categoriesData?.results ?? [];
 
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+  // Personalized feed: whole catalog scored against the user's profile, pre-sorted.
+  const recQuery = useQuery({
+    queryKey: ['recommended-products'],
+    queryFn: () => getRecommendedForMe({ limit: 500 }),
+    enabled: isRecommended,
+  });
+
+  // Plain catalog list for a specific category (paginated, server-side search).
+  const catalogQuery = useInfiniteQuery({
     queryKey: ['products', search, categoryId],
     queryFn: ({ pageParam = 1 }) =>
       listProducts({ search, category_id: categoryId, limit: 100, page: pageParam }),
@@ -90,6 +137,7 @@ const ProductsPage = () => {
       return Number(url.searchParams.get('page'));
     },
     initialPageParam: 1,
+    enabled: !isRecommended,
   });
 
   const { data: wishlistData } = useQuery({
@@ -121,10 +169,27 @@ const ProductsPage = () => {
     },
   });
 
-  const products = data?.pages.flatMap((p) => p.results) ?? [];
+  // Normalize both modes into one { product, score?, explanation? } list.
+  let entries;
+  let isLoading;
+  let isError;
+  if (isRecommended) {
+    isLoading = recQuery.isLoading;
+    isError = recQuery.isError;
+    const term = search.trim().toLowerCase();
+    entries = (recQuery.data?.results ?? [])
+      .map((r) => ({ product: r.product, score: r.score, explanation: r.explanation }))
+      .filter((e) => !term || e.product.name.toLowerCase().includes(term));
+  } else {
+    isLoading = catalogQuery.isLoading;
+    isError = catalogQuery.isError;
+    entries = (catalogQuery.data?.pages.flatMap((p) => p.results) ?? []).map((product) => ({ product }));
+  }
+
+  const recMessage = isRecommended ? recQuery.data?.message : null;
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3, py: 4 }}>
+    <Box sx={{ width: '100%', mx: 'auto', px: 3, py: 4 }}>
       <Typography variant="h2" sx={{ mb: 3 }}>
         Products
       </Typography>
@@ -150,11 +215,11 @@ const ProductsPage = () => {
         <ToggleButtonGroup
           value={categoryId}
           exclusive
-          onChange={(_, val) => setCategoryId(val)}
+          onChange={(_, val) => val !== null && setCategoryId(val)}
           sx={{ mb: 4, flexWrap: 'wrap', gap: 0.5 }}
         >
-          <ToggleButton value={null} sx={{ borderRadius: '20px !important', px: 2 }}>
-            All
+          <ToggleButton value={RECOMMENDED} sx={{ borderRadius: '20px !important', px: 2 }}>
+            ⭐ Recommended
           </ToggleButton>
           {categories.map((cat) => (
             <ToggleButton key={cat.id} value={cat.id} sx={{ borderRadius: '20px !important', px: 2 }}>
@@ -174,36 +239,45 @@ const ProductsPage = () => {
         <Alert severity="error">Failed to load products. Please try again.</Alert>
       )}
 
-      {!isLoading && !isError && products.length === 0 && (
+      {!isLoading && recMessage && entries.length === 0 && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          {recMessage} Add interests, preferred categories, or wishlist items to your profile to get
+          personalized picks.
+        </Alert>
+      )}
+
+      {!isLoading && !isError && !recMessage && entries.length === 0 && (
         <Typography color="text.secondary" textAlign="center" sx={{ py: 8 }}>
           No products found.
         </Typography>
       )}
 
-      <Grid container spacing={3}>
-        {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
+        {entries.map(({ product, score, explanation }) => (
+          <Box key={product.id}>
             <ProductCard
               product={product}
+              score={score}
+              explanation={explanation}
               wishlistItemId={wishlistMap[product.id]}
               isMutating={mutatingIds.has(product.id)}
               onAdd={(productId) => addMutation.mutate(productId)}
               onRemove={(itemId) => removeMutation.mutate({ itemId, productId: product.id })}
             />
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
-      {hasNextPage && (
+      {!isRecommended && catalogQuery.hasNextPage && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <Button
             variant="outlined"
             size="large"
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            startIcon={isFetchingNextPage ? <CircularProgress size={16} /> : null}
+            onClick={() => catalogQuery.fetchNextPage()}
+            disabled={catalogQuery.isFetchingNextPage}
+            startIcon={catalogQuery.isFetchingNextPage ? <CircularProgress size={16} /> : null}
           >
-            {isFetchingNextPage ? 'Loading…' : 'Show More'}
+            {catalogQuery.isFetchingNextPage ? 'Loading…' : 'Show More'}
           </Button>
         </Box>
       )}
