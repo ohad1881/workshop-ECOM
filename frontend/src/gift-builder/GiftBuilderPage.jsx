@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useQuery } from '@tanstack/react-query';
-import { getRecommendations, getBundles } from '../api/recommendations';
+import { getGiftSuggestions } from '../api/recommendations';
 import { getUserProfile } from '../api/users';
 import { useMetadata } from '../general_hooks/useMetadata';
 import UserSearchPanel from './UserSearchPanel';
@@ -42,34 +42,16 @@ const GiftBuilderPage = () => {
       .catch(() => {});
   }, [preloadId]);
 
-  const recsQuery = useQuery({
-    queryKey: ['recommendations', recipient?.id, config?.budget, config?.event_type],
+  const suggestionsQuery = useQuery({
+    queryKey: ['gift-suggestions', recipient?.id, config?.budget, config?.event_type],
     queryFn: () =>
-      getRecommendations(recipient.id, {
+      getGiftSuggestions(recipient.id, {
         budget: config.budget,
         event_type: config.event_type,
         limit: 20,
       }),
     enabled: !!recipient && !!config,
   });
-
-  const bundleQueries = {
-    max_score: useQuery({
-      queryKey: ['bundle', recipient?.id, config?.budget, config?.event_type, 'max_score'],
-      queryFn: () => getBundles(recipient.id, { budget: config.budget, event_type: config.event_type, strategy: 'max_score' }),
-      enabled: !!recipient && !!config,
-    }),
-    max_items: useQuery({
-      queryKey: ['bundle', recipient?.id, config?.budget, config?.event_type, 'max_items'],
-      queryFn: () => getBundles(recipient.id, { budget: config.budget, event_type: config.event_type, strategy: 'max_items' }),
-      enabled: !!recipient && !!config,
-    }),
-    balanced: useQuery({
-      queryKey: ['bundle', recipient?.id, config?.budget, config?.event_type, 'balanced'],
-      queryFn: () => getBundles(recipient.id, { budget: config.budget, event_type: config.event_type, strategy: 'balanced' }),
-      enabled: !!recipient && !!config,
-    }),
-  };
 
   const handleSelectRecipient = (user) => {
     setRecipient(user);
@@ -123,10 +105,15 @@ const GiftBuilderPage = () => {
     setSelectedBundleStrategyLabel('');
   };
 
-  const recommendations = Array.isArray(recsQuery.data) ? recsQuery.data : [];
-  const noPublicData = recsQuery.data?.message;
+  const suggestions = suggestionsQuery.data ?? {};
+  const recommendations = Array.isArray(suggestions.recommendations) ? suggestions.recommendations : [];
+  const bundles = suggestions.bundles ?? {};
+  const noPublicData = suggestions.message;
 
-  const selectedStrategyBundle = config ? bundleQueries[config.strategy] : null;
+  const selectedStrategy = giftStrategies.find((s) => s.value === config?.strategy);
+  const otherStrategies = giftStrategies.filter((s) => s.value !== config?.strategy);
+  const selectedStrategyBundle = config ? bundles[config.strategy] : null;
+  const maxScoreCount = bundles.max_score?.items?.length ?? null;
 
   useEffect(() => {
     if (activeStep === 3 && (!config || !selectedBundle)) {
@@ -145,7 +132,7 @@ const GiftBuilderPage = () => {
           recipient={recipient}
           initialConfig={config}
           onFind={handleFind}
-          loading={recsQuery.isFetching}
+          loading={suggestionsQuery.isFetching}
           onBack={handleBackToRecipient}
         />
       );
@@ -179,50 +166,54 @@ const GiftBuilderPage = () => {
           )}
 
           <Tabs value={resultsTab} onChange={(_, v) => setResultsTab(v)} sx={{ mb: 3 }}>
-            <Tab label="Best Bundle" />
-            <Tab label="All Strategies" />
-            <Tab label="Top Picks" />
+            <Tab label="Selected Bundle" />
+            <Tab label="Other Bundles" />
+            <Tab label="Best Products" />
           </Tabs>
 
           {resultsTab === 0 && (
-            <BundleView
-              bundle={Array.isArray(selectedStrategyBundle?.data) ? null : selectedStrategyBundle?.data}
-              strategy={giftStrategies.find((s) => s.value === config.strategy)}
-              isLoading={selectedStrategyBundle?.isLoading}
-              onSelect={handleSelectBundle}
-            />
+            <Box>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                Selected bundle: <strong>{selectedStrategy?.label}</strong>
+              </Typography>
+              <BundleView
+                bundle={selectedStrategyBundle ?? null}
+                strategy={selectedStrategy}
+                isLoading={suggestionsQuery.isLoading}
+                compareCount={config.strategy === 'max_items' ? maxScoreCount : null}
+                onSelect={handleSelectBundle}
+              />
+            </Box>
           )}
 
           {resultsTab === 1 && (
             <Grid container spacing={3}>
-              {giftStrategies.map((strategy) => {
-                const q = bundleQueries[strategy.value];
-                const maxScoreCount = bundleQueries.max_score?.data?.items?.length ?? null;
-                return (
-                  <Grid item xs={12} md={4} key={strategy.value}>
-                    <BundleView
-                      bundle={Array.isArray(q?.data) ? null : q?.data}
-                      strategy={strategy}
-                      isLoading={q?.isLoading}
-                      compareCount={strategy.value === 'max_items' ? maxScoreCount : null}
-                      onSelect={handleSelectBundle}
-                    />
-                  </Grid>
-                );
-              })}
+              {otherStrategies.map((strategy) => (
+                <Grid size={{ xs: 12 }} key={strategy.value}>
+                  <BundleView
+                    bundle={bundles[strategy.value] ?? null}
+                    strategy={strategy}
+                    isLoading={suggestionsQuery.isLoading}
+                    compareCount={strategy.value === 'max_items' ? maxScoreCount : null}
+                    onSelect={handleSelectBundle}
+                  />
+                </Grid>
+              ))}
             </Grid>
           )}
 
           {resultsTab === 2 && (
-            recsQuery.isLoading ? <Spinner /> :
+            suggestionsQuery.isLoading ? <Spinner /> :
             recommendations.length === 0 ? (
-              <Alert severity="info">
-                {noPublicData || 'No recommendations found. Try increasing the budget.'}
-              </Alert>
+              noPublicData ? null : (
+                <Alert severity="info">
+                  No products found. Try increasing the budget.
+                </Alert>
+              )
             ) : (
               <Grid container spacing={2}>
                 {recommendations.map((item) => (
-                  <Grid item xs={12} sm={6} md={4} key={item.product.id}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.product.id}>
                     <RecommendationCard item={item} />
                   </Grid>
                 ))}

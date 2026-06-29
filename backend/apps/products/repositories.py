@@ -1,6 +1,8 @@
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.db.models import Count, Q
 
 from apps.users.models import Category
+from apps.wishlists.models import WishlistItem
 from .models import Product, Tag
 
 
@@ -61,11 +63,27 @@ class ProductRepository:
         )
 
     @staticmethod
-    def get_active_within_budget(budget):
-        """Used by the recommendation engine."""
-        return (
+    def get_active_within_budget(budget, exclude_category_ids=None):
+        """
+        Used by the recommendation engine. Returns active in-budget products with
+        category/tags joined and the public wishlist count annotated, so scoring
+        runs entirely in memory (no per-product queries).
+
+        exclude_category_ids: categories the recipient has marked as excluded —
+        filtered out at the DB level so they are never scored or suggested.
+        """
+        qs = (
             Product.objects
             .select_related('category')
             .prefetch_related('tags')
             .filter(is_active=True, price__lte=budget)
+            .annotate(
+                public_wishlist_count=Count(
+                    'wishlisted_by',
+                    filter=Q(wishlisted_by__privacy=WishlistItem.PrivacyLevel.PUBLIC),
+                )
+            )
         )
+        if exclude_category_ids:
+            qs = qs.exclude(category_id__in=exclude_category_ids)
+        return qs

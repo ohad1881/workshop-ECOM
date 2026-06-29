@@ -30,10 +30,13 @@ const GiftConfigPanel = ({ recipient, initialConfig = {}, onFind, loading, onBac
 
       <TextField
         fullWidth
+        required
         type="number"
         label="Budget ($)"
         value={budget}
         onChange={(e) => setBudget(e.target.value)}
+        error={!isValid}
+        helperText={!isValid ? 'Budget is required' : ' '}
         inputProps={{ min: 1, step: 1 }}
         sx={{ mb: 3 }}
       />

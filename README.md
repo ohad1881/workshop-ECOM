@@ -615,14 +615,10 @@ class UserProfile(Model):
 
     user = OneToOneField(User, on_delete=CASCADE, related_name='profile')
 
-    # Interests & Preferences
+    # Interests & Preferences (always public; only wishlist items carry privacy)
     interests = ManyToManyField('products.Tag', blank=True, related_name='interested_users')
     preferred_categories = ManyToManyField(Category, blank=True, related_name='preferred_by')
     excluded_categories = ManyToManyField(Category, blank=True, related_name='excluded_by')
-
-    # Privacy controls (per section)
-    interests_privacy = CharField(max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC)
-    preferences_privacy = CharField(max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC)
 
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
@@ -1198,24 +1194,20 @@ class RecommendationService:
         if not recipient_profile:
             raise ValueError("Recipient not found")
 
-        # Check if recipient has any public data
-        has_public_data = (
-            (recipient_profile.interests_privacy == 'public' and recipient_profile.interests.exists()) or
-            (recipient_profile.preferences_privacy == 'public' and (
-                recipient_profile.preferred_categories.exists()
-                or recipient_profile.excluded_categories.exists()
-            )) or
-            recipient_profile.user.wishlist_items.filter(privacy='public').exists()
+        # Interests and category preferences are always usable; only the wishlist
+        # is privacy-gated.
+        has_usable_data = (
+            recipient_profile.interests.exists()
+            or recipient_profile.preferred_categories.exists()
+            or recipient_profile.excluded_categories.exists()
+            or recipient_profile.user.wishlist_items.filter(privacy='public').exists()
         )
-        if not has_public_data:
-            return {"message": "This user has no public profile data for recommendations", "items": []}
+        if not has_usable_data:
+            return {"message": "This user has no profile data for recommendations yet", "items": []}
 
-        # Private preferences (preferred/excluded categories) are only used when
-        # the caller is the recipient themselves (self-gift) or the session owner.
-        include_private_preferences = (
-            self_gift
-            or bool(giver_user and giver_user.id == recipient_profile.user_id)
-        )
+        # Self-gift is auto-detected (giver is the recipient); their private
+        # wishlist is then used too. There is no caller-supplied self-gift flag.
+        self_gift = bool(giver_user and giver_user.id == recipient_profile.user_id)
 
         # Fetch giver preferences (AI memory) if giver is known
         giver_preferences = []
@@ -1346,13 +1338,12 @@ def get_bundles(recipient_id, budget, event_type=None, giver_user=None):
 | Endpoint | Method | Auth | Description |
 |---|---|---|---|
 | `/api/recommendations/bundle/<user_id>/` | GET | Yes | Optimized bundles. Params: `budget`, `event_type`, `strategy` |
-| `/api/recommendations/self-gift/` | GET | Yes | Self-gift bundles (uses user's own full profile data including private) |
 
 ### Acceptance Criteria — Phase 8
 
 - [ ] Bundle total price never exceeds budget
 - [ ] All three strategies return different results when applicable
-- [ ] Self-gift mode uses the user's full data (including private preferences)
+- [ ] Self-gift (giver is the recipient) uses the user's private wishlist too
 - [ ] Empty product list returns empty bundle
 - [ ] Zero budget returns empty bundle
 - [ ] Bundle service reuses `RecommendationService` (no duplication)
@@ -1696,11 +1687,8 @@ Wrap the app in `<ThemeProvider theme={theme}>` and `<CssBaseline />` in `main.j
 - **"Show profile as a Stranger" button** (MUI `Button` with `Visibility` icon): Toggles the page into a read-only view that shows exactly what another user would see (respecting the current privacy settings). A banner at the top says "You're viewing your profile as others see it" with a "Back to my profile" button.
 
 **`profile/UserProfilePage.jsx`** — Viewing someone else's profile:
-- Shows only PUBLIC fields based on privacy settings.
-- Avatar, username, bio (always public).
-- Interests shown only if `interests_privacy == 'public'`.
-- Preferred categories shown only if `preferences_privacy == 'public'`.
-- Public wishlist preview (first 6 public items).
+- Avatar, username, bio, interests, and preferred/disliked categories are all public.
+- Public wishlist preview (first 6 public items) — wishlist items are the only privacy-gated data.
 - **"Create a gift for {name}" CTA button** → navigates to gift builder with user pre-selected.
 - No edit controls.
 
@@ -2119,13 +2107,11 @@ unique(user, pref_type, value)
 | 23 | POST | `/api/wishlists/` | Yes | Add to wishlist |
 | 24 | PATCH | `/api/wishlists/<id>/` | Yes | Update wishlist item |
 | 25 | DELETE | `/api/wishlists/<id>/` | Yes | Remove from wishlist |
-| 26 | GET | `/api/recommendations/for-user/<id>/` | Yes | Recommendations |
-| 27 | GET | `/api/recommendations/bundle/<id>/` | Yes | Optimized bundles |
-| 28 | GET | `/api/recommendations/self-gift/` | Yes | Self-gift mode |
-| 29 | GET | `/api/chat/sessions/` | Yes | List chat sessions |
-| 30 | POST | `/api/chat/sessions/` | Yes | Create session |
-| 31 | GET | `/api/chat/sessions/<id>/` | Yes | Session + history |
-| 32 | POST | `/api/chat/sessions/<id>/messages/` | Yes | Send message (SSE stream) |
+| 26 | GET | `/api/recommendations/gift-suggestions/<id>/` | Yes | Top-pick recommendations + all three bundles (one scoring pass); self-gift auto-detected |
+| 27 | GET | `/api/chat/sessions/` | Yes | List chat sessions |
+| 28 | POST | `/api/chat/sessions/` | Yes | Create session |
+| 29 | GET | `/api/chat/sessions/<id>/` | Yes | Session + history |
+| 30 | POST | `/api/chat/sessions/<id>/messages/` | Yes | Send message (SSE stream) |
 
 ---
 

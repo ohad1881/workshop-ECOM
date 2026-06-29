@@ -58,9 +58,9 @@ Two PATCH surfaces are split by concern: **settings** (identity/account) vs **pr
 | `/auth/login/` | POST | No | body: **`email`**, **`password`** | `{ "access": "eyJ...", "refresh": "eyJ...", "user": { "id": 1, "username": "ada", "gravatar_hash": "..." } }` |
 | `/auth/token/refresh/` | POST | No | body: **`refresh`** | `{ "access": "eyJ..." }` |
 | `/auth/logout/` | POST | Yes | body: **`refresh`** | `204 No Content` |
-| `/auth/me/` | GET | Yes | _(Bearer only)_ | `{ "id": 1, "email": "ada@example.com", "username": "ada", "gravatar_hash": "...", "date_joined": "2026-01-15T10:00:00Z", "preferences": { "bio": "", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [], "interests_privacy": "public", "preferences_privacy": "public" } }` |
+| `/auth/me/` | GET | Yes | _(Bearer only)_ | `{ "id": 1, "email": "ada@example.com", "username": "ada", "gravatar_hash": "...", "date_joined": "2026-01-15T10:00:00Z", "preferences": { "bio": "", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [] } }` |
 | `/auth/me/` | PATCH | Yes | **settings** (partial): `username`, `email` | `{ "id": 1, "username": "ada2", "email": "ada@example.com", "gravatar_hash": "..." }` |
-| `/auth/me/preferences/` | PATCH | Yes | **preferences** (partial): `bio`, `interest_ids` `[ids]` (Tag IDs from `/tags/`), `preferred_category_ids` `[ids]` (Category IDs from `/categories/`), `excluded_category_ids` `[ids]` (Category IDs), `interests_privacy`, `preferences_privacy` | `{ "bio": "Loves gadgets", "interest_ids": [1, 2, 3], "preferences_privacy": "private" }` |
+| `/auth/me/preferences/` | PATCH | Yes | **preferences** (partial): `bio`, `interest_ids` `[ids]` (Tag IDs from `/tags/`), `preferred_category_ids` `[ids]` (Category IDs from `/categories/`), `excluded_category_ids` `[ids]` (Category IDs) | `{ "bio": "Loves gadgets", "interest_ids": [1, 2, 3] }` |
 | `/auth/change-password/` | POST | Yes | body: **`old_password`**, **`new_password`** | `{ "detail": "Password updated." }` |
 
 ## Users (`/api/users/*`)
@@ -70,7 +70,7 @@ No list-all endpoint. Discover users via search (used for the gift-builder recip
 | Endpoint | Method | Auth | Request | Returns (example) |
 |---|---|---|---|---|
 | `/users/search/` | GET | Yes | query: **`q`**, `limit` (20) | `[ { "id": 2, "username": "grace", "gravatar_hash": "..." } ]` |
-| `/users/<id>/` | GET | Yes | path **`id`** | `{ "id": 2, "username": "grace", "gravatar_hash": "...", "bio": "Hi", "date_joined": "2026-01-15T10:00:00Z", "interests_privacy": "public" }` |
+| `/users/<id>/` | GET | Yes | path **`id`** | `{ "id": 2, "username": "grace", "gravatar_hash": "...", "bio": "Hi", "date_joined": "2026-01-15T10:00:00Z", "interest_ids": [1, 2], "preferred_category_ids": [1], "excluded_category_ids": [] }` |
 | `/users/<id>/wishlist/` | GET | Yes | path **`id`** | `[ { "id": 10, "product": { "id": 5, "name": "Headphones", "price": "199.00" } } ]` |
 
 ## Taxonomy & Metadata
@@ -106,11 +106,11 @@ Read-only from the frontend (see the admin note at the top). Filtering is by **I
 
 `strategy` ∈ `max_score` \| `max_items` \| `balanced`. `event_type` is a metadata value (e.g. `birthday`), not an entity ID.
 
+`gift-suggestions` returns the top-pick `recommendations` **and** all three `bundles` from a single scoring pass — the client renders every tab/strategy from one response (no per-strategy call). Excluded categories are filtered out server-side, so they are never scored or suggested. **Self-gift is auto-detected**: when `user_id` is the authenticated user, their private wishlist is also used. When the recipient has no public data, returns `{ "message": "…", "recommendations": [], "bundles": {} }`.
+
 | Endpoint | Method | Auth | Request | Returns (example) |
 |---|---|---|---|---|
-| `/recommendations/for-user/<user_id>/` | GET | Yes | path **`user_id`**; query **`budget`**, `event_type`, `limit` (10), `strategy` (`balanced`) | `[ { "product": { "id": 5, "name": "Headphones", "price": "199.00" }, "score": 0.92 } ]` |
-| `/recommendations/bundle/<user_id>/` | GET | Yes | path **`user_id`**; query **`budget`**, `event_type`, `strategy` (`balanced`) | `{ "items": [ { "id": 5, "name": "Headphones", "price": "199.00" } ], "total": "199.00", "score": 1.74 }` |
-| `/recommendations/self-gift/` | GET | Yes | query **`budget`**, `event_type`, `strategy` (`balanced`) | `{ "items": [ { "id": 8, "name": "Mug", "price": "15.00" } ], "total": "15.00" }` |
+| `/recommendations/gift-suggestions/<user_id>/` | GET | Yes | path **`user_id`**; query **`budget`**, `event_type`, `limit` (20) | `{ "recommendations": [ { "product": { "id": 5, "name": "Headphones", "price": "199.00" }, "score": 0.92, "explanation": "…" } ], "bundles": { "max_score": { "items": [ … ], "total_price": "461.45", "total_score": 4.1, "budget_utilization": "92.3%" }, "max_items": { … }, "balanced": { … } } }` |
 
 ## Chat (`/api/chat/*`)
 

@@ -12,7 +12,12 @@ const RecommendationCard = ({ item }) => {
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {product.image_url ? (
-        <CardMedia component="img" height="140" image={product.image_url} alt={product.name} />
+        <CardMedia
+          component="img"
+          image={product.image_url}
+          alt={product.name}
+          sx={{ height: 140, objectFit: 'cover' }}
+        />
       ) : (
         <Box sx={{ height: 140, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography variant="body2" color="text.secondary">No image</Typography>

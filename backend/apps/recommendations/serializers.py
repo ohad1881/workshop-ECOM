@@ -14,3 +14,8 @@ class BundleItemSerializer(serializers.Serializer):
     total_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     total_score = serializers.FloatField()
     budget_utilization = serializers.CharField()
+
+
+class GiftSuggestionsSerializer(serializers.Serializer):
+    recommendations = RecommendationItemSerializer(many=True)
+    bundles = serializers.DictField(child=BundleItemSerializer())

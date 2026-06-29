@@ -1,7 +1,9 @@
 from ortools.algorithms.python import knapsack_solver
 
+from .constants import STRATEGY_BALANCED, STRATEGY_MAX_ITEMS, STRATEGY_MAX_SCORE
 
-def optimize_gift_bundle(scored_products, budget, strategy='balanced'):
+
+def optimize_gift_bundle(scored_products, budget, strategy=STRATEGY_BALANCED):
     """
     0/1 Knapsack: select products that maximise total value within budget.
 
@@ -21,9 +23,9 @@ def optimize_gift_bundle(scored_products, budget, strategy='balanced'):
     SCORE_SCALE = 1000
     ITEM_BONUS = 300  # raised: all candidates already pass MIN_RELEVANCE_THRESHOLD
 
-    if strategy == 'max_score':
+    if strategy == STRATEGY_MAX_SCORE:
         values = [int(p['score'] * SCORE_SCALE) for p in scored_products]
-    elif strategy == 'max_items':
+    elif strategy == STRATEGY_MAX_ITEMS:
         values = [100 for _ in scored_products]
     else:  # balanced (default)
         values = [

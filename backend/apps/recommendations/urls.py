@@ -1,9 +1,7 @@
 from django.urls import path
 
-from .controllers import BundleController, RecommendationListController, SelfGiftController
+from .controllers import GiftSuggestionsController
 
 urlpatterns = [
-    path('for-user/<int:user_id>/', RecommendationListController.as_view(), name='recommendations'),
-    path('bundle/<int:user_id>/', BundleController.as_view(), name='bundle'),
-    path('self-gift/', SelfGiftController.as_view(), name='self-gift'),
+    path('gift-suggestions/<int:user_id>/', GiftSuggestionsController.as_view(), name='gift-suggestions'),
 ]

@@ -33,7 +33,7 @@ import { formatCurrency } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from '@tanstack/react-query';
-import { getRecommendations } from '../api/recommendations';
+import { getGiftSuggestions } from '../api/recommendations';
 
 const BundleEditor = ({
   bundleProducts,
@@ -57,7 +57,7 @@ const BundleEditor = ({
 
   const recsQuery = useQuery({
     queryKey: ['bundle-editor-recs', recipient?.id, budget],
-    queryFn: () => getRecommendations(recipient.id, { budget, limit: 100 }),
+    queryFn: () => getGiftSuggestions(recipient.id, { budget, limit: 100 }),
     enabled: dialogOpen && !!recipient,
   });
 
@@ -68,7 +68,7 @@ const BundleEditor = ({
   const overBudget = currentTotal > budget;
 
   const visibleRecommendations = useMemo(() => {
-    const items = Array.isArray(recsQuery.data) ? recsQuery.data : [];
+    const items = Array.isArray(recsQuery.data?.recommendations) ? recsQuery.data.recommendations : [];
     return items
       .filter((item) => {
         const score = (item.score ?? 0) * 100;
@@ -80,7 +80,7 @@ const BundleEditor = ({
         if (sortBy === 'balanced') return (b.score * 800 + 200) - (a.score * 800 + 200);
         return b.score - a.score;
       });
-  }, [recsQuery.data, minMatch, priceRange, sortBy]);
+  }, [recsQuery.data?.recommendations, minMatch, priceRange, sortBy]);
 
   const handleOpenDialog = () => {
     setSortBy('match');

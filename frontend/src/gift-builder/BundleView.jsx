@@ -92,7 +92,7 @@ const BundleView = ({ bundle, strategy, isLoading, compareCount, onSelect }) => 
       ) : (
         <Grid container spacing={2}>
           {items.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item.product.id}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.product.id}>
               <RecommendationCard item={item} />
             </Grid>
           ))}
