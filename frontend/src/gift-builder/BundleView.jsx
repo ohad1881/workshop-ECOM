@@ -1,9 +1,10 @@
-import { Box, Typography, LinearProgress, Chip, Grid, Paper, Stack, Alert } from '@mui/material';
+import { Box, Typography, LinearProgress, Chip, Grid, Paper, Stack, Alert, Button } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { formatCurrency } from '../utils/formatters';
 import RecommendationCard from './RecommendationCard';
 import Spinner from '../general_components/Spinner';
 
-const BundleView = ({ bundle, strategy, isLoading, compareCount }) => {
+const BundleView = ({ bundle, strategy, isLoading, compareCount, onSelect }) => {
   if (isLoading) return <Spinner />;
 
   if (!bundle) {
@@ -29,6 +30,19 @@ const BundleView = ({ bundle, strategy, isLoading, compareCount }) => {
               {strategy.description}
             </Typography>
           </>
+        )}
+        {onSelect && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<ArrowForwardIosIcon />}
+              onClick={() => onSelect(bundle, strategy?.label)}
+              sx={{ borderRadius: '12px', textTransform: 'none' }}
+            >
+              Select this Bundle
+            </Button>
+          </Box>
         )}
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
