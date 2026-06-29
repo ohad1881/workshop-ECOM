@@ -73,21 +73,18 @@ const ProfileView = ({ profile, wishlist, isOwner, wishlistLoading }) => {
       title: 'Preferred categories',
       icon: <ThumbUpIcon fontSize="small" color="success" />,
       ids: profile.preferredCategoryIds,
-      privacy: profile.preferencesPrivacy,
     },
     {
       field: 'excluded_category_ids',
       title: 'Disliked categories',
       icon: <ThumbDownIcon fontSize="small" color="error" />,
       ids: profile.excludedCategoryIds,
-      privacy: profile.preferencesPrivacy,
     },
     {
       field: 'interest_ids',
       title: 'Tags',
       icon: <LocalOfferIcon fontSize="small" color="primary" />,
       ids: profile.interestIds,
-      privacy: profile.interestsPrivacy,
     },
   ];
   const currentIds = (field) => {
@@ -267,7 +264,6 @@ const ProfileView = ({ profile, wishlist, isOwner, wishlistLoading }) => {
                 icon={section.icon}
                 ids={section.ids}
                 nameMap={mapFor(section.field)}
-                privacy={section.privacy}
                 isOwner={isOwner}
                 onAdd={() => setAddCategoryField(section.field)}
                 onRemove={(id) => removeCategory(section.field, id)}

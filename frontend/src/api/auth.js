@@ -24,7 +24,7 @@ export const logout = (refresh) =>
 
 export const getCurrentUser = () => apiClient.get('/auth/me/').then((r) => r.data);
 
-// Profile preferences: bio, interest_ids, preferred/excluded_category_ids, privacy flags.
+// Profile preferences: bio, interest_ids, preferred/excluded_category_ids.
 export const updatePreferences = (data) =>
   apiClient.patch('/auth/me/preferences/', data).then((r) => r.data);
 

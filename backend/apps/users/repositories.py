@@ -35,20 +35,10 @@ class UserRepository:
 
     @staticmethod
     def update_profile(profile, bio=None, interest_ids=None, preferred_category_ids=None,
-                       excluded_category_ids=None, interests_privacy=None, preferences_privacy=None):
+                       excluded_category_ids=None):
         if bio is not None:
             profile.user.bio = bio
             profile.user.save(update_fields=['bio'])
-
-        scalar_updates = {}
-        if interests_privacy is not None:
-            scalar_updates['interests_privacy'] = interests_privacy
-        if preferences_privacy is not None:
-            scalar_updates['preferences_privacy'] = preferences_privacy
-        if scalar_updates:
-            for k, v in scalar_updates.items():
-                setattr(profile, k, v)
-            profile.save(update_fields=list(scalar_updates.keys()))
 
         if interest_ids is not None:
             profile.interests.set(interest_ids)

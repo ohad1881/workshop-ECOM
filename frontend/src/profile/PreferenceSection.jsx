@@ -1,11 +1,9 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import PublicIcon from '@mui/icons-material/Public';
-import LockIcon from '@mui/icons-material/Lock';
 
 // A wishlist-style section of category chips. Owner can remove (chip delete) and
 // add (the "+ Add" chip). Read-only otherwise; hidden when empty for non-owners.
-const PreferenceSection = ({ title, icon, ids, nameMap, privacy, isOwner, onAdd, onRemove }) => {
+const PreferenceSection = ({ title, icon, ids, nameMap, isOwner, onAdd, onRemove }) => {
   if (!isOwner && (!ids || ids.length === 0)) return null;
   const list = ids || [];
 
@@ -17,12 +15,6 @@ const PreferenceSection = ({ title, icon, ids, nameMap, privacy, isOwner, onAdd,
       >
         {icon}
         {title}
-        {isOwner && privacy && (
-          <Typography component="span" variant="caption" sx={{ color: 'text.secondary', display: 'inline-flex', alignItems: 'center', gap: 0.25 }}>
-            {privacy === 'private' ? <LockIcon fontSize="inherit" /> : <PublicIcon fontSize="inherit" />}
-            {privacy}
-          </Typography>
-        )}
       </Typography>
 
       <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>

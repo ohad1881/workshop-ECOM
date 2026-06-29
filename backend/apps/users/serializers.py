@@ -80,12 +80,6 @@ class ProfileUpdateSerializer(serializers.Serializer):
     excluded_category_ids = serializers.ListField(
         child=serializers.IntegerField(), required=False
     )
-    interests_privacy = serializers.ChoiceField(
-        choices=['public', 'private'], required=False
-    )
-    preferences_privacy = serializers.ChoiceField(
-        choices=['public', 'private'], required=False
-    )
 
 
 class ChangePasswordSerializer(serializers.Serializer):

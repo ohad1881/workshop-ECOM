@@ -31,7 +31,6 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'interests_privacy', 'preferences_privacy', 'created_at')
-    list_filter = ('interests_privacy', 'preferences_privacy')
+    list_display = ('user', 'created_at')
     search_fields = ('user__username', 'user__email')
     filter_horizontal = ('interests', 'preferred_categories', 'excluded_categories')

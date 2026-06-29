@@ -34,22 +34,13 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
-    class PrivacyLevel(models.TextChoices):
-        PUBLIC = 'public', 'Public'
-        PRIVATE = 'private', 'Private'
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
+    # Interests and category preferences are always public; only wishlist items
+    # carry a privacy setting.
     interests = models.ManyToManyField('products.Tag', blank=True, related_name='interested_users')
     preferred_categories = models.ManyToManyField(Category, blank=True, related_name='preferred_by')
     excluded_categories = models.ManyToManyField(Category, blank=True, related_name='excluded_by')
-
-    interests_privacy = models.CharField(
-        max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC
-    )
-    preferences_privacy = models.CharField(
-        max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC
-    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

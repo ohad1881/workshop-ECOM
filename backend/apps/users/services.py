@@ -19,31 +19,27 @@ class AuthService:
 class UserService:
     @staticmethod
     def get_public_profile(user_id):
-        """Returns user data with privacy settings applied. Used by both REST API and AI tools."""
+        """Returns a user's public profile. Used by both REST API and AI tools.
+
+        Interests and category preferences are always public; only wishlist items
+        carry privacy.
+        """
         user = UserRepository.get_by_id(user_id)
         if not user:
             return None
 
         profile = user.profile
-        data = {
+        return {
             'id': user.id,
             'username': user.username,
             'gravatar_hash': user.gravatar_hash,
             'bio': user.bio,
             'date_joined': user.date_joined,
-            'interests_privacy': profile.interests_privacy,
-            'preferences_privacy': profile.preferences_privacy,
-        }
-
-        if profile.interests_privacy == 'public':
-            data['interest_ids'] = list(profile.interests.values_list('id', flat=True))
-
-        if profile.preferences_privacy == 'public':
-            data['preferred_category_ids'] = list(
+            'interest_ids': list(profile.interests.values_list('id', flat=True)),
+            'preferred_category_ids': list(
                 profile.preferred_categories.values_list('id', flat=True)
-            )
-            data['excluded_category_ids'] = list(
+            ),
+            'excluded_category_ids': list(
                 profile.excluded_categories.values_list('id', flat=True)
-            )
-
-        return data
+            ),
+        }

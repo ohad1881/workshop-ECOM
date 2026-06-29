@@ -71,8 +71,6 @@ class MeController(APIView):
                 'interest_ids': list(profile.interests.values_list('id', flat=True)),
                 'preferred_category_ids': list(profile.preferred_categories.values_list('id', flat=True)),
                 'excluded_category_ids': list(profile.excluded_categories.values_list('id', flat=True)),
-                'interests_privacy': profile.interests_privacy,
-                'preferences_privacy': profile.preferences_privacy,
             },
         })
 
@@ -106,8 +104,6 @@ class MePreferencesController(APIView):
             'interest_ids': list(profile.interests.values_list('id', flat=True)),
             'preferred_category_ids': list(profile.preferred_categories.values_list('id', flat=True)),
             'excluded_category_ids': list(profile.excluded_categories.values_list('id', flat=True)),
-            'interests_privacy': profile.interests_privacy,
-            'preferences_privacy': profile.preferences_privacy,
         })
 
 
