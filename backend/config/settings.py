@@ -165,7 +165,7 @@ GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
 # Logging — console handler, level via env. App modules log under the `apps`
 # namespace (apps.<domain>...), so getLogger(__name__) picks up this config.
-LOG_LEVEL = config('LOG_LEVEL', default='INFO')
+LOG_LEVEL = 'INFO'
 
 LOGGING = {
     'version': 1,
