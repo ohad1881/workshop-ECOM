@@ -199,7 +199,7 @@ const BundleEditor = ({
           disabled={safeBundleItems.length === 0}
           sx={{ borderRadius: '12px', textTransform: 'none' }}
         >
-          Proceed to AI Chat
+          Edit with AI chat
         </Button>
         <Button variant="outlined" sx={{ borderRadius: '12px', textTransform: 'none' }}>
           Save Selection

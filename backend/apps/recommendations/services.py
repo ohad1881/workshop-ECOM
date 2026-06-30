@@ -96,7 +96,7 @@ class RecommendationService:
         )
 
     @staticmethod
-    def _score_products(recipient_id, budget, event_type=None, giver_user=None):
+    def _score_products(recipient_id, budget, event_type=None, giver_user=None, exclude_product_ids=None):
         """
         Score and rank every active in-budget product for a recipient — the single
         scoring pass shared by the recommendation list, the bundles, and the
@@ -139,8 +139,11 @@ class RecommendationService:
             budget, exclude_category_ids=ctx.excluded_category_ids,
         )
 
+        exclude_ids = set(exclude_product_ids or [])
         scored = []
         for product in products:
+            if product.id in exclude_ids:
+                continue
             score, explanation = compute_score(product, ctx)
             scored.append({'product': product, 'score': score, 'explanation': explanation})
 
@@ -198,14 +201,82 @@ class RecommendationService:
         return scored[:limit]
 
     @staticmethod
-    def get_bundles(recipient_id, budget, event_type=None, giver_user=None):
+    def get_bundles(recipient_id, budget, event_type=None, giver_user=None, exclude_product_ids=None):
         """All three knapsack bundles for a recipient. Used by the AI chat tools."""
         scored = RecommendationService._score_products(
-            recipient_id, budget, event_type, giver_user,
+            recipient_id, budget, event_type, giver_user, exclude_product_ids,
         )
         if isinstance(scored, dict):
             return scored
         return RecommendationService._build_bundles(scored, budget)
+
+    @staticmethod
+    def build_bundles_from_products(product_ids, budget):
+        """
+        Knapsack bundles over an explicit candidate set, WITHOUT a registered
+        recipient (stranger mode). There is no recipient profile to score against,
+        so every candidate gets a uniform score — the optimizer's value here is the
+        budget-bounded selection, not relevance ranking, so the three strategies
+        converge. Output shape matches get_bundles for a uniform frontend.
+        """
+        products = ProductRepository.get_active_by_ids(product_ids, max_price=budget)
+        scored = [
+            {'product': p, 'score': 1.0, 'explanation': 'Matches the described recipient.'}
+            for p in products
+        ]
+        if not scored:
+            return {'message': 'No matching products within this budget.', 'items': []}
+        return RecommendationService._build_bundles(scored, budget)
+
+    @staticmethod
+    def build_bundle_for_products(product_ids, budget, recipient_id=None,
+                                  event_type=None, giver_user=None):
+        """
+        Build an EXACT-set bundle (no knapsack) from explicit product ids, preserving
+        order. Items are scored for the recipient when there is one, so the bundle reads
+        like the gift builder's; anything the scorer doesn't return falls back to a
+        neutral score. Used to seed a gift-builder handoff chat. Returns None if no items.
+        """
+        if not product_ids:
+            return None
+
+        score_by_id = {}
+        if recipient_id and budget is not None:
+            try:
+                scored = RecommendationService._score_products(
+                    recipient_id, budget, event_type, giver_user,
+                )
+                if not isinstance(scored, dict):
+                    score_by_id = {s['product'].id: s for s in scored}
+            except Exception:
+                score_by_id = {}
+
+        products_by_id = {p.id: p for p in ProductRepository.get_active_by_ids(product_ids)}
+        items = []
+        for pid in product_ids:
+            if pid in score_by_id:
+                items.append(score_by_id[pid])
+            elif pid in products_by_id:
+                items.append({
+                    'product': products_by_id[pid],
+                    'score': 1.0,
+                    'explanation': 'In your selected bundle.',
+                })
+        if not items:
+            return None
+
+        budget_decimal = Decimal(str(budget)) if budget else Decimal('0')
+        total_price = sum(Decimal(str(i['product'].price)) for i in items)
+        total_score = sum(i['score'] for i in items)
+        return {
+            'items': items,
+            'total_price': total_price,
+            'total_score': round(total_score, 2),
+            'budget_utilization': (
+                f"{(total_price / budget_decimal * 100):.1f}%"
+                if budget_decimal > 0 else "0%"
+            ),
+        }
 
     @staticmethod
     def get_gift_suggestions(recipient_id, budget, event_type=None,

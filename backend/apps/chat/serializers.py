@@ -10,18 +10,21 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
 
 class ChatSessionListSerializer(serializers.ModelSerializer):
+    recipient_username = serializers.CharField(source='recipient.username', read_only=True, default=None)
+
     class Meta:
         model = ChatSession
-        fields = ['id', 'title', 'recipient_id', 'budget', 'event_type',
+        fields = ['id', 'title', 'recipient_id', 'recipient_username', 'budget', 'event_type',
                   'is_self_gift', 'stranger_description', 'created_at', 'updated_at']
 
 
 class ChatSessionDetailSerializer(serializers.ModelSerializer):
     messages = ChatMessageSerializer(many=True, read_only=True)
+    recipient_username = serializers.CharField(source='recipient.username', read_only=True, default=None)
 
     class Meta:
         model = ChatSession
-        fields = ['id', 'title', 'recipient_id', 'budget', 'event_type',
+        fields = ['id', 'title', 'recipient_id', 'recipient_username', 'budget', 'event_type',
                   'is_self_gift', 'stranger_description', 'messages', 'created_at', 'updated_at']
 
 
@@ -34,18 +37,21 @@ class CreateSessionSerializer(serializers.Serializer):
     event_type = serializers.CharField(required=False, allow_blank=True, default='')
     is_self_gift = serializers.BooleanField(required=False, default=False)
     stranger_description = serializers.CharField(required=False, allow_blank=True, default='')
-
-    def validate(self, data):
-        if not data.get('recipient_id') and not data.get('stranger_description') and not data.get('is_self_gift'):
-            raise serializers.ValidationError(
-                "Provide recipient_id, stranger_description, or set is_self_gift=true."
-            )
-        return data
+    # Gift-builder handoff: seed the chat with this bundle (an opening user message + a
+    # canned assistant greeting carrying the bundle card). No model call is made.
+    bundle_product_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False, default=list,
+    )
 
 
 class SendMessageSerializer(serializers.Serializer):
     content = serializers.CharField(allow_blank=False, trim_whitespace=True)
     mentioned_user_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        default=list,
+    )
+    mentioned_product_ids = serializers.ListField(
         child=serializers.IntegerField(),
         required=False,
         default=list,

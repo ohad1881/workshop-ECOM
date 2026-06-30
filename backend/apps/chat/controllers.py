@@ -50,6 +50,16 @@ class ChatSessionDetailController(APIView):
 
         return Response(ChatSessionDetailSerializer(session).data)
 
+    def delete(self, request, session_id):
+        try:
+            ChatService.delete_session(session_id, request.user)
+        except ValueError as e:
+            return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except PermissionError as e:
+            return Response({'message': str(e)}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ChatMessageController(APIView):
     permission_classes = [IsAuthenticated]
@@ -77,6 +87,7 @@ class ChatMessageController(APIView):
                 user=request.user,
                 content=serializer.validated_data['content'],
                 mentioned_user_ids=serializer.validated_data['mentioned_user_ids'],
+                mentioned_product_ids=serializer.validated_data['mentioned_product_ids'],
             ),
             content_type='text/event-stream',
         )

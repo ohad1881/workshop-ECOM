@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getGiftSuggestions } from '../api/recommendations';
 import { getUserProfile } from '../api/users';
 import { useMetadata } from '../general_hooks/useMetadata';
+import { useChatWidget } from '../context/chatWidget/useChatWidget';
 import UserSearchPanel from './UserSearchPanel';
 import GiftConfigPanel from './GiftConfigPanel';
 import RecommendationCard from './RecommendationCard';
@@ -21,6 +22,7 @@ const STEPS = ['Select Recipient', 'Configure Gift', 'Results', 'Customize Bundl
 const GiftBuilderPage = () => {
   const [searchParams] = useSearchParams();
   const { giftStrategies } = useMetadata();
+  const { openChat } = useChatWidget();
 
   const [activeStep, setActiveStep] = useState(0);
   const [recipient, setRecipient] = useState(null);
@@ -234,7 +236,12 @@ const GiftBuilderPage = () => {
           onBack={() => setActiveStep(2)}
           onRemoveProduct={handleRemoveProductFromBundle}
           onAddProduct={handleAddProductToBundle}
-          onProceed={() => window.location.assign('/chat')}
+          onProceed={() => openChat({
+            recipient,
+            budget: config?.budget,
+            eventType: config?.event_type,
+            bundleItems: selectedBundleItems,
+          })}
         />
       );
     }

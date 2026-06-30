@@ -11,18 +11,30 @@ export const createSession = (data) =>
 
 export const getSession = (id) => apiClient.get(`/chat/sessions/${id}/`).then((r) => r.data);
 
+export const deleteSession = (id) => apiClient.delete(`/chat/sessions/${id}/`).then((r) => r.data);
+
 // Sends a message and consumes the SSE token stream. `onToken(text)` is invoked
 // for each streamed chunk; resolves when the server sends `[DONE]`. Uses fetch
 // (not axios) because axios doesn't expose a readable stream in the browser.
-// `mentionedUserIds` are resolved client-side via searchUsers (see API.md → Chat).
-export const sendMessage = async (sessionId, content, mentionedUserIds = [], onToken) => {
+// `mentionedUserIds` / `mentionedProductIds` are resolved client-side via
+// searchUsers / searchProducts (see API.md → Chat).
+export const sendMessage = async (
+  sessionId,
+  content,
+  { mentionedUserIds = [], mentionedProductIds = [] } = {},
+  onToken,
+) => {
   const response = await fetch(`${API_BASE_URL}/chat/sessions/${sessionId}/messages/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ content, mentioned_user_ids: mentionedUserIds }),
+    body: JSON.stringify({
+      content,
+      mentioned_user_ids: mentionedUserIds,
+      mentioned_product_ids: mentionedProductIds,
+    }),
   });
 
   if (!response.ok || !response.body) {

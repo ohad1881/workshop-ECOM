@@ -52,7 +52,11 @@ TOOLS = [
     {
         "name": "optimize_gift_bundle",
         "description": (
-            "Run the knapsack optimizer to find the best combination of gifts within budget."
+            "Run the knapsack optimizer to find the best combination of gifts within budget. "
+            "Provide `recipient_id` for a registered recipient; OR `candidate_product_ids` "
+            "(e.g. ids returned by `search_products`) when there is no registered recipient "
+            "(stranger mode). Use `exclude_product_ids` to drop items from a registered-recipient "
+            "bundle when the user wants to swap something out."
         ),
         "parameters": {
             "type": "OBJECT",
@@ -64,8 +68,38 @@ TOOLS = [
                     "type": "STRING",
                     "enum": ["max_score", "max_items", "balanced"],
                 },
+                "exclude_product_ids": {
+                    "type": "ARRAY",
+                    "items": {"type": "INTEGER"},
+                    "description": "Product ids to drop (registered-recipient swap).",
+                },
+                "candidate_product_ids": {
+                    "type": "ARRAY",
+                    "items": {"type": "INTEGER"},
+                    "description": "Product pool to optimize over when there is no recipient_id (stranger mode).",
+                },
             },
-            "required": ["recipient_id", "budget"],
+            "required": ["budget"],
+        },
+    },
+    {
+        "name": "edit_gift_bundle",
+        "description": (
+            "Modify the bundle CURRENTLY shown and re-render it. The server starts from the "
+            "current bundle, removes `remove_product_ids`, adds `add_product_ids`, then renders "
+            "the exact result — you do NOT restate the items that stay. Use this whenever the "
+            "user asks to remove, drop, swap, or add items to the existing bundle (whether it "
+            "came from the gift builder or you built it earlier). Provide `budget` so match "
+            "scores reflect the recipient."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "remove_product_ids": {"type": "ARRAY", "items": {"type": "INTEGER"}},
+                "add_product_ids": {"type": "ARRAY", "items": {"type": "INTEGER"}},
+                "budget": {"type": "NUMBER"},
+                "event_type": {"type": "STRING"},
+            },
         },
     },
     {
@@ -104,10 +138,53 @@ TOOLS = [
             "required": ["preference_type", "value"],
         },
     },
+    {
+        "name": "find_users",
+        "description": (
+            "Look up registered GiftGraph users by (partial) username. Use this to resolve a "
+            "person the user names or @-mentions into a numeric user id before calling "
+            "`get_recipient_profile`. Returns id + username for each match (empty if none)."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "query": {"type": "STRING", "description": "Username or partial username"},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "list_taxonomy",
+        "description": (
+            "List every category and tag that exists in GiftGraph (name + slug). Call this "
+            "before inferring a recipient's interests so you only use categories/tags that "
+            "actually exist — especially in stranger mode when building a temporary profile."
+        ),
+    },
+    {
+        "name": "present_temporary_profile",
+        "description": (
+            "Stranger mode only: show the user a temporary recipient profile — the categories "
+            "and tags you think the recipient likes and dislikes — rendered as a profile card. "
+            "Use the EXACT category/tag names returned by `list_taxonomy`. Call this to first "
+            "show the profile, to update it as you learn more, and whenever the user asks what "
+            "you think the recipient likes."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "summary": {"type": "STRING", "description": "1–2 sentence description of the recipient"},
+                "liked_categories": {"type": "ARRAY", "items": {"type": "STRING"}},
+                "disliked_categories": {"type": "ARRAY", "items": {"type": "STRING"}},
+                "liked_tags": {"type": "ARRAY", "items": {"type": "STRING"}},
+                "disliked_tags": {"type": "ARRAY", "items": {"type": "STRING"}},
+            },
+        },
+    },
 ]
 
 
-def execute_tool(tool_name, tool_input, giver_user, recipient_id=None):
+def execute_tool(tool_name, tool_input, giver_user, recipient_id=None, session_id=None):
     """
     Execute a tool call using the existing service layer.
     Each tool delegates to the same services the REST API uses — no duplication.
@@ -126,11 +203,23 @@ def execute_tool(tool_name, tool_input, giver_user, recipient_id=None):
         elif tool_name == "optimize_gift_bundle":
             return _optimize_gift_bundle(tool_input, giver_user)
 
+        elif tool_name == "edit_gift_bundle":
+            return _edit_gift_bundle(tool_input, giver_user, recipient_id, session_id)
+
         elif tool_name == "get_giver_preferences":
             return _get_giver_preferences(giver_user)
 
         elif tool_name == "update_giver_preference":
             return _update_giver_preference(tool_input, giver_user)
+
+        elif tool_name == "find_users":
+            return _find_users(tool_input)
+
+        elif tool_name == "list_taxonomy":
+            return _list_taxonomy()
+
+        elif tool_name == "present_temporary_profile":
+            return _present_temporary_profile(tool_input)
 
         else:
             return {"error": f"Unknown tool: {tool_name}"}
@@ -208,37 +297,83 @@ def _get_recommendations(tool_input, giver_user):
 
 
 def _optimize_gift_bundle(tool_input, giver_user):
-    from apps.products.serializers import ProductRecommendationSerializer
     from apps.recommendations.services import RecommendationService
 
     strategy = tool_input.get('strategy', 'balanced')
-    bundles = RecommendationService.get_bundles(
-        recipient_id=tool_input['recipient_id'],
-        budget=Decimal(str(tool_input['budget'])),
-        event_type=tool_input.get('event_type'),
-        giver_user=giver_user,
-    )
+    budget = Decimal(str(tool_input['budget']))
+    recipient_id = tool_input.get('recipient_id')
+    candidate_product_ids = tool_input.get('candidate_product_ids')
+
+    if recipient_id:
+        bundles = RecommendationService.get_bundles(
+            recipient_id=recipient_id,
+            budget=budget,
+            event_type=tool_input.get('event_type'),
+            giver_user=giver_user,
+            exclude_product_ids=tool_input.get('exclude_product_ids'),
+        )
+    elif candidate_product_ids:
+        bundles = RecommendationService.build_bundles_from_products(
+            product_ids=candidate_product_ids,
+            budget=budget,
+        )
+    else:
+        return {"error": "Provide recipient_id, or candidate_product_ids for stranger mode."}
 
     if isinstance(bundles, dict) and 'message' in bundles:
         return bundles
 
-    result = {}
-    for strat, bundle_data in bundles.items():
-        result[strat] = {
-            'items': [
-                {
-                    'product': ProductRecommendationSerializer(item['product']).data,
-                    'score': round(item['score'], 3),
-                    'explanation': item['explanation'],
-                }
-                for item in bundle_data['items']
-            ],
-            'total_price': str(bundle_data['total_price']),
-            'total_score': bundle_data['total_score'],
-            'budget_utilization': bundle_data['budget_utilization'],
-        }
-
+    result = {strat: _bundle_result(bundle_data) for strat, bundle_data in bundles.items()}
     return result.get(strategy, result)
+
+
+def _bundle_result(bundle):
+    """Serialize a RecommendationService bundle dict into the tool-result shape the
+    frontend renders (shared by optimize_gift_bundle and edit_gift_bundle)."""
+    from apps.products.serializers import ProductRecommendationSerializer
+    return {
+        'items': [
+            {
+                'product': ProductRecommendationSerializer(item['product']).data,
+                'score': round(item['score'], 3),
+                'explanation': item['explanation'],
+            }
+            for item in bundle['items']
+        ],
+        'total_price': str(bundle['total_price']),
+        'total_score': bundle['total_score'],
+        'budget_utilization': bundle['budget_utilization'],
+    }
+
+
+def _edit_gift_bundle(tool_input, giver_user, recipient_id, session_id):
+    """Apply a remove/add delta to the session's CURRENT bundle (the source of truth saved
+    in message metadata) and re-render. Deterministic: the surviving items are taken from
+    the saved bundle, not re-stated by the model."""
+    from apps.recommendations.services import RecommendationService
+    from .repositories import ChatRepository
+
+    base_ids = ChatRepository.get_latest_bundle_product_ids(session_id) if session_id else []
+    if not base_ids:
+        return {"message": "There's no current bundle to edit yet — build one first."}
+
+    remove = set(tool_input.get('remove_product_ids') or [])
+    new_ids = [pid for pid in base_ids if pid not in remove]
+    for pid in (tool_input.get('add_product_ids') or []):
+        if pid not in new_ids:
+            new_ids.append(pid)
+
+    budget = tool_input.get('budget')
+    bundle = RecommendationService.build_bundle_for_products(
+        product_ids=new_ids,
+        budget=Decimal(str(budget)) if budget is not None else None,
+        recipient_id=recipient_id,
+        event_type=tool_input.get('event_type'),
+        giver_user=giver_user,
+    )
+    if not bundle:
+        return {"message": "The edited bundle is empty."}
+    return _bundle_result(bundle)
 
 
 def _get_giver_preferences(giver_user):
@@ -263,3 +398,29 @@ def _update_giver_preference(tool_input, giver_user):
         "status": "saved",
         "preference": GiftGiverPreferenceSerializer(pref).data,
     }
+
+
+def _find_users(tool_input):
+    from apps.users.repositories import UserRepository
+    query = tool_input.get('query', '').strip()
+    if not query:
+        return {"error": "Provide a username to search for."}
+    users = UserRepository.search_by_username(query, limit=10)
+    return [{'id': u.id, 'username': u.username} for u in users]
+
+
+def _list_taxonomy():
+    from apps.products.repositories import CategoryRepository, TagRepository
+    return {
+        'categories': [{'name': c.name, 'slug': c.slug} for c in CategoryRepository.get_all()],
+        'tags': [{'name': t.name, 'slug': t.slug} for t in TagRepository.get_all()],
+    }
+
+
+def _present_temporary_profile(tool_input):
+    """Echo the inferred stranger profile back so the frontend renders it as a card.
+    Display-only — nothing is persisted (there is no registered recipient)."""
+    keys = ['liked_categories', 'disliked_categories', 'liked_tags', 'disliked_tags']
+    profile = {k: [str(v) for v in (tool_input.get(k) or [])] for k in keys}
+    profile['summary'] = tool_input.get('summary', '')
+    return profile

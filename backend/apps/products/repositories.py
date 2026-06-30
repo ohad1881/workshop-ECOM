@@ -53,6 +53,21 @@ class ProductRepository:
         return qs
 
     @staticmethod
+    def get_active_by_ids(product_ids, max_price=None):
+        """Active products for an explicit id list (used by stranger-mode bundles)."""
+        if not product_ids:
+            return Product.objects.none()
+        qs = (
+            Product.objects
+            .select_related('category')
+            .prefetch_related('tags')
+            .filter(id__in=product_ids, is_active=True)
+        )
+        if max_price is not None:
+            qs = qs.filter(price__lte=max_price)
+        return qs
+
+    @staticmethod
     def full_text_search(query, limit=20):
         return (
             Product.objects
