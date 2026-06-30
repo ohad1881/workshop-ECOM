@@ -24,6 +24,7 @@ import {
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RecommendationCard from './RecommendationCard';
 import { formatCurrency } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
@@ -106,7 +107,7 @@ const BundleEditor = ({
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Button
             variant="outlined"
-            startIcon={<DeleteOutlinedIcon />}
+            startIcon={<ArrowBackIosNewIcon />}
             onClick={onBack}
             sx={{ borderRadius: '12px', textTransform: 'none' }}
           >

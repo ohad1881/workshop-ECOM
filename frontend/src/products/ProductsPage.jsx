@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAtom } from 'jotai';
 import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Box,
@@ -25,6 +26,7 @@ import { getCategories } from '../api/taxonomy';
 import { getRecommendedForMe } from '../api/recommendations';
 import { getMyWishlist, addWishlistItem, removeWishlistItem } from '../api/wishlists';
 import { resolveMediaUrl } from '../utils/media';
+import { showWishlistItemsAtom } from './productAtoms';
 
 // 0–1 match score → a color for the "% match" badge.
 const scoreColor = (score) => {
@@ -109,6 +111,8 @@ const ProductsPage = () => {
   // Default view is the personalized "Recommended" feed; category ids switch to plain catalog.
   const [categoryId, setCategoryId] = useState(RECOMMENDED);
   const [mutatingIds, setMutatingIds] = useState(new Set());
+  // Persisted "Show in Wishlist" toggle — defaults to false (wishlist items hidden).
+  const [showWishlistItems, setShowWishlistItems] = useAtom(showWishlistItemsAtom);
   const queryClient = useQueryClient();
 
   const isRecommended = categoryId === RECOMMENDED;
@@ -186,30 +190,48 @@ const ProductsPage = () => {
     entries = (catalogQuery.data?.pages.flatMap((p) => p.results) ?? []).map((product) => ({ product }));
   }
 
+  // "Show in Wishlist" toggle: when OFF (default), hide products already on the
+  // user's wishlist; when ON, include them.
+  if (!showWishlistItems) {
+    entries = entries.filter((e) => wishlistMap[e.product.id] == null);
+  }
+
   const recMessage = isRecommended ? recQuery.data?.message : null;
 
   return (
     <Box sx={{ width: '100%', mx: 'auto', px: 3, py: 4 }}>
-      <Typography variant="h2" sx={{ mb: 3 }}>
-        Products
-      </Typography>
+      <Typography variant="h2" sx={{ mb: 3 }}>Products</Typography>
 
-      <TextField
-        fullWidth
-        placeholder="Search products…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 3 }}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+        <TextField
+          fullWidth
+          placeholder="Search products…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <Tooltip title="Show items in wishlist">
+          <ToggleButton
+            value="wishlist"
+            selected={showWishlistItems}
+            onChange={() => setShowWishlistItems((v) => !v)}
+            size="small"
+            color="error"
+            aria-label="Show included in wishlist items"
+            sx={{ borderRadius: '50% !important', p: 0.75, flexShrink: 0 }}
+          >
+            {showWishlistItems ? <FavoriteIcon sx={{ fontSize: 18 }} /> : <FavoriteBorderIcon sx={{ fontSize: 18 }} />}
+          </ToggleButton>
+        </Tooltip>
+      </Box>
 
       {categories.length > 0 && (
         <ToggleButtonGroup
@@ -228,6 +250,7 @@ const ProductsPage = () => {
           ))}
         </ToggleButtonGroup>
       )}
+
 
       {isLoading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
@@ -252,7 +275,15 @@ const ProductsPage = () => {
         </Typography>
       )}
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
+      <Box
+        sx={{
+          display: 'grid',
+          // Fit columns to the actual available width (not the viewport), so the
+          // grid reflows correctly when the chat drawer shifts the page left.
+          gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))',
+          gap: 3,
+        }}
+      >
         {entries.map(({ product, score, explanation }) => (
           <Box key={product.id}>
             <ProductCard

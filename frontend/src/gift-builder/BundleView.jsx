@@ -9,9 +9,10 @@ const BundleView = ({ bundle, strategy, isLoading, compareCount, onSelect }) => 
 
   if (!bundle) {
     return (
-      <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
-        No bundle data available.
-      </Typography>
+      <Alert severity="info" sx={{ my: 2 }}>
+        No products fit within this budget. Try increasing the budget in the previous step to see
+        gift bundles.
+      </Alert>
     );
   }
 

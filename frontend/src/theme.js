@@ -1,9 +1,9 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 // Lightweight light-only theme: neutral greys + a single blue accent.
 // Keep this minimal — extend palette/typography here rather than hardcoding
 // colors in components.
-const theme = createTheme({
+const baseTheme = createTheme({
   palette: {
     mode: 'light',
     primary: { main: '#2563EB', light: '#3B82F6', dark: '#1D4ED8', contrastText: '#FFFFFF' },
@@ -22,5 +22,9 @@ const theme = createTheme({
   },
   shape: { borderRadius: 8 },
 });
+
+// Auto-scale heading/typography sizes down on smaller breakpoints so text never
+// overflows on phones/tablets — applied app-wide via the ThemeProvider.
+const theme = responsiveFontSizes(baseTheme);
 
 export default theme;

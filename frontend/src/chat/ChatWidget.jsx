@@ -6,6 +6,10 @@ import { useChatWidget } from '../context/chatWidget/useChatWidget';
 import SessionList from './SessionList';
 import ChatConversation from './ChatConversation';
 
+// Drawer width on desktop. Shared with MainLayout so it can shift the page
+// content left by the same amount when the assistant is open.
+export const CHAT_DRAWER_WIDTH = 400;
+
 // Global floating assistant. Non-modal (persistent Drawer, no backdrop) so the user
 // can keep browsing while the AI streams. State + in-flight stream live in the provider.
 const ChatWidget = () => {
@@ -34,8 +38,7 @@ const ChatWidget = () => {
         slotProps={{
           paper: {
             sx: {
-              width: 420,
-              minWidth: 420,
+              width: { xs: '100vw', sm: CHAT_DRAWER_WIDTH },
               maxWidth: '100vw',
               flexShrink: 0,
               display: 'flex',

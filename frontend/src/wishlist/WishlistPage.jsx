@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import {
   Box, Typography, Grid, Button, Snackbar,
+  Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -14,6 +15,8 @@ const WishlistPage = () => {
   const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [undoItem, setUndoItem] = useState(null);
+  const [confirmItem, setConfirmItem] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const timerRef = useRef(null);
 
   const { data: items = [], isLoading, error } = useQuery({
@@ -30,7 +33,15 @@ const WishlistPage = () => {
     mutationFn: (id) => removeWishlistItem(id),
   });
 
-  const handleDelete = (item) => {
+  // Clicking the trash icon asks for confirmation first. We keep `confirmItem`
+  // set while the dialog fades out (cleared on exit) so its content doesn't
+  // flash blank during the close animation.
+  const requestDelete = (item) => {
+    setConfirmItem(item);
+    setConfirmOpen(true);
+  };
+
+  const performDelete = (item) => {
     if (timerRef.current) clearTimeout(timerRef.current);
 
     queryClient.setQueryData(['wishlist'], (old = []) =>
@@ -40,6 +51,11 @@ const WishlistPage = () => {
 
     setUndoItem(item);
     timerRef.current = setTimeout(() => setUndoItem(null), 5000);
+  };
+
+  const confirmDelete = () => {
+    if (confirmItem) performDelete(confirmItem);
+    setConfirmOpen(false);
   };
 
   const handleUndo = () => {
@@ -83,8 +99,8 @@ const WishlistPage = () => {
       ) : (
         <Grid container spacing={2}>
           {items.map((item) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-              <WishlistItem item={item} onDelete={handleDelete} />
+            <Grid size={{ xs: 12, md: 3 }} key={item.id}>
+              <WishlistItem item={item} onDelete={requestDelete} />
             </Grid>
           ))}
         </Grid>
@@ -97,6 +113,25 @@ const WishlistPage = () => {
         adding={addMutation.isPending}
         existingProductIds={items.map((i) => i.product.id)}
       />
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        slotProps={{ transition: { onExited: () => setConfirmItem(null) } }}
+      >
+        <DialogTitle>Remove from wishlist?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Do you want to remove &ldquo;{confirmItem?.product?.name}&rdquo; from your wishlist?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
+          <Button color="error" variant="contained" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         open={!!undoItem}

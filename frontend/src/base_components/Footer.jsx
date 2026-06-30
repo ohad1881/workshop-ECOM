@@ -44,6 +44,9 @@ const Footer = () => {
               <Link component={RouterLink} to="/gift-builder" underline="hover" color="text.secondary">
                 Build a Gift
               </Link>
+              <Link component={RouterLink} to="/products" underline="hover" color="text.secondary">
+                Products
+              </Link>
               <Link component={RouterLink} to="/wishlist" underline="hover" color="text.secondary">
                 My Wishlist
               </Link>
