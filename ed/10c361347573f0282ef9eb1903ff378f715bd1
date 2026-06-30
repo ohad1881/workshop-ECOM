@@ -1,0 +1,77 @@
+frontend/src/base_components/Footer.jsx
+  s_ee29a2e85ea90a::t_c659d4a7e80679 47-49
+frontend/package.json
+  s_ee29a2e85ea90a::t_553f180a927449 21
+frontend/src/products/productAtoms.js
+  s_ee29a2e85ea90a::t_3e34eb7104656e 1-3
+  s_ee29a2e85ea90a::t_0144c40fd79b14 4-6
+frontend/src/chat/ChatWidget.jsx
+  s_ee29a2e85ea90a::t_159171c4887752 9-10,12
+  s_ee29a2e85ea90a::t_5989138f56290b 41
+  h_48054a6077c2eb 11
+frontend/src/gift-builder/BundleView.jsx
+  s_ee29a2e85ea90a::t_47d9e1c84e20d2 12-15
+frontend/src/base_components/Navbar.jsx
+  s_ee29a2e85ea90a::t_29889918963a91 134-136
+  s_ee29a2e85ea90a::t_affa89449287ad 12-17,19,23-29,34,62-76,85,87,89-94,125-133,137-147
+  s_ee29a2e85ea90a::t_ba1c6fd705e4d9 77-84
+frontend/src/products/ProductsPage.jsx
+  s_ee29a2e85ea90a::t_64f4e21edf3170 203,205-220,229
+  s_ee29a2e85ea90a::t_fa9b354ce8aaa1 29
+  h_48054a6077c2eb 221
+  s_ee29a2e85ea90a::t_cdee2e08ec55bd 278-280,284-286
+  s_ee29a2e85ea90a::t_df2ae5e3446815 2
+  s_ee29a2e85ea90a::t_06003112028a9c 234
+  s_ee29a2e85ea90a::t_8cccce66a0429e 114-115
+  s_ee29a2e85ea90a::t_456072c864b636 281-283
+  s_ee29a2e85ea90a::t_2eb416ba2f4476 197-198
+  s_ee29a2e85ea90a::t_1862337038bf23 222-228,230-233
+  s_ee29a2e85ea90a::t_6d6fa8e7cc100a 193-196
+  s_ee29a2e85ea90a::t_dd62760a20dc0f 254
+frontend/src/theme.js
+  s_ee29a2e85ea90a::t_2063d440966030 1,6
+  s_ee29a2e85ea90a::t_baa204970694bb 26-29
+frontend/src/base_components/MainLayout.jsx
+  s_ee29a2e85ea90a::t_041e557dc9757d 5,7,14-20,22-36
+frontend/src/wishlist/WishlistPage.jsx
+  s_ee29a2e85ea90a::t_8ceddf64781cd9 123-128,130-135
+  s_ee29a2e85ea90a::t_3a33c95b2c1307 36-42
+  h_48054a6077c2eb 102,122
+  s_ee29a2e85ea90a::t_e08224e3e6bb5b 4
+  s_ee29a2e85ea90a::t_db05ca2ae06424 43-44,56-57
+  s_ee29a2e85ea90a::t_483a26d244d7b1 103
+  s_ee29a2e85ea90a::t_c195d767177139 18
+  s_ee29a2e85ea90a::t_a01706b2023a7c 19
+  s_ee29a2e85ea90a::t_ee6b9462f373cc 117-121,129
+  s_ee29a2e85ea90a::t_6bbea9500a51da 58
+frontend/src/gift-builder/BundleEditor.jsx
+  s_ee29a2e85ea90a::t_47232cb216013d 27
+  s_ee29a2e85ea90a::t_4206a68eff9bfb 110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "ed10c361347573f0282ef9eb1903ff378f715bd1",
+  "prompts": {},
+  "humans": {
+    "h_48054a6077c2eb": {
+      "author": "ohad shushan <ohad.s@mstone.ai>"
+    }
+  },
+  "sessions": {
+    "s_ee29a2e85ea90a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "804cbd32-2247-4168-bc35-f4a96213a088",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "ohad shushan <ohad.s@mstone.ai>",
+      "token_usage": {
+        "input_tokens": 31424,
+        "output_tokens": 242472,
+        "cache_creation_tokens": 431929,
+        "cache_read_tokens": 65550259
+      }
+    }
+  }
+}
