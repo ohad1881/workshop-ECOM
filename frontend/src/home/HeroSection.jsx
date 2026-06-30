@@ -2,6 +2,7 @@ import { Box, Button, Typography, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth/useAuth';
 import UserSearch from './UserSearch';
+import logo from '../assets/logo.png';
 
 // Home-only hero block (single-use; lives directly in the home/ page folder).
 const HeroSection = () => {
@@ -10,6 +11,12 @@ const HeroSection = () => {
 
   return (
     <Box sx={{ textAlign: 'center', py: 8 }}>
+      <Box
+        component="img"
+        src={logo}
+        alt="GiftGraph"
+        sx={{ width: { xs: 65, sm: 65 }, height: 'auto', mb: 2, mx: 'auto', display: 'block' }}
+      />
       <Typography variant="h1" sx={{ mb: 2 }}>
         Welcome to GiftGraph
       </Typography>

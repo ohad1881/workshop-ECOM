@@ -19,6 +19,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../context/auth/useAuth';
 import { gravatarUrl } from '../utils/gravatar';
+import logo from '../assets/logo.png';
 
 const NAV_LINKS = [
   { label: 'Home', to: '/' },
@@ -74,14 +75,19 @@ const Navbar = () => {
             </IconButton>
           )}
 
-          <Typography
-            variant="h4"
+          <Box
             component={RouterLink}
             to="/"
-            sx={{ color: 'primary.main', fontWeight: 700, textDecoration: 'none' }}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.7, textDecoration: 'none' }}
           >
-            GiftGraph
-          </Typography>
+            <Box component="img" src={logo} alt="" sx={{ height: 32, width: 'auto', display: 'block', mb: 0.7 }} />
+            <Typography
+              variant="h4"
+              sx={{ color: 'primary.main', fontWeight: 700}}
+            >
+              GiftGraph
+            </Typography>
+          </Box>
         </Box>
 
         {/* Desktop inline nav links */}
