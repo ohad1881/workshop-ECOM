@@ -291,6 +291,7 @@ giftgraph/
 │   │       ├── serializers.py
 │   │       ├── urls.py
 │   │       ├── tools.py             # Gemini function declarations
+│   │       ├── prompts.py           # system-prompt prose (str.format templates)
 │   │       ├── admin.py
 │   │       ├── apps.py
 │   │       └── migrations/
@@ -326,10 +327,14 @@ giftgraph/
 │       │   ├── chat.js
 │       │   └── metadata.js         # Event types, strategies (cached)
 │       ├── context/                # One folder per context (object / provider / hook)
-│       │   └── auth/
-│       │       ├── AuthContext.js
-│       │       ├── AuthProvider.jsx
-│       │       └── useAuth.js
+│       │   ├── auth/
+│       │   │   ├── AuthContext.js
+│       │   │   ├── AuthProvider.jsx
+│       │   │   └── useAuth.js
+│       │   └── chatWidget/          # Global chat widget open-state + in-flight SSE stream
+│       │       ├── ChatWidgetContext.js
+│       │       ├── ChatWidgetProvider.jsx
+│       │       └── useChatWidget.js
 │       ├── general_hooks/          # Hooks shared across pages
 │       │   ├── useMetadata.js      # Loads & caches app constants
 │       │   └── useDebounce.js
@@ -378,8 +383,17 @@ giftgraph/
 │       │   ├── RecommendationCard.jsx
 │       │   ├── BundleView.jsx
 │       │   └── BundleEditor.jsx       # Customize-bundle step: add/remove products
-│       ├── chat/
-│       │   └── ChatPage.jsx
+│       ├── chat/                       # Global AI chat widget (no /chat route — mounted in MainLayout)
+│       │   ├── ChatWidget.jsx          # FAB + non-modal persistent Drawer shell (fixed width)
+│       │   ├── SessionList.jsx          # Past sessions + "New chat" (starts a blank free-text session)
+│       │   ├── ChatConversation.jsx    # History + SSE streaming + suggested chips
+│       │   ├── ChatMessage.jsx         # Bubble + inline bundle/recommendation cards
+│       │   ├── ChatComposer.jsx        # Input; Enter sends, Shift+Enter newline
+│       │   ├── BundleCard.jsx          # Proposed bundle + (stubbed) Save
+│       │   ├── BundleItemRow.jsx       # Compact one-line product row (chat-only; space-tight)
+│       │   ├── TemporaryProfileCard.jsx # Stranger-mode inferred profile (likes/dislikes chips)
+│       │   ├── MentionTextField.jsx    # Input + @user / #product autocomplete dropdown
+│       │   └── useMentions.js          # @/# mention detection + resolution
 │       ├── privacy/
 │       │   └── PrivacyPolicyPage.jsx
 │       ├── terms/
@@ -1411,7 +1425,10 @@ TOOLS = [
     },
     {
         "name": "optimize_gift_bundle",
-        "description": "Run the knapsack optimizer to find the best combination of gifts within budget.",
+        "description": "Run the knapsack optimizer to find the best combination of gifts within budget. "
+                       "Provide recipient_id for a registered recipient; OR candidate_product_ids "
+                       "(from search_products) when there is no recipient (stranger mode). Use "
+                       "exclude_product_ids to drop items from a registered-recipient bundle (swap).",
         "parameters": {
             "type": "OBJECT",
             "properties": {
@@ -1421,9 +1438,11 @@ TOOLS = [
                 "strategy": {
                     "type": "STRING",
                     "enum": ["max_score", "max_items", "balanced"]
-                }
+                },
+                "exclude_product_ids": {"type": "ARRAY", "items": {"type": "INTEGER"}},
+                "candidate_product_ids": {"type": "ARRAY", "items": {"type": "INTEGER"}}
             },
-            "required": ["recipient_id", "budget"]
+            "required": ["budget"]
         }
     },
     {
@@ -1493,6 +1512,15 @@ def execute_tool(tool_name, tool_input, giver_user, recipient_id=None):
             context=tool_input.get('context', '')
         )
         return {"status": "saved", "preference": GiftGiverPreferenceSerializer(pref).data}
+
+    # Plus more tools:
+    #   edit_gift_bundle(remove_product_ids, add_product_ids, budget) → apply a delta to the session's
+    #                                           CURRENT bundle (read from saved message metadata) and
+    #                                           re-render deterministically without restating the set
+    #                                           (RecommendationService.build_bundle_for_products)
+    #   find_users(query)                 → resolve a username/@mention to a user id (UserRepository.search_by_username)
+    #   list_taxonomy()                   → all categories + tags, so the AI uses real names (stranger mode)
+    #   present_temporary_profile(...)    → display-only echo of an inferred stranger profile, rendered as a card
 ```
 
 ### 9.3 AI Service — `apps/chat/services.py`
@@ -1509,31 +1537,34 @@ automatic function calling is disabled so the loop drives tool execution manuall
 (`role` ∈ {`user`, `assistant`}) are mapped to Gemini `Content` objects (`assistant` → `model`);
 tool results are returned as `Part.from_function_response(...)` parts under a `user` content.
 
-The system prompt is built dynamically per request from session and user context:
+The system prompt is built dynamically per request. The **prose** lives in `apps/chat/prompts.py`
+as `str.format` templates (`PREAMBLE`, `STRANGER_MODE`, `SELF_GIFT_MODE`, `RECIPIENT_MODE`,
+`BUNDLE_REFINEMENT_RULE`, …) — mirroring how `tools.py` holds the function declarations. The
+**logic** (which mode, value interpolation) stays in `_build_system_prompt`, which picks the right
+template for the session's mode (stranger / self-gift / registered recipient) and fills in the
+current user id, budget, occasion, and any `@user` / `#product` mentions:
 
 ```python
 GEMINI_MODEL = 'gemini-2.5-flash'
 MAX_TOOL_ROUNDS = 5
 MAX_TOKENS = 2048
 
-def _build_system_prompt(session, user, mentioned_user_ids):
-    parts = [
-        "You are GiftGraph's gifting assistant.",
-        "Help users choose thoughtful gifts using the available tools.",
-        "Respect privacy: use only public recipient data exposed by tools, "
-        "unless the session is self-gift mode for the current user.",
-        f"Current user id: {user.id}.",
-    ]
-    if session.recipient_id:
-        parts.append(f"Session recipient id: {session.recipient_id}.")
+def _build_system_prompt(session, user, mentioned_user_ids, mentioned_product_ids=()):
+    parts = [prompts.PREAMBLE.format(user_id=user.id)]
     if session.budget is not None:
-        parts.append(f"Session budget: {session.budget}.")
+        parts.append(prompts.BUDGET_RULE.format(budget=session.budget))
     if session.event_type:
-        parts.append(f"Session event type: {session.event_type}.")
-    if session.is_self_gift:
-        parts.append("This is a self-gift session.")
-    if mentioned_user_ids:
-        parts.append("User IDs mentioned in the latest message: " + ", ".join(...) + ".")
+        parts.append(prompts.OCCASION_RULE.format(event_type=session.event_type))
+
+    if session.stranger_description and not session.recipient_id:
+        parts.append(prompts.STRANGER_MODE.format(stranger_description=session.stranger_description))
+    elif session.is_self_gift:
+        parts.append(prompts.SELF_GIFT_MODE.format(bundle_refinement=prompts.BUNDLE_REFINEMENT_RULE))
+    elif session.recipient_id:
+        parts.append(prompts.RECIPIENT_MODE.format(
+            recipient_id=session.recipient_id, bundle_refinement=prompts.BUNDLE_REFINEMENT_RULE))
+
+    # … then append @user / #product mention lines, and join with "\n".
     return "\n".join(parts)
 ```
 
@@ -1543,7 +1574,7 @@ the message history to `MAX_MESSAGES_PER_SESSION`, then yields the response as S
 On any exception the service yields a safe fallback string instead of surfacing the error.
 
 ```python
-def stream_message(session_id, user, content, mentioned_user_ids=None):
+def stream_message(session_id, user, content, mentioned_user_ids=None, mentioned_product_ids=None):
     try:
         session = ChatService.get_session(session_id, user)
         ChatRepository.create_message(session_id=session.id, role='user', content=content, ...)
@@ -1621,9 +1652,10 @@ def update_giver_preferences_async(user_id, preference_type, value, context):
 | Endpoint | Method | Auth | Description |
 |---|---|---|---|
 | `/api/chat/sessions/` | GET | Yes | List user's chat sessions |
-| `/api/chat/sessions/` | POST | Yes | Create session. Body: `{ recipient_id, budget, event_type, is_self_gift }` |
+| `/api/chat/sessions/` | POST | Yes | Create session. Body (all optional): `{ recipient_id, budget, event_type, is_self_gift, stranger_description, bundle_product_ids }` — a blank session is valid; the assistant infers the recipient from the chat. `bundle_product_ids` (gift-builder handoff) seeds the session with a canned opening assistant message carrying the bundle card (no model call). |
 | `/api/chat/sessions/<id>/` | GET | Yes | Session with message history |
-| `/api/chat/sessions/<id>/messages/` | POST | Yes | Send message. Returns SSE stream. |
+| `/api/chat/sessions/<id>/` | DELETE | Yes | Delete a session (owner only); `204 No Content` |
+| `/api/chat/sessions/<id>/messages/` | POST | Yes | Send message (body: `content`, `mentioned_user_ids`, `mentioned_product_ids`). Returns SSE stream. |
 
 ### Acceptance Criteria — Phase 9
 

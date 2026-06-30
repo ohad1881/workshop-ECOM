@@ -60,8 +60,10 @@ Domain-specific extras that exist today:
   `seed_data/dummy_data.json`).
 - `apps/recommendations/` — `engine.py`, `optimizer.py`, `constants.py` (scoring/OR-Tools split out).
   Note: no `migrations/` directory yet.
-- `apps/chat/` — `tools.py` (Gemini function declarations); the Gemini integration currently lives in
-  `services.py` (there is no separate `ai_service.py`).
+- `apps/chat/` — `tools.py` (Gemini function declarations) and `prompts.py` (system-prompt prose as
+  `str.format` templates); the Gemini integration currently lives in `services.py` (there is no
+  separate `ai_service.py`). `_build_system_prompt` does the mode selection + interpolation, pulling
+  text from `prompts.py`.
 
 ### The layering rule (the one thing to get right)
 
