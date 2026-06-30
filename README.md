@@ -677,7 +677,7 @@ class WishlistItem(Model):
     user = ForeignKey(User, on_delete=CASCADE, related_name='wishlist_items')
     product = ForeignKey(Product, on_delete=CASCADE, related_name='wishlisted_by')
     privacy = CharField(max_length=10, choices=PrivacyLevel.choices, default=PrivacyLevel.PUBLIC)
-    priority = IntegerField(default=0)  # 0 = no priority, 5 = most wanted
+    priority = IntegerField(default=5)  # 0 = no priority, 5 = most wanted (default to max)
     note = TextField(blank=True, max_length=200)
     added_at = DateTimeField(auto_now_add=True)
 
@@ -692,9 +692,11 @@ class WishlistItem(Model):
 class ChatSession(Model):
     owner = ForeignKey(User, on_delete=CASCADE, related_name='chat_sessions')
     recipient = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True, related_name='gift_sessions')
-    budget = DecimalField(max_digits=10, decimal_places=2, null=True)
+    title = CharField(max_length=255, blank=True)
+    budget = DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     event_type = CharField(max_length=50, blank=True)
     is_self_gift = BooleanField(default=False)
+    stranger_description = TextField(blank=True, default='')  # gift a person not on the platform
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
@@ -829,8 +831,9 @@ class AuthService:
 | `/api/auth/login/` | POST | No | Returns JWT access + refresh tokens (email-based login) |
 | `/api/auth/token/refresh/` | POST | No | Refresh access token |
 | `/api/auth/logout/` | POST | Yes | Blacklist the refresh token |
-| `/api/auth/me/` | GET | Yes | Get current user + profile |
-| `/api/auth/me/` | PATCH | Yes | Update profile fields |
+| `/api/auth/me/` | GET | Yes | Get current user + profile (preferences nested) |
+| `/api/auth/me/` | PATCH | Yes | Update account settings (`username`, `email`) |
+| `/api/auth/me/preferences/` | PATCH | Yes | Update profile preferences (`bio`, interest/category IDs) |
 | `/api/auth/change-password/` | POST | Yes | Change password |
 
 ### 3.4 Serializers — `apps/users/serializers.py`
@@ -886,9 +889,11 @@ Build using CSR: UserRepository → UserService → UserController.
 
 | Endpoint | Method | Auth | Description |
 |---|---|---|---|
-| `/api/users/` | GET | Yes | List users (public info only: username, public interests) |
-| `/api/users/<id>/` | GET | Yes | Get user's public profile (respects privacy settings) |
+| `/api/users/<id>/` | GET | Yes | Get user's public profile |
 | `/api/users/search/?q=<query>` | GET | Yes | Search users by username. Uses `icontains` for partial matching. |
+| `/api/users/<id>/wishlist/` | GET | Yes | A user's public wishlist items |
+
+There is no "list all users" endpoint — users are discovered only via search.
 
 **Privacy logic** (in `UserService`):
 - Create a method `get_public_profile(user_id)` that returns only fields where the privacy setting is `'public'`.
@@ -945,16 +950,17 @@ Build using CSR: ProductRepository → ProductService → ProductController.
 |---|---|---|---|---|
 | `/api/products/` | GET | Yes | Any | List products, filterable |
 | `/api/products/<id>/` | GET | Yes | Any | Product detail |
-| `/api/products/` | POST | Yes | Admin | Create product |
-| `/api/products/<id>/` | PUT/PATCH | Yes | Admin | Update product |
-| `/api/products/<id>/` | DELETE | Yes | Admin | Soft delete (`is_active=False`) |
 | `/api/products/search/?q=<query>` | GET | Yes | Any | Full-text search |
-| `/api/products/import-csv/` | POST | Yes | Admin | Upload CSV, returns import report |
 
-**Filtering** (via `django-filter` on GET `/api/products/`):
-- `category` — exact match on category slug
+Product create / update / delete and CSV import are **not** HTTP endpoints — they are
+admin-only operations done through the Django admin panel and the `import_products`
+management command (see §5.2). Only the read endpoints above are exposed to the frontend.
+
+**Filtering** (query params on GET `/api/products/`):
+- `category_id` — exact match on category **ID**
 - `min_price` / `max_price` — range filter
-- `tags` — filter products that have any of the specified tag IDs
+- `tag_ids` — comma-separated tag **IDs**; matches products having any of them
+- `search` — full-text query over name / description
 - `is_active` — defaults to `True`
 
 **Full-text search** (in `ProductRepository`):
@@ -989,7 +995,7 @@ The `tags` column contains comma-separated tag names within the quoted field. Th
 
 **Usage**: `python manage.py import_products /path/to/products_template.csv`
 
-Also exposed as an API endpoint (`/api/products/import-csv/`) for admin users.
+This is the management command only — there is no `/api/products/import-csv/` HTTP endpoint.
 
 **IMPORTANT**: Do NOT insert any hardcoded seed data into the database. The only way products enter the system is via the CSV import command or admin panel. The CSV template with 5 example products is provided for testing that the import pipeline works correctly.
 
@@ -1241,9 +1247,10 @@ class RecommendationService:
 
 | Endpoint | Method | Auth | Description |
 |---|---|---|---|
-| `/api/recommendations/for-user/<user_id>/` | GET | Yes | Get ranked recommendations. Params: `budget` (required), `event_type`, `limit`. |
+| `/api/recommendations/gift-suggestions/<user_id>/` | GET | Yes | Top-pick recommendations + all three bundles from one scoring pass. Params: `budget` (required), `event_type`, `limit`. Self-gift auto-detected when `user_id` is the caller. |
+| `/api/recommendations/for-me/` | GET | Yes | Entire catalog scored against the caller's own profile (self-gift), sorted by match score. Param: `limit` (200, max 500). Powers the products "Recommended" tab. |
 
-The controller calls `RecommendationService.get_recommendations()`, passing the authenticated user as `giver_user` so AI-learned preferences are applied.
+The controllers call `RecommendationService`, passing the authenticated user as `giver_user` so AI-learned preferences are applied.
 
 ### Acceptance Criteria — Phase 7
 
@@ -2086,32 +2093,31 @@ unique(user, pref_type, value)
 | 2 | POST | `/api/auth/login/` | No | Login (JWT) |
 | 3 | POST | `/api/auth/token/refresh/` | No | Refresh token |
 | 4 | POST | `/api/auth/logout/` | Yes | Blacklist refresh token |
-| 5 | GET | `/api/auth/me/` | Yes | Current user + profile |
-| 6 | PATCH | `/api/auth/me/` | Yes | Update profile |
-| 7 | POST | `/api/auth/change-password/` | Yes | Change password |
-| 8 | GET | `/api/users/` | Yes | List users (public info) |
+| 5 | GET | `/api/auth/me/` | Yes | Current user + profile (preferences nested) |
+| 6 | PATCH | `/api/auth/me/` | Yes | Update account settings (`username`, `email`) |
+| 7 | PATCH | `/api/auth/me/preferences/` | Yes | Update profile preferences (`bio`, interest/category IDs) |
+| 8 | POST | `/api/auth/change-password/` | Yes | Change password |
 | 9 | GET | `/api/users/<id>/` | Yes | Public profile |
 | 10 | GET | `/api/users/search/?q=` | Yes | Search users |
 | 11 | GET | `/api/users/<id>/wishlist/` | Yes | User's public wishlist |
-| 12 | GET | `/api/categories/` | Yes | List categories |
-| 13 | GET | `/api/tags/` | Yes | List tags |
+| 12 | GET | `/api/categories/` | Yes | List/search categories (paginated) |
+| 13 | GET | `/api/tags/` | Yes | List/search tags (paginated) |
 | 14 | GET | `/api/metadata/` | Yes | App constants (events, strategies) |
 | 15 | GET | `/api/products/` | Yes | List/filter products |
 | 16 | GET | `/api/products/<id>/` | Yes | Product detail |
-| 17 | POST | `/api/products/` | Admin | Create product |
-| 18 | PATCH | `/api/products/<id>/` | Admin | Update product |
-| 19 | DELETE | `/api/products/<id>/` | Admin | Soft-delete |
-| 20 | GET | `/api/products/search/?q=` | Yes | Full-text search |
-| 21 | POST | `/api/products/import-csv/` | Admin | Import from CSV |
-| 22 | GET | `/api/wishlists/` | Yes | Own wishlist (all) |
-| 23 | POST | `/api/wishlists/` | Yes | Add to wishlist |
-| 24 | PATCH | `/api/wishlists/<id>/` | Yes | Update wishlist item |
-| 25 | DELETE | `/api/wishlists/<id>/` | Yes | Remove from wishlist |
-| 26 | GET | `/api/recommendations/gift-suggestions/<id>/` | Yes | Top-pick recommendations + all three bundles (one scoring pass); self-gift auto-detected |
-| 27 | GET | `/api/chat/sessions/` | Yes | List chat sessions |
-| 28 | POST | `/api/chat/sessions/` | Yes | Create session |
-| 29 | GET | `/api/chat/sessions/<id>/` | Yes | Session + history |
-| 30 | POST | `/api/chat/sessions/<id>/messages/` | Yes | Send message (SSE stream) |
+| 17 | GET | `/api/products/search/?q=` | Yes | Full-text search |
+| 18 | GET | `/api/wishlists/` | Yes | Own wishlist (all) |
+| 19 | POST | `/api/wishlists/` | Yes | Add to wishlist |
+| 20 | PATCH | `/api/wishlists/<id>/` | Yes | Update wishlist item |
+| 21 | DELETE | `/api/wishlists/<id>/` | Yes | Remove from wishlist |
+| 22 | GET | `/api/recommendations/gift-suggestions/<id>/` | Yes | Top-pick recommendations + all three bundles (one scoring pass); self-gift auto-detected |
+| 23 | GET | `/api/recommendations/for-me/` | Yes | Entire catalog scored against the current user (self-gift); powers the products "Recommended" tab |
+| 24 | GET | `/api/chat/sessions/` | Yes | List chat sessions |
+| 25 | POST | `/api/chat/sessions/` | Yes | Create session |
+| 26 | GET | `/api/chat/sessions/<id>/` | Yes | Session + history |
+| 27 | POST | `/api/chat/sessions/<id>/messages/` | Yes | Send message (SSE stream) |
+
+> **Not HTTP endpoints:** product create / update / delete and CSV import are **not** exposed over the API. Products are managed through the Django admin panel and the `python manage.py import_products` management command (see the admin note in `API.md`).
 
 ---
 
