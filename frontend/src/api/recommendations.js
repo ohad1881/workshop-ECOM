@@ -12,3 +12,12 @@ export const getGiftSuggestions = (userId, params) =>
 // match score. Powers the products page "Recommended" tab. params: { limit }.
 export const getRecommendedForMe = (params) =>
   apiClient.get('/recommendations/for-me/', { params }).then((r) => r.data);
+
+export const finalizeGiftBundle = (data) =>
+  apiClient.post('/recommendations/finalize/', data).then((r) => r.data);
+
+export const getGiftHistory = () =>
+  apiClient.get('/recommendations/history/').then((r) => r.data);
+
+export const deleteGiftHistory = (id) =>
+  apiClient.delete(`/recommendations/history/${id}/`).then((r) => r.data);

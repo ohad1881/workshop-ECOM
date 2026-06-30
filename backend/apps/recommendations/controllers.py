@@ -5,7 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import GiftSuggestionsSerializer, RecommendationItemSerializer
+from .serializers import (
+    GiftHistoryCreateSerializer,
+    GiftHistorySerializer,
+    GiftSuggestionsSerializer,
+    RecommendationItemSerializer,
+)
 from .services import RecommendationService
 
 # Effectively "no budget cap" — large enough to include the entire catalog when
@@ -82,3 +87,45 @@ class RecommendedForMeController(APIView):
             return Response({'message': result['message'], 'results': []})
 
         return Response({'results': RecommendationItemSerializer(result, many=True).data})
+
+
+class GiftHistoryController(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        history = RecommendationService.get_gift_history_for_giver(request.user.id)
+        return Response({'history': GiftHistorySerializer(history, many=True).data})
+
+    def post(self, request):
+        serializer = GiftHistoryCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            history = RecommendationService.finalize_gift_bundle(
+                giver_user=request.user,
+                recipient_id=serializer.validated_data.get('recipient_id'),
+                recipient_stranger_name=serializer.validated_data.get('recipient_stranger_name'),
+                budget=serializer.validated_data['budget'],
+                event_type=serializer.validated_data.get('event_type'),
+                strategy=serializer.validated_data['strategy'],
+                items=serializer.validated_data['items'],
+            )
+        except ValueError as exc:
+            return Response({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(GiftHistorySerializer(history).data, status=status.HTTP_201_CREATED)
+
+
+class GiftHistoryDetailController(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, history_id):
+        try:
+            RecommendationService.delete_gift_history(history_id, request.user)
+        except ValueError as exc:
+            return Response({'message': str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        except PermissionError as exc:
+            return Response({'message': str(exc)}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

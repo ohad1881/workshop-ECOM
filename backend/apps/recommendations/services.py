@@ -18,7 +18,7 @@ from .constants import (
 )
 from .engine import compute_score
 from .optimizer import optimize_gift_bundle
-from .repositories import GiftGiverPreferenceRepository
+from .repositories import GiftGiverPreferenceRepository, GiftHistoryRepository
 
 _PUBLIC = WishlistItem.PrivacyLevel.PUBLIC
 
@@ -302,3 +302,69 @@ class RecommendationService:
             'recommendations': scored[:limit],
             'bundles': bundles,
         }
+
+    @staticmethod
+    def finalize_gift_bundle(
+        giver_user,
+        recipient_id=None,
+        budget=None,
+        event_type=None,
+        strategy=None,
+        items=None,
+        recipient_stranger_name=None,
+    ):
+        if not items:
+            raise ValueError('At least one product is required to save the bundle.')
+
+        if budget is None:
+            raise ValueError('Budget is required.')
+
+        recipient = None
+        if recipient_id:
+            recipient = UserRepository.get_by_id(recipient_id)
+            if not recipient:
+                raise ValueError('Recipient not found.')
+
+        product_ids = [item['product_id'] for item in items]
+        products = ProductRepository.get_by_ids(product_ids)
+        if len(products) != len(set(product_ids)):
+            raise ValueError('One or more selected products were not found.')
+
+        item_by_product_id = {item['product_id']: item for item in items}
+        total_price = sum(Decimal(str(product.price)) for product in products)
+        snapshot_items = [
+            {
+                'id': product.id,
+                'name': product.name,
+                'price': str(product.price),
+                'image_url': product.image_url,
+                'category_id': product.category_id,
+                'score': item_by_product_id[product.id].get('score', 0.0),
+                'explanation': item_by_product_id[product.id].get('explanation', ''),
+            }
+            for product in products
+        ]
+
+        return GiftHistoryRepository.create(
+            giver=giver_user,
+            recipient=recipient,
+            recipient_stranger_name=(recipient_stranger_name or '') if not recipient else '',
+            budget=Decimal(str(budget)),
+            event_type=event_type or '',
+            strategy=strategy or '',
+            items=snapshot_items,
+            total_price=Decimal(str(total_price)),
+        )
+
+    @staticmethod
+    def get_gift_history_for_giver(user_id):
+        return GiftHistoryRepository.get_for_giver(user_id)
+
+    @staticmethod
+    def delete_gift_history(history_id, user):
+        history = GiftHistoryRepository.get_by_id(history_id)
+        if not history:
+            raise ValueError('Gift history entry not found.')
+        if history.giver_id != user.id:
+            raise PermissionError('You do not have permission to delete this entry.')
+        GiftHistoryRepository.delete(history_id)

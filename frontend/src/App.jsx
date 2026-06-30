@@ -17,6 +17,7 @@ import GiftBuilderPage from './gift-builder/GiftBuilderPage';
 import PrivacyPolicyPage from './privacy/PrivacyPolicyPage';
 import TermsOfServicePage from './terms/TermsOfServicePage';
 import ProductsPage from './products/ProductsPage';
+import GiftHistoryPage from './history/GiftHistoryPage';
 import NotFoundPage from './not-found/NotFoundPage';
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
                 <Route path="/users/:id" element={<UserProfilePage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/gift-builder" element={<GiftBuilderPage />} />
+                <Route path="/history" element={<GiftHistoryPage />} />
               </Route>
             </Route>
 

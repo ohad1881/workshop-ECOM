@@ -50,6 +50,9 @@ const Footer = () => {
               <Link component={RouterLink} to="/wishlist" underline="hover" color="text.secondary">
                 My Wishlist
               </Link>
+              <Link component={RouterLink} to="/history" underline="hover" color="text.secondary">
+                Gift History
+              </Link>
             </Box>
           </Box>
 

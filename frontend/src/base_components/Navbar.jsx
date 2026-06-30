@@ -26,6 +26,7 @@ const NAV_LINKS = [
   { label: 'Build a Gift', to: '/gift-builder' },
   { label: 'Products', to: '/products' },
   { label: 'My Wishlist', to: '/wishlist' },
+  { label: 'Gift History', to: '/history' },
 ];
 
 const Navbar = () => {

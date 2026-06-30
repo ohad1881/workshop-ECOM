@@ -38,6 +38,15 @@ class ProductRepository:
         )
 
     @staticmethod
+    def get_by_ids(product_ids):
+        return list(
+            Product.objects
+            .select_related('category')
+            .prefetch_related('tags')
+            .filter(id__in=product_ids, is_active=True)
+        )
+
+    @staticmethod
     def list_active(category_id=None, tag_ids=None, min_price=None, max_price=None, search=None):
         qs = Product.objects.select_related('category').prefetch_related('tags').filter(is_active=True)
         if search:

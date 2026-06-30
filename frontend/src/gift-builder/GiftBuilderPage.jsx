@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Box, Typography, Stepper, Step, StepLabel,
@@ -33,16 +33,76 @@ const GiftBuilderPage = () => {
   const [selectedBundleStrategyLabel, setSelectedBundleStrategyLabel] = useState('');
 
   const preloadId = searchParams.get('recipientId');
+  const preloadBudget = searchParams.get('budget');
+  const preloadEventType = searchParams.get('eventType');
+  const preloadStrategy = searchParams.get('strategy');
+  const isEditBundle = searchParams.get('editBundle') === '1';
+
+  const { data: preloadedProfile } = useQuery({
+    queryKey: ['preload-recipient', preloadId],
+    queryFn: () => getUserProfile(preloadId),
+    enabled: !!preloadId,
+  });
+
+  const preloadHandledRef = useRef(false);
 
   useEffect(() => {
-    if (!preloadId) return;
-    getUserProfile(preloadId)
-      .then((profile) => {
-        setRecipient({ id: profile.id, username: profile.username, gravatar_hash: profile.gravatar_hash });
-        setActiveStep(1);
-      })
-      .catch(() => {});
-  }, [preloadId]);
+    if (!preloadedProfile || preloadHandledRef.current) return;
+    preloadHandledRef.current = true;
+
+    const recipientObj = {
+      id: preloadedProfile.id,
+      username: preloadedProfile.username,
+      gravatar_hash: preloadedProfile.gravatar_hash,
+    };
+    setRecipient(recipientObj);
+
+    if (!preloadBudget) {
+      setActiveStep(1);
+      return;
+    }
+
+    const cfg = {
+      budget: Number(preloadBudget),
+      event_type: preloadEventType || '',
+      strategy: preloadStrategy || 'balanced',
+    };
+    setConfig(cfg);
+
+    if (isEditBundle) {
+      // Restore saved products from sessionStorage and jump straight to step 4.
+      let stored = null;
+      try {
+        stored = JSON.parse(sessionStorage.getItem('editBundle') ?? 'null');
+      } catch (_) { /* fall through to results */ }
+      sessionStorage.removeItem('editBundle');
+
+      if (stored?.products?.length) {
+        // Gift history snapshots score/explanation per item, so the bundle is
+        // restored with its real match data — no re-scoring round trip needed.
+        const wrappedItems = stored.products.map(({ score, explanation, ...product }) => ({
+          product,
+          score: score ?? 0,
+          explanation: explanation ?? '',
+        }));
+        const totalPrice = wrappedItems.reduce((sum, item) => sum + Number(item.product.price || 0), 0);
+        const totalScore = wrappedItems.reduce((sum, item) => sum + item.score, 0);
+        setSelectedBundle({
+          items: wrappedItems,
+          total_price: totalPrice,
+          total_score: totalScore,
+          budget_utilization: cfg.budget > 0 ? `${((totalPrice / cfg.budget) * 100).toFixed(1)}%` : '—',
+        });
+        setSelectedBundleItems(wrappedItems);
+        setSelectedBundleStrategyLabel(stored.strategy ?? 'Edited');
+        setActiveStep(3);
+        return;
+      }
+    }
+
+    setActiveStep(2);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preloadedProfile]);
 
   const suggestionsQuery = useQuery({
     queryKey: ['gift-suggestions', recipient?.id, config?.budget, config?.event_type],
@@ -116,19 +176,14 @@ const GiftBuilderPage = () => {
   const otherStrategies = giftStrategies.filter((s) => s.value !== config?.strategy);
   const selectedStrategyBundle = config ? bundles[config.strategy] : null;
   const maxScoreCount = bundles.max_score?.items?.length ?? null;
-
-  useEffect(() => {
-    if (activeStep === 3 && (!config || !selectedBundle)) {
-      setActiveStep(0);
-    }
-  }, [activeStep, config, selectedBundle]);
+  const safeActiveStep = activeStep === 3 && (!config || !selectedBundle) ? 0 : activeStep;
 
   const renderStepContent = () => {
-    if (activeStep === 0) {
+    if (safeActiveStep === 0) {
       return <UserSearchPanel onSelect={handleSelectRecipient} />;
     }
 
-    if (activeStep === 1 && recipient) {
+    if (safeActiveStep === 1 && recipient) {
       return (
         <GiftConfigPanel
           recipient={recipient}
@@ -140,7 +195,7 @@ const GiftBuilderPage = () => {
       );
     }
 
-    if (activeStep === 2 && recipient && config) {
+    if (safeActiveStep === 2 && recipient && config) {
       return (
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 2 }}>
@@ -226,12 +281,14 @@ const GiftBuilderPage = () => {
       );
     }
 
-    if (activeStep === 3 && selectedBundle) {
+    if (safeActiveStep === 3 && selectedBundle) {
       return (
         <BundleEditor
           bundleItems={selectedBundleItems}
           budget={config?.budget ?? 0}
           bundleStrategy={selectedBundleStrategyLabel}
+          strategyKey={config?.strategy}
+          eventType={config?.event_type}
           recipient={recipient}
           onBack={() => setActiveStep(2)}
           onRemoveProduct={handleRemoveProductFromBundle}

@@ -29,13 +29,15 @@ import RecommendationCard from './RecommendationCard';
 import { formatCurrency } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
 import { useTheme } from '@mui/material/styles';
-import { useQuery } from '@tanstack/react-query';
-import { getGiftSuggestions } from '../api/recommendations';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getGiftSuggestions, finalizeGiftBundle } from '../api/recommendations';
 
 const BundleEditor = ({
   bundleItems,
   budget,
   bundleStrategy,
+  strategyKey,
+  eventType,
   recipient,
   onBack,
   onRemoveProduct,
@@ -56,6 +58,22 @@ const BundleEditor = ({
     queryKey: ['bundle-editor-recs', recipient?.id, budget],
     queryFn: () => getGiftSuggestions(recipient.id, { budget, limit: 100 }),
     enabled: dialogOpen && !!recipient,
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: (payload) => finalizeGiftBundle(payload),
+    onSuccess: () => {
+      setSnackbarMessage('Bundle saved to your gift history.');
+      setSnackbarOpen(true);
+    },
+    onError: (error) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        'Could not save the bundle.';
+      setSnackbarMessage(message);
+      setSnackbarOpen(true);
+    },
   });
 
   const currentTotal = useMemo(
@@ -98,6 +116,26 @@ const BundleEditor = ({
     onAddProduct(item);
     setSnackbarMessage(`${product.name} added to your bundle.`);
     setSnackbarOpen(true);
+  };
+
+  const handleSaveSelection = () => {
+    if (!recipient?.id) {
+      setSnackbarMessage('Please select a recipient before saving.');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    saveMutation.mutate({
+      recipient_id: recipient.id,
+      budget,
+      event_type: eventType,
+      strategy: strategyKey,
+      items: safeBundleItems.map((item) => ({
+        product_id: item.product.id,
+        score: item.score ?? 0,
+        explanation: item.explanation ?? '',
+      })),
+    });
   };
 
   return (
@@ -202,8 +240,13 @@ const BundleEditor = ({
         >
           Edit with AI chat
         </Button>
-        <Button variant="outlined" sx={{ borderRadius: '12px', textTransform: 'none' }}>
-          Save Selection
+        <Button
+          variant="outlined"
+          onClick={handleSaveSelection}
+          disabled={safeBundleItems.length === 0 || saveMutation.isPending}
+          sx={{ borderRadius: '12px', textTransform: 'none' }}
+        >
+          {saveMutation.isPending ? 'Saving…' : 'Save Selection'}
         </Button>
       </Box>
 
