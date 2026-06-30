@@ -376,7 +376,8 @@ giftgraph/
 │       │   ├── UserSearchPanel.jsx
 │       │   ├── GiftConfigPanel.jsx      # Budget, event type, strategy selector
 │       │   ├── RecommendationCard.jsx
-│       │   └── BundleView.jsx
+│       │   ├── BundleView.jsx
+│       │   └── BundleEditor.jsx       # Customize-bundle step: add/remove products
 │       ├── chat/
 │       │   └── ChatPage.jsx
 │       ├── privacy/
@@ -1794,9 +1795,11 @@ Cache this in the React Query cache so the data is available instantly on subseq
 - "Best Bundle" — knapsack-optimized set for selected strategy
 - "All Strategies" — side-by-side comparison of all 3 strategies
 
-**`gift-builder/RecommendationCard.jsx`**: MUI `Card` with product image, name, price, score (MUI `LinearProgress` bar), and explanation text.
+**`gift-builder/RecommendationCard.jsx`**: MUI `Card` with product image, name, price, score (MUI `LinearProgress` bar), and explanation text. Accepts an optional `action` (a full-width footer node, e.g. an Add/Remove button) and `actionSx` so callers reuse the same card across the results, bundle, and add-products views.
 
 **`gift-builder/BundleView.jsx`**: MUI `Card` showing selected bundle items, total price vs. budget (MUI `LinearProgress`), total score, budget utilization percentage.
+
+**`gift-builder/BundleEditor.jsx`** (Step 4 — Customize Bundle): renders the selected bundle's items as `RecommendationCard`s with a Remove action, totals vs. budget, and an "Add Products" dialog that lists further recommendations (each a `RecommendationCard` with an Add / In Bundle action).
 
 **"Refine with AI" button**: Opens the chat panel / navigates to chat with the session pre-populated.
 

@@ -27,7 +27,7 @@ const GiftBuilderPage = () => {
   const [config, setConfig] = useState(null);
   const [resultsTab, setResultsTab] = useState(0);
   const [selectedBundle, setSelectedBundle] = useState(null);
-  const [selectedBundleProducts, setSelectedBundleProducts] = useState([]);
+  const [selectedBundleItems, setSelectedBundleItems] = useState([]);
   const [selectedBundleStrategyLabel, setSelectedBundleStrategyLabel] = useState('');
 
   const preloadId = searchParams.get('recipientId');
@@ -57,7 +57,7 @@ const GiftBuilderPage = () => {
     setRecipient(user);
     setConfig(null);
     setSelectedBundle(null);
-    setSelectedBundleProducts([]);
+    setSelectedBundleItems([]);
     setSelectedBundleStrategyLabel('');
     setActiveStep(1);
   };
@@ -82,18 +82,18 @@ const GiftBuilderPage = () => {
     }
 
     setSelectedBundle(bundle);
-    setSelectedBundleProducts(bundle.items.map((item) => item.product));
+    setSelectedBundleItems(bundle.items);
     setSelectedBundleStrategyLabel(strategyLabel || 'Selected');
     setActiveStep(3);
   };
 
-  const handleAddProductToBundle = (product) => {
-    if (selectedBundleProducts.some((item) => item.id === product.id)) return;
-    setSelectedBundleProducts((prev) => [...prev, product]);
+  const handleAddProductToBundle = (item) => {
+    if (selectedBundleItems.some((existing) => existing.product.id === item.product.id)) return;
+    setSelectedBundleItems((prev) => [...prev, item]);
   };
 
   const handleRemoveProductFromBundle = (productId) => {
-    setSelectedBundleProducts((prev) => prev.filter((product) => product.id !== productId));
+    setSelectedBundleItems((prev) => prev.filter((item) => item.product.id !== productId));
   };
 
   const handleReset = () => {
@@ -101,7 +101,7 @@ const GiftBuilderPage = () => {
     setRecipient(null);
     setConfig(null);
     setSelectedBundle(null);
-    setSelectedBundleProducts([]);
+    setSelectedBundleItems([]);
     setSelectedBundleStrategyLabel('');
   };
 
@@ -213,7 +213,7 @@ const GiftBuilderPage = () => {
             ) : (
               <Grid container spacing={2}>
                 {recommendations.map((item) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.product.id}>
+                  <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={item.product.id}>
                     <RecommendationCard item={item} />
                   </Grid>
                 ))}
@@ -227,7 +227,7 @@ const GiftBuilderPage = () => {
     if (activeStep === 3 && selectedBundle) {
       return (
         <BundleEditor
-          bundleProducts={selectedBundleProducts}
+          bundleItems={selectedBundleItems}
           budget={config?.budget ?? 0}
           bundleStrategy={selectedBundleStrategyLabel}
           recipient={recipient}

@@ -5,7 +5,7 @@ import {
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { formatCurrency } from '../utils/formatters';
 
-const RecommendationCard = ({ item }) => {
+const RecommendationCard = ({ item, action, actionSx }) => {
   const { product, score, explanation } = item;
   const scorePercent = Math.round(score * 100);
 
@@ -49,6 +49,11 @@ const RecommendationCard = ({ item }) => {
           </Tooltip>
         </Box>
       </CardContent>
+      {action && (
+        <Box sx={{ px: 2, pb: 2, pt: 0.5, ...actionSx }}>
+          {action}
+        </Box>
+      )}
     </Card>
   );
 };

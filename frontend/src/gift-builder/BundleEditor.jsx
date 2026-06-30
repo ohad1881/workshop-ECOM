@@ -3,11 +3,7 @@ import {
   Box,
   Typography,
   Grid,
-  Card,
-  CardContent,
-  CardMedia,
   Button,
-  Chip,
   Divider,
   Stack,
   Alert,
@@ -36,7 +32,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getGiftSuggestions } from '../api/recommendations';
 
 const BundleEditor = ({
-  bundleProducts,
+  bundleItems,
   budget,
   bundleStrategy,
   recipient,
@@ -47,7 +43,7 @@ const BundleEditor = ({
 }) => {
   const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const safeBundleProducts = Array.isArray(bundleProducts) ? bundleProducts : [];
+  const safeBundleItems = Array.isArray(bundleItems) ? bundleItems : [];
   const [sortBy, setSortBy] = useState('match');
   const [filterAnchor, setFilterAnchor] = useState(null);
   const [minMatch, setMinMatch] = useState(0);
@@ -62,8 +58,8 @@ const BundleEditor = ({
   });
 
   const currentTotal = useMemo(
-    () => safeBundleProducts.reduce((sum, product) => sum + Number(product.price || 0), 0),
-    [safeBundleProducts],
+    () => safeBundleItems.reduce((sum, item) => sum + Number(item.product?.price || 0), 0),
+    [safeBundleItems],
   );
   const overBudget = currentTotal > budget;
 
@@ -89,15 +85,16 @@ const BundleEditor = ({
     setDialogOpen(true);
   };
 
-  const handleSelectProduct = (product) => {
-    const alreadyAdded = safeBundleProducts.some((item) => item.id === product.id);
+  const handleSelectProduct = (item) => {
+    const product = item.product;
+    const alreadyAdded = safeBundleItems.some((bundleItem) => bundleItem.product.id === product.id);
     if (alreadyAdded) {
       setSnackbarMessage(`${product.name} is already in your bundle.`);
       setSnackbarOpen(true);
       return;
     }
 
-    onAddProduct(product);
+    onAddProduct(item);
     setSnackbarMessage(`${product.name} added to your bundle.`);
     setSnackbarOpen(true);
   };
@@ -132,47 +129,33 @@ const BundleEditor = ({
           : 'Edit the bundle items and adjust the gift to stay within your budget.'}
       </Typography>
 
-      {safeBundleProducts.length === 0 ? (
+      {safeBundleItems.length === 0 ? (
         <Alert severity="info" sx={{ mb: 3 }}>
           Your bundle is empty. Use the Add Products button to add items.
         </Alert>
       ) : (
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          {safeBundleProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Card sx={{ borderRadius: '12px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                {product.image_url ? (
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={product.image_url}
-                    alt={product.name}
-                  />
-                ) : (
-                  <Box sx={{ height: 140, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Typography variant="body2" color="text.secondary">No image</Typography>
-                  </Box>
-                )}
-                <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
-                  <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1 }} noWrap>
-                    {product.name}
-                  </Typography>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1, gap: 1 }}>
-                    <Typography variant="subtitle2" fontWeight={700} color="primary" sx={{ fontFamily: 'DM Sans, sans-serif' }}>
-                      {formatCurrency(product.price)}
-                    </Typography>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<DeleteOutlinedIcon />}
-                      onClick={() => onRemoveProduct(product.id)}
-                      sx={{ borderRadius: '12px', textTransform: 'none' }}
-                    >
-                      Remove
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
+          {safeBundleItems.map((item) => (
+            <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={item.product.id}>
+              <RecommendationCard
+                item={item}
+                action={
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<DeleteOutlinedIcon />}
+                    onClick={() => onRemoveProduct(item.product.id)}
+                    color="error"
+                    sx={{
+                      borderRadius: '12px',
+                      textTransform: 'none',
+                      '&:hover': { bgcolor: 'error.light', color: 'white', borderColor: 'error.light' },
+                    }}
+                  >
+                    Remove
+                  </Button>
+                }
+              />
             </Grid>
           ))}
         </Grid>
@@ -213,7 +196,7 @@ const BundleEditor = ({
         <Button
           variant="contained"
           onClick={onProceed}
-          disabled={safeBundleProducts.length === 0}
+          disabled={safeBundleItems.length === 0}
           sx={{ borderRadius: '12px', textTransform: 'none' }}
         >
           Proceed to AI Chat
@@ -257,36 +240,31 @@ const BundleEditor = ({
             <Grid container spacing={2}>
               {visibleRecommendations.map((item) => {
                 const product = item.product;
-                const isInBundle = safeBundleProducts.some((bundleItem) => bundleItem.id === product.id);
+                const isInBundle = safeBundleItems.some((bundleItem) => bundleItem.product.id === product.id);
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={product.id}>
-                    <Card sx={{ borderRadius: '12px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <RecommendationCard item={item} />
-                      </Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, pb: 2, pt: 1.5, gap: 1 }}>
-                        <Box sx={{ minWidth: 120, display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                          {isInBundle ? (
-                            <Chip
-                              label="In Bundle"
-                              size="small"
-                              icon={<span style={{ fontSize: 12 }}>✓</span>}
-                              sx={{ height: '40px', px: 1.5, borderRadius: '12px', bgcolor: '#2A9D8F', color: 'white', fontFamily: 'DM Sans, sans-serif' }}
-                            />
-                          ) : (
-                            <Button
-                              size="small"
-                              variant="contained"
-                              onClick={() => handleSelectProduct(product)}
-                              startIcon={<span style={{ fontSize: 14 }}>+</span>}
-                              sx={{ height: '40px', px: 2, borderRadius: '12px', textTransform: 'none', bgcolor: '#E87461', '&:hover': { bgcolor: '#d96551' }, fontFamily: 'DM Sans, sans-serif' }}
-                            >
-                              Add
-                            </Button>
-                          )}
-                        </Box>
-                      </Box>
-                    </Card>
+                  <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={product.id}>
+                    <RecommendationCard
+                      item={item}
+                      action={
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          disabled={isInBundle}
+                          onClick={isInBundle ? undefined : () => handleSelectProduct(item)}
+                          startIcon={<span style={{ fontSize: 14 }}>{isInBundle ? '✓' : '+'}</span>}
+                          sx={{
+                            borderRadius: '12px',
+                            textTransform: 'none',
+                            fontFamily: 'DM Sans, sans-serif',
+                            bgcolor: '#E87461',
+                            '&:hover': { bgcolor: '#d96551' },
+                            '&.Mui-disabled': { bgcolor: '#2A9D8F', color: 'white' },
+                          }}
+                        >
+                          {isInBundle ? 'In Bundle' : 'Add'}
+                        </Button>
+                      }
+                    />
                   </Grid>
                 );
               })}
