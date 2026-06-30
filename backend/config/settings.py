@@ -162,3 +162,35 @@ CELERY_REDIS_BACKEND_USE_SSL = {'ssl_cert_reqs': ssl.CERT_REQUIRED}
 
 # Gemini API (google-genai)
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+
+# Logging — console handler, level via env. App modules log under the `apps`
+# namespace (apps.<domain>...), so getLogger(__name__) picks up this config.
+LOG_LEVEL = config('LOG_LEVEL', default='INFO')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'apps': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+    },
+}
