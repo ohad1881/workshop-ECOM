@@ -60,7 +60,7 @@ class ChatMessageController(APIView):
 
         if not ChatService.is_ai_configured():
             return Response(
-                {'message': 'Anthropic API key is not configured.'},
+                {'message': 'Gemini API key is not configured.'},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 

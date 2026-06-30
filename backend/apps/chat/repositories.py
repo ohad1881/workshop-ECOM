@@ -33,7 +33,7 @@ class ChatRepository:
 
     @staticmethod
     def get_messages_for_api(session_id):
-        """Return messages formatted for the Claude messages API."""
+        """Return messages as {role, content} dicts for the chat model API."""
         msgs = (
             ChatMessage.objects
             .filter(session_id=session_id, role__in=['user', 'assistant'])

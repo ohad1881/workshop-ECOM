@@ -34,7 +34,7 @@
 
 ## 1. Project Overview
 
-**GiftGraph** is a Social-Commerce platform that reimagines gift-finding by shifting from product-based search to person-based search. Users create profiles with interests, preferences, and wishlists. When a user wants to find a gift for someone else, the system uses publicly available profile data, a scoring engine, and a knapsack optimization algorithm to suggest optimal gifts or gift bundles within a budget. An AI chat interface powered by Claude lets users refine recommendations conversationally.
+**GiftGraph** is a Social-Commerce platform that reimagines gift-finding by shifting from product-based search to person-based search. Users create profiles with interests, preferences, and wishlists. When a user wants to find a gift for someone else, the system uses publicly available profile data, a scoring engine, and a knapsack optimization algorithm to suggest optimal gifts or gift bundles within a budget. An AI chat interface powered by Gemini lets users refine recommendations conversationally.
 
 The AI is the **core feature** of this project. It doesn't just answer questions — it actively learns each user's gifting style over time, remembers what they liked and disliked, and uses that memory to improve future recommendations for everyone using the platform.
 
@@ -61,7 +61,7 @@ The AI is the **core feature** of this project. It doesn't just answer questions
 | **djangorestframework-simplejwt** | 5.3+ | JWT authentication (stateless, free) |
 | **django-filter** | 24.0+ | Declarative API filtering |
 | **django-cors-headers** | 4.3+ | CORS for React frontend |
-| **anthropic** | 0.40+ | Official Claude API SDK |
+| **google-genai** | 1.0+ | Official Google Gemini API SDK |
 | **google-or-tools** | 9.9+ | Free knapsack optimizer from Google |
 | **Celery** | 5.4+ | Async task queue for background AI work |
 | **Redis** | 7+ | Celery message broker |
@@ -286,11 +286,11 @@ giftgraph/
 │   │       ├── __init__.py
 │   │       ├── models.py
 │   │       ├── repositories.py
-│   │       ├── services.py          # includes the Claude API integration
+│   │       ├── services.py          # includes the Gemini API integration
 │   │       ├── controllers.py
 │   │       ├── serializers.py
 │   │       ├── urls.py
-│   │       ├── tools.py             # Tool definitions for Claude
+│   │       ├── tools.py             # Gemini function declarations
 │   │       ├── admin.py
 │   │       ├── apps.py
 │   │       └── migrations/
@@ -302,7 +302,7 @@ giftgraph/
 │
 │   # NOTE: tests/ (per-app, mirroring the layers) and Celery task modules
 │   #       (services tasks.py) are planned — see Phase 15 — but NOT yet implemented.
-│   #       The Claude integration currently lives in chat/services.py rather than a
+│   #       The Gemini integration currently lives in chat/services.py rather than a
 │   #       separate ai_service.py.
 │
 ├── frontend/
@@ -470,7 +470,7 @@ djangorestframework-simplejwt>=5.3,<6.0
 django-cors-headers>=4.3,<5.0
 django-filter>=24.0,<25.0
 psycopg[binary]>=3.1,<4.0
-anthropic>=0.40,<1.0
+google-genai>=1.0,<2.0
 ortools>=9.9
 celery>=5.4,<6.0
 redis>=5.0,<6.0
@@ -490,7 +490,7 @@ DB_PASSWORD=giftgraph_pass
 DB_HOST=localhost
 DB_PORT=5432
 
-ANTHROPIC_API_KEY=your-anthropic-api-key
+GEMINI_API_KEY=your-gemini-api-key
 
 REDIS_URL=redis://localhost:6379/0
 
@@ -716,7 +716,7 @@ class ChatMessage(Model):
     created_at = DateTimeField(auto_now_add=True)
 ```
 
-**Why store every message**: Claude has no memory between API calls. The entire conversation history must be sent on every request for context. Without stored messages, the AI couldn't reference anything from earlier in the conversation. A cap of 50 messages per session prevents unbounded growth, and sessions can be soft-deleted over time.
+**Why store every message**: Gemini has no memory between API calls. The entire conversation history must be sent on every request for context. Without stored messages, the AI couldn't reference anything from earlier in the conversation. A cap of 50 messages per session prevents unbounded growth, and sessions can be soft-deleted over time.
 
 ### 2.6 AI Memory Model — `apps/chat/models.py`
 
@@ -1363,31 +1363,33 @@ This is the most important phase. The AI is not just a chatbot — it's an intel
 
 ### 9.1 AI Tools — `apps/chat/tools.py`
 
-Define tools that Claude can call. **Each tool calls the existing service layer** — no code duplication.
+Define Gemini function declarations the model can call. **Each tool calls the existing service
+layer** — no code duplication. Declarations use the OpenAPI-subset schema (uppercase types) and are
+passed at request time as `types.Tool(function_declarations=TOOLS)`.
 
 ```python
 TOOLS = [
     {
         "name": "search_products",
         "description": "Search the product catalog. Returns matching products with name, price, category, and tags.",
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "query": {"type": "string", "description": "Free-text search query"},
-                "category": {"type": "string", "description": "Category slug"},
-                "min_price": {"type": "number"},
-                "max_price": {"type": "number"},
-                "tag_slugs": {"type": "array", "items": {"type": "string"}}
+                "query": {"type": "STRING", "description": "Free-text search query"},
+                "category": {"type": "STRING", "description": "Category slug"},
+                "min_price": {"type": "NUMBER"},
+                "max_price": {"type": "NUMBER"},
+                "tag_slugs": {"type": "ARRAY", "items": {"type": "STRING"}}
             }
         }
     },
     {
         "name": "get_recipient_profile",
         "description": "Get a user's public interests, preferred categories, and public wishlist items.",
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "user_id": {"type": "integer"}
+                "user_id": {"type": "INTEGER"}
             },
             "required": ["user_id"]
         }
@@ -1395,13 +1397,13 @@ TOOLS = [
     {
         "name": "get_recommendations",
         "description": "Get scored product recommendations for a recipient within a budget.",
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "recipient_id": {"type": "integer"},
-                "budget": {"type": "number"},
-                "event_type": {"type": "string"},
-                "limit": {"type": "integer", "default": 10}
+                "recipient_id": {"type": "INTEGER"},
+                "budget": {"type": "NUMBER"},
+                "event_type": {"type": "STRING"},
+                "limit": {"type": "INTEGER"}
             },
             "required": ["recipient_id", "budget"]
         }
@@ -1409,14 +1411,14 @@ TOOLS = [
     {
         "name": "optimize_gift_bundle",
         "description": "Run the knapsack optimizer to find the best combination of gifts within budget.",
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "recipient_id": {"type": "integer"},
-                "budget": {"type": "number"},
-                "event_type": {"type": "string"},
+                "recipient_id": {"type": "INTEGER"},
+                "budget": {"type": "NUMBER"},
+                "event_type": {"type": "STRING"},
                 "strategy": {
-                    "type": "string",
+                    "type": "STRING",
                     "enum": ["max_score", "max_items", "balanced"]
                 }
             },
@@ -1425,24 +1427,20 @@ TOOLS = [
     },
     {
         "name": "get_giver_preferences",
-        "description": "Retrieve the current user's learned gifting preferences (what they like/avoid gifting).",
-        "input_schema": {
-            "type": "object",
-            "properties": {}
-        }
+        "description": "Retrieve the current user's learned gifting preferences (what they like/avoid gifting)."
     },
     {
         "name": "update_giver_preference",
         "description": "Save or update a learned preference about the current user's gifting style. Call this when the user expresses a preference (e.g., 'I never gift tech stuff' → avoid_category: electronics).",
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
                 "preference_type": {
-                    "type": "string",
+                    "type": "STRING",
                     "enum": ["avoid_category", "avoid_tag", "prefer_category", "prefer_tag", "general_note"]
                 },
-                "value": {"type": "string", "description": "Category slug, tag slug, or free text"},
-                "context": {"type": "string", "description": "Why this preference was learned"}
+                "value": {"type": "STRING", "description": "Category slug, tag slug, or free text"},
+                "context": {"type": "STRING", "description": "Why this preference was learned"}
             },
             "required": ["preference_type", "value"]
         }
@@ -1498,17 +1496,24 @@ def execute_tool(tool_name, tool_input, giver_user, recipient_id=None):
 
 ### 9.3 AI Service — `apps/chat/services.py`
 
-The Claude integration lives in `ChatService` inside `services.py` (no separate `ai_service.py`).
-The model is `claude-3-5-sonnet-latest` (constant `ANTHROPIC_MODEL`). The tool-use loop runs up
-to `MAX_TOOL_ROUNDS = 3` round trips; if tools are still being called after that the service
+The Gemini integration lives in `ChatService` inside `services.py` (no separate `ai_service.py`).
+The model is `gemini-2.5-flash` (constant `GEMINI_MODEL`). The tool-use loop runs up
+to `MAX_TOOL_ROUNDS = 5` round trips; if tools are still being called after that the service
 returns a fallback message asking the user to narrow the request.
+
+Gemini calls go through `google-genai`: a `genai.Client(api_key=settings.GEMINI_API_KEY)` issues
+`client.models.generate_content(...)`. Tools are passed as `types.Tool(function_declarations=TOOLS)`
+(see `tools.py`), the system prompt is supplied via `GenerateContentConfig.system_instruction`, and
+automatic function calling is disabled so the loop drives tool execution manually. Stored messages
+(`role` ∈ {`user`, `assistant`}) are mapped to Gemini `Content` objects (`assistant` → `model`);
+tool results are returned as `Part.from_function_response(...)` parts under a `user` content.
 
 The system prompt is built dynamically per request from session and user context:
 
 ```python
-ANTHROPIC_MODEL = 'claude-3-5-sonnet-latest'
-MAX_TOOL_ROUNDS = 3
-MAX_TOKENS = 1024
+GEMINI_MODEL = 'gemini-2.5-flash'
+MAX_TOOL_ROUNDS = 5
+MAX_TOKENS = 2048
 
 def _build_system_prompt(session, user, mentioned_user_ids):
     parts = [
@@ -1532,7 +1537,7 @@ def _build_system_prompt(session, user, mentioned_user_ids):
 ```
 
 **Chat flow**: `stream_message` saves the user message, calls `_generate_assistant_reply`
-(which runs the tool-use loop via `client.messages.create`), saves the assistant reply, trims
+(which runs the tool-use loop via `client.models.generate_content`), saves the assistant reply, trims
 the message history to `MAX_MESSAGES_PER_SESSION`, then yields the response as SSE chunks.
 On any exception the service yields a safe fallback string instead of surfacing the error.
 
@@ -1569,7 +1574,7 @@ class ChatMessageController(APIView):
 
         if not ChatService.is_ai_configured():
             return Response(
-                {'message': 'Anthropic API key is not configured.'},
+                {'message': 'Gemini API key is not configured.'},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
@@ -1623,14 +1628,14 @@ def update_giver_preferences_async(user_id, preference_type, value, context):
 
 - [ ] Chat session creation works with recipient/budget/event
 - [ ] Sending a message returns a token-streamed AI response via SSE (text renders incrementally, not all at once)
-- [ ] Claude uses `search_products` tool (calls ProductService — no duplication)
-- [ ] Claude uses `get_recommendations` tool (calls RecommendationService)
-- [ ] Claude uses `optimize_gift_bundle` tool (calls RecommendationService)
-- [ ] Claude calls `get_giver_preferences` before making recommendations
-- [ ] When user says "I don't like gifting X", Claude calls `update_giver_preference`
+- [ ] Gemini uses `search_products` tool (calls ProductService — no duplication)
+- [ ] Gemini uses `get_recommendations` tool (calls RecommendationService)
+- [ ] Gemini uses `optimize_gift_bundle` tool (calls RecommendationService)
+- [ ] Gemini calls `get_giver_preferences` before making recommendations
+- [ ] When user says "I don't like gifting X", Gemini calls `update_giver_preference`
 - [ ] GiftGiverPreference records persist in DB and affect future sessions
-- [ ] Claude verifies it has recipient + budget BEFORE running heavy tools
-- [ ] Conversation history is preserved and sent to Claude on each message
+- [ ] Gemini verifies it has recipient + budget BEFORE running heavy tools
+- [ ] Conversation history is preserved and sent to Gemini on each message
 - [ ] Message cap (50) is enforced per session
 - [ ] API key from env, never hardcoded
 - [ ] Uses `client.messages.stream()` with `text_stream` for token-level streaming (the SDK's 10-minute default timeout covers AI calls)
@@ -1964,12 +1969,12 @@ class OptimizerTests(TestCase):
 ```
 
 **AI service tests** (`test_ai_service.py`):
-- Mock the Anthropic client.
+- Mock the Gemini client.
 - Verify tool dispatch logic, message history building, error handling.
 
 ```python
 class AIServiceTests(TestCase):
-    @patch('apps.chat.ai_service.anthropic.Anthropic')
+    @patch('apps.chat.services.genai.Client')
     def test_tool_calls_use_existing_services(self, mock_client):
         """Tool execution calls ProductService, not direct ORM."""
 
@@ -2133,7 +2138,7 @@ unique(user, pref_type, value)
 | `DB_PASSWORD` | Yes | PostgreSQL password |
 | `DB_HOST` | No | Default `localhost` |
 | `DB_PORT` | No | Default `5432` |
-| `ANTHROPIC_API_KEY` | Yes | Anthropic API key for Claude |
+| `GEMINI_API_KEY` | Yes | Google Gemini API key |
 | `REDIS_URL` | No | Default `redis://localhost:6379/0` |
 | `CORS_ALLOWED_ORIGINS` | Yes | Allowed frontend origins |
 

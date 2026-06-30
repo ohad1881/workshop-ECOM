@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+# Gemini function declarations (OpenAPI-subset schema, uppercase types).
 TOOLS = [
     {
         "name": "search_products",
@@ -7,14 +8,14 @@ TOOLS = [
             "Search the product catalog. Returns matching products with name, price, "
             "category, and tags."
         ),
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "query": {"type": "string", "description": "Free-text search query"},
-                "category": {"type": "string", "description": "Category slug to filter by"},
-                "min_price": {"type": "number"},
-                "max_price": {"type": "number"},
-                "tag_slugs": {"type": "array", "items": {"type": "string"}},
+                "query": {"type": "STRING", "description": "Free-text search query"},
+                "category": {"type": "STRING", "description": "Category slug to filter by"},
+                "min_price": {"type": "NUMBER"},
+                "max_price": {"type": "NUMBER"},
+                "tag_slugs": {"type": "ARRAY", "items": {"type": "STRING"}},
             },
         },
     },
@@ -23,10 +24,10 @@ TOOLS = [
         "description": (
             "Get a user's public interests, preferred categories, and public wishlist items."
         ),
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "user_id": {"type": "integer"},
+                "user_id": {"type": "INTEGER"},
             },
             "required": ["user_id"],
         },
@@ -37,13 +38,13 @@ TOOLS = [
             "Get scored product recommendations for a recipient within a budget. "
             "Always ask for recipient_id and budget before calling this."
         ),
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "recipient_id": {"type": "integer"},
-                "budget": {"type": "number"},
-                "event_type": {"type": "string"},
-                "limit": {"type": "integer", "default": 10},
+                "recipient_id": {"type": "INTEGER"},
+                "budget": {"type": "NUMBER"},
+                "event_type": {"type": "STRING"},
+                "limit": {"type": "INTEGER"},
             },
             "required": ["recipient_id", "budget"],
         },
@@ -53,14 +54,14 @@ TOOLS = [
         "description": (
             "Run the knapsack optimizer to find the best combination of gifts within budget."
         ),
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
-                "recipient_id": {"type": "integer"},
-                "budget": {"type": "number"},
-                "event_type": {"type": "string"},
+                "recipient_id": {"type": "INTEGER"},
+                "budget": {"type": "NUMBER"},
+                "event_type": {"type": "STRING"},
                 "strategy": {
-                    "type": "string",
+                    "type": "STRING",
                     "enum": ["max_score", "max_items", "balanced"],
                 },
             },
@@ -73,10 +74,6 @@ TOOLS = [
             "Retrieve the current user's learned gifting preferences "
             "(what they like/avoid gifting). Call this before making recommendations."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {},
-        },
     },
     {
         "name": "update_giver_preference",
@@ -85,22 +82,22 @@ TOOLS = [
             "Call this when the user expresses a preference, e.g. "
             "'I never gift tech stuff' → avoid_category: electronics."
         ),
-        "input_schema": {
-            "type": "object",
+        "parameters": {
+            "type": "OBJECT",
             "properties": {
                 "preference_type": {
-                    "type": "string",
+                    "type": "STRING",
                     "enum": [
                         "avoid_category", "avoid_tag",
                         "prefer_category", "prefer_tag", "general_note",
                     ],
                 },
                 "value": {
-                    "type": "string",
+                    "type": "STRING",
                     "description": "Category slug, tag slug, or free text for general_note",
                 },
                 "context": {
-                    "type": "string",
+                    "type": "STRING",
                     "description": "Why this preference was learned (conversation excerpt)",
                 },
             },

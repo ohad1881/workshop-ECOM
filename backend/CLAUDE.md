@@ -1,7 +1,7 @@
 # Backend — GiftGraph
 
-Django 5.1 + Django REST Framework + PostgreSQL + JWT (simplejwt) + Celery/Redis + Anthropic SDK +
-Google OR-Tools. Serves the React frontend described in `../frontend/CLAUDE.md`.
+Django 5.1 + Django REST Framework + PostgreSQL + JWT (simplejwt) + Celery/Redis + google-genai
+(Gemini) SDK + Google OR-Tools. Serves the React frontend described in `../frontend/CLAUDE.md`.
 The authoritative build plan and API contract live in the root `README.md` (architecture = §3,
 structure = §4, endpoints = Appendix B) and `../API.md`.
 
@@ -60,7 +60,7 @@ Domain-specific extras that exist today:
   `seed_data/dummy_data.json`).
 - `apps/recommendations/` — `engine.py`, `optimizer.py`, `constants.py` (scoring/OR-Tools split out).
   Note: no `migrations/` directory yet.
-- `apps/chat/` — `tools.py` (Claude tool definitions); the Claude integration currently lives in
+- `apps/chat/` — `tools.py` (Gemini function declarations); the Gemini integration currently lives in
   `services.py` (there is no separate `ai_service.py`).
 
 ### The layering rule (the one thing to get right)
@@ -91,7 +91,7 @@ CRUD — keep the chain consistent so the seam is there when logic grows.
   ORM directly.
 - **Business logic** → `apps/<domain>/services.py`. Cross-domain orchestration lives here. For
   recommendations the scoring/optimization code is split out: `engine.py`, `optimizer.py`,
-  `constants.py`. For chat the Claude tool definitions are in `tools.py`.
+  `constants.py`. For chat the Gemini function declarations are in `tools.py`.
 - **A DB query** → a method on a repository class in `apps/<domain>/repositories.py`. All ORM access
   (`filter`, `get`, `create`, …) is confined here. One repository per model (usually).
 - **A model / schema change** → `apps/<domain>/models.py`, then `makemigrations` (writes to

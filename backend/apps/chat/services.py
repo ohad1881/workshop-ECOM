@@ -1,6 +1,7 @@
 import json
 
-from anthropic import Anthropic
+from google import genai
+from google.genai import types
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -10,7 +11,7 @@ from .repositories import ChatRepository
 from .tools import TOOLS, execute_tool
 
 
-ANTHROPIC_MODEL = 'claude-sonnet-4-6'
+GEMINI_MODEL = 'gemini-2.5-flash'
 MAX_TOOL_ROUNDS = 5
 MAX_TOKENS = 2048
 
@@ -18,7 +19,7 @@ MAX_TOKENS = 2048
 class ChatService:
     @staticmethod
     def is_ai_configured():
-        api_key = getattr(settings, 'ANTHROPIC_API_KEY', '')
+        api_key = getattr(settings, 'GEMINI_API_KEY', '')
         return bool(api_key and not api_key.startswith('your-'))
 
     @staticmethod
@@ -106,54 +107,58 @@ class ChatService:
 
     @staticmethod
     def _generate_assistant_reply(session, user, mentioned_user_ids):
-        client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        messages = ChatRepository.get_messages_for_api(session.id)
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        contents = ChatService._build_contents(
+            ChatRepository.get_messages_for_api(session.id)
+        )
+        config = types.GenerateContentConfig(
+            system_instruction=ChatService._build_system_prompt(
+                session, user, mentioned_user_ids
+            ),
+            tools=[types.Tool(function_declarations=TOOLS)],
+            max_output_tokens=MAX_TOKENS,
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+        )
         metadata = {'mentioned_user_ids': mentioned_user_ids, 'tool_calls': []}
 
         for _ in range(MAX_TOOL_ROUNDS + 1):
-            response = client.messages.create(
-                model=ANTHROPIC_MODEL,
-                max_tokens=MAX_TOKENS,
-                system=ChatService._build_system_prompt(session, user, mentioned_user_ids),
-                messages=messages,
-                tools=TOOLS,
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=contents,
+                config=config,
             )
 
-            tool_uses = [
-                block for block in response.content
-                if getattr(block, 'type', None) == 'tool_use'
+            candidate = response.candidates[0]
+            parts = candidate.content.parts or []
+            function_calls = [
+                part.function_call for part in parts
+                if getattr(part, 'function_call', None)
             ]
-            if not tool_uses:
-                return ChatService._extract_text(response.content), metadata
+            if not function_calls:
+                return ChatService._extract_text(parts), metadata
 
-            messages.append({
-                'role': 'assistant',
-                'content': [
-                    ChatService._content_block_to_param(block)
-                    for block in response.content
-                ],
-            })
+            contents.append(candidate.content)
 
-            tool_results = []
-            for tool_use in tool_uses:
+            tool_result_parts = []
+            for call in function_calls:
+                call_args = dict(call.args or {})
                 result = execute_tool(
-                    tool_use.name,
-                    tool_use.input,
+                    call.name,
+                    call_args,
                     giver_user=user,
                     recipient_id=session.recipient_id,
                 )
                 metadata['tool_calls'].append({
-                    'name': tool_use.name,
-                    'input': ChatService._json_safe(tool_use.input),
+                    'name': call.name,
+                    'input': ChatService._json_safe(call_args),
                     'result': ChatService._json_safe(result),
                 })
-                tool_results.append({
-                    'type': 'tool_result',
-                    'tool_use_id': tool_use.id,
-                    'content': json.dumps(result, cls=DjangoJSONEncoder),
-                })
+                tool_result_parts.append(types.Part.from_function_response(
+                    name=call.name,
+                    response={'result': ChatService._json_safe(result)},
+                ))
 
-            messages.append({'role': 'user', 'content': tool_results})
+            contents.append(types.Content(role='user', parts=tool_result_parts))
 
         return (
             "I gathered some context, but I need you to narrow the request a bit "
@@ -224,24 +229,21 @@ class ChatService:
         return "\n".join(parts)
 
     @staticmethod
-    def _content_block_to_param(block):
-        block_type = getattr(block, 'type', None)
-        if block_type == 'text':
-            return {'type': 'text', 'text': block.text}
-        if block_type == 'tool_use':
-            return {
-                'type': 'tool_use',
-                'id': block.id,
-                'name': block.name,
-                'input': block.input,
-            }
-        return {'type': 'text', 'text': ''}
+    def _build_contents(messages):
+        """Map stored {role, content} messages to Gemini Content objects."""
+        contents = []
+        for m in messages:
+            role = 'model' if m['role'] == 'assistant' else 'user'
+            contents.append(types.Content(
+                role=role,
+                parts=[types.Part.from_text(text=m['content'])],
+            ))
+        return contents
 
     @staticmethod
-    def _extract_text(content_blocks):
+    def _extract_text(parts):
         text = ''.join(
-            block.text for block in content_blocks
-            if getattr(block, 'type', None) == 'text'
+            getattr(part, 'text', '') or '' for part in parts
         ).strip()
         return text or "I couldn't produce a recommendation from the available context."
 

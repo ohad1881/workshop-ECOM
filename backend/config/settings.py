@@ -160,5 +160,5 @@ import ssl
 CELERY_BROKER_USE_SSL = {'ssl_cert_reqs': ssl.CERT_REQUIRED}
 CELERY_REDIS_BACKEND_USE_SSL = {'ssl_cert_reqs': ssl.CERT_REQUIRED}
 
-# Anthropic API
-ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+# Gemini API (google-genai)
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
