@@ -200,7 +200,7 @@ const BundleEditor = ({
         </Grid>
       )}
 
-      <Box sx={{ p: 3, borderRadius: '12px', border: '1px solid', borderColor: 'divider', mb: 3, backgroundColor: 'grey.50' }}>
+      <Box sx={{ p: 3, borderRadius: '12px', border: '1px solid', borderColor: 'divider', mb: 3, backgroundColor: 'action.hover' }}>
         <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems="center" spacing={2}>
           <Box>
             <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5 }}>

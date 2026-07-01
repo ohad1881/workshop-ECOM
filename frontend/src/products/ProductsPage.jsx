@@ -27,6 +27,7 @@ import { getRecommendedForMe } from '../api/recommendations';
 import { getMyWishlist, addWishlistItem, removeWishlistItem } from '../api/wishlists';
 import { resolveMediaUrl } from '../utils/media';
 import { showWishlistItemsAtom } from './productAtoms';
+import PageTitle from '../general_components/PageTitle';
 
 // 0–1 match score → a color for the "% match" badge.
 const scoreColor = (score) => {
@@ -79,7 +80,7 @@ const ProductCard = ({ product, score, explanation, wishlistItemId, onAdd, onRem
         <Typography variant="h6" gutterBottom noWrap>
           {product.name}
         </Typography>
-        <Typography variant="body1" color="primary" fontWeight={600}>
+        <Typography variant="body1" color="secondary" fontWeight={600}>
           ${Number(product.price).toFixed(2)}
         </Typography>
       </CardContent>
@@ -200,7 +201,7 @@ const ProductsPage = () => {
 
   return (
     <Box sx={{ width: '100%', mx: 'auto', px: 3, py: 4 }}>
-      <Typography variant="h2" sx={{ mb: 3 }}>Products</Typography>
+      <PageTitle>Products</PageTitle>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
         <TextField

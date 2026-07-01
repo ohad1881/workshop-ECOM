@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField, Box, Grid, Alert } from '@mui/material';
+import { TextField, Paper, Typography, Grid, Alert } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { searchUsers } from '../api/users';
@@ -20,7 +20,21 @@ const UserSearch = () => {
   });
 
   return (
-    <Box sx={{ maxWidth: 720, mx: 'auto', mt: 4, textAlign: 'left' }}>
+    <Paper
+      elevation={0}
+      sx={{
+        maxWidth: 720,
+        mx: 'auto',
+        mt: 5,
+        p: { xs: 2.5, sm: 3.5 },
+        borderRadius: 3,
+        textAlign: 'left',
+        boxShadow: '0 0 40px rgba(139, 92, 246, 0.12)',
+      }}
+    >
+      <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2 }}>
+        Find someone to gift
+      </Typography>
       <TextField
         fullWidth
         placeholder="Search for a user..."
@@ -39,7 +53,7 @@ const UserSearch = () => {
           </Grid>
         ))}
       </Grid>
-    </Box>
+    </Paper>
   );
 };
 

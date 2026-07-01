@@ -13,6 +13,7 @@ import { formatCurrency, formatDate } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
 import EmptyState from '../general_components/EmptyState';
 import CustomSnackbar from '../general_components/CustomSnackbar';
+import PageTitle from '../general_components/PageTitle';
 
 const GiftHistoryPage = () => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const GiftHistoryPage = () => {
 
   return (
     <Box sx={{ py: 4 }}>
-      <Typography variant="h3" sx={{ mb: 3 }}>Gift History</Typography>
+      <PageTitle>Gift History</PageTitle>
 
       {history.length === 0 ? (
         <EmptyState

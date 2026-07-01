@@ -47,9 +47,16 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    # User.USERNAME_FIELD = 'email', so simplejwt already accepts email + password.
-    # We only need to add the user object to the response.
+    # User.USERNAME_FIELD = 'email', so simplejwt's dynamically-named identifier
+    # field is 'email' — but we let people log in with their username too by
+    # resolving it to the real email before delegating to the parent validate().
     def validate(self, attrs):
+        identifier = attrs.get(self.username_field, '')
+        if identifier and '@' not in identifier:
+            user = User.objects.filter(username=identifier).first()
+            if user:
+                attrs[self.username_field] = user.email
+
         data = super().validate(attrs)
         data['user'] = {
             'id': self.user.id,

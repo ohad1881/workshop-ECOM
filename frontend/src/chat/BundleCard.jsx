@@ -13,7 +13,7 @@ const BundleCard = ({ bundle }) => {
   if (items.length === 0) return null;
 
   return (
-    <Paper variant="outlined" sx={{ p: 1.5, mt: 1, bgcolor: 'background.default' }}>
+    <Paper variant="outlined" sx={{ p: 1.5, mt: 1, bgcolor: 'chatSurface' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
         <Typography variant="subtitle2" fontWeight={700}>
           Gift bundle · {formatCurrency(bundle.total_price)}

@@ -44,7 +44,7 @@ const ChatWidget = () => {
               display: 'flex',
               flexDirection: 'column',
               overflowX: 'hidden',
-              bgcolor: 'grey.300', // darker canvas; bubbles/cards stay light to pop
+              bgcolor: 'background.default', // dark canvas; message/card panels use background.paper to pop
             },
           },
         }}

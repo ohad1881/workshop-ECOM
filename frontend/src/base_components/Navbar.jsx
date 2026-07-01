@@ -19,13 +19,15 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../context/auth/useAuth';
 import { gravatarUrl } from '../utils/gravatar';
+import { avatarColorFor } from '../utils/avatarColor';
 import logo from '../assets/logo.png';
 
 const NAV_LINKS = [
   { label: 'Home', to: '/' },
+  { label: 'My Profile', to: '/profile' },
+  { label: 'My Wishlist', to: '/wishlist' },
   { label: 'Build a Gift', to: '/gift-builder' },
   { label: 'Products', to: '/products' },
-  { label: 'My Wishlist', to: '/wishlist' },
   { label: 'Gift History', to: '/history' },
 ];
 
@@ -61,8 +63,14 @@ const Navbar = () => {
         borderColor: 'divider',
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between', gap: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      {/*
+        Left and right groups both get flex:1, so the middle nav-links group is
+        always truly centered on the toolbar — regardless of the logo group and
+        the avatar/login group having different widths. (space-between alone
+        centers the middle group in the *leftover* space, not the full width.)
+      */}
+      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
           {/* Mobile hamburger — only when there are nav links to show. */}
           {isAuthenticated && (
             <IconButton
@@ -93,7 +101,7 @@ const Navbar = () => {
 
         {/* Desktop inline nav links */}
         {isAuthenticated && (
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, flexShrink: 0 }}>
             {NAV_LINKS.map((link) => (
               <Button key={link.to} component={RouterLink} to={link.to} color="inherit">
                 {link.label}
@@ -102,13 +110,13 @@ const Navbar = () => {
           </Box>
         )}
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1 }}>
           {isAuthenticated ? (
             <>
               <Avatar
                 onClick={openMenu}
                 src={gravatarUrl(user?.gravatar_hash, { size: 80 })}
-                sx={{ cursor: 'pointer', bgcolor: 'primary.main' }}
+                sx={{ cursor: 'pointer', bgcolor: avatarColorFor(user?.username || user?.email) }}
               >
                 {avatarInitial}
               </Avatar>

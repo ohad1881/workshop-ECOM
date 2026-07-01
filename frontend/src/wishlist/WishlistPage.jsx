@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import {
-  Box, Typography, Grid, Button, Snackbar,
+  Box, Grid, Button, Snackbar,
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,6 +10,7 @@ import WishlistItem from './WishlistItem';
 import AddWishlistItemDialog from '../profile/AddWishlistItemDialog';
 import Spinner from '../general_components/Spinner';
 import EmptyState from '../general_components/EmptyState';
+import PageTitle from '../general_components/PageTitle';
 
 const WishlistPage = () => {
   const queryClient = useQueryClient();
@@ -80,7 +81,7 @@ const WishlistPage = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h3">My Wishlist</Typography>
+        <PageTitle sx={{ mb: 0 }}>My Wishlist</PageTitle>
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
           Add Item
         </Button>

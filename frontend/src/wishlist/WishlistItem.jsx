@@ -37,7 +37,7 @@ const WishlistItem = ({ item, onDelete }) => {
           alt={item.product.name}
         />
       ) : (
-        <Box sx={{ height: 140, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ height: 140, bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography variant="body2" color="text.secondary">No image</Typography>
         </Box>
       )}
@@ -45,7 +45,7 @@ const WishlistItem = ({ item, onDelete }) => {
         <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ mb: 0.5 }}>
           {item.product.name}
         </Typography>
-        <Typography variant="body2" color="primary" fontWeight={600} sx={{ mb: 1 }}>
+        <Typography variant="body2" color="secondary" fontWeight={600} sx={{ mb: 1 }}>
           {formatCurrency(item.product.price)}
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>

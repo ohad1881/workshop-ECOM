@@ -36,8 +36,8 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormTextField
-            label="Email"
-            type="email"
+            label="Email or Username"
+            type="text"
             name="email"
             register={register}
             errors={errors}

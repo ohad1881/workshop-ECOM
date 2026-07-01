@@ -1,0 +1,539 @@
+{
+  "users": [
+    {
+      "name": "Mark Zuckerberg",
+      "username": "mark_zuckerberg",
+      "email": "mark_zuckerberg@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Tech / Gadgets / Productivity",
+      "bio": "A tech-builder persona who likes productivity gadgets, clean desk setups, AI tools, cameras, and smart home devices.",
+      "interests": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup",
+        "ai",
+        "startup",
+        "camera",
+        "smart-home",
+        "minimalist",
+        "coding"
+      ],
+      "preferred_categories": [
+        "electronics",
+        "gaming-tech-toys"
+      ],
+      "excluded_categories": [
+        "beauty-self-care"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Smart Desk Hub",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "AI Notebook",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Charging Dock",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Webcam Light",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Cristiano Ronaldo",
+      "username": "cristiano_ronaldo",
+      "email": "cristiano_ronaldo@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Fitness / Wellness / Performance",
+      "bio": "A high-performance athlete persona who values training gear, hydration, recovery, nutrition, wellness, and disciplined routines.",
+      "interests": [
+        "fitness",
+        "training",
+        "running",
+        "hydration",
+        "recovery",
+        "wellness",
+        "performance",
+        "nutrition",
+        "football",
+        "discipline"
+      ],
+      "preferred_categories": [
+        "sports-outdoors",
+        "beauty-self-care"
+      ],
+      "excluded_categories": [
+        "books-stationery"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Hydration Bottle",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Massage Gun",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Training Bands",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Protein Shaker",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Taylor Swift",
+      "username": "taylor_swift",
+      "email": "taylor_swift@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Writing / Cozy / Storytelling",
+      "bio": "A storytelling persona who likes songwriting, journals, books, tea, cozy evenings, cats, keepsakes, and sentimental gifts.",
+      "interests": [
+        "songwriting",
+        "journaling",
+        "books",
+        "cozy",
+        "tea",
+        "cats",
+        "storytelling",
+        "lyrics",
+        "friendship",
+        "romantic"
+      ],
+      "preferred_categories": [
+        "books-stationery",
+        "home-kitchen",
+        "collectibles-fan-culture"
+      ],
+      "excluded_categories": [
+        "sports-outdoors"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Songwriting Journal",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Cat Mug",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Bracelet Kit",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Memory Box",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Eyal Shani",
+      "username": "eyal_shani",
+      "email": "eyal_shani@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Food / Hosting / Kitchen",
+      "bio": "A poetic chef persona who loves fresh ingredients, hosting, Mediterranean flavors, tomatoes, spices, kitchen tools, and serving pieces.",
+      "interests": [
+        "cooking",
+        "hosting",
+        "kitchen",
+        "mediterranean",
+        "tomato",
+        "spices",
+        "gourmet",
+        "olive-oil",
+        "family",
+        "fresh"
+      ],
+      "preferred_categories": [
+        "food-drink",
+        "home-kitchen"
+      ],
+      "excluded_categories": [
+        "gaming-tech-toys"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Olive Oil",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Tomato Bowl",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Chef Knife",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Spice Drawer",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Vincent van Gogh",
+      "username": "vincent_van_gogh",
+      "email": "vincent_van_gogh@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Art / Creativity / Painting",
+      "bio": "A creative artist persona who likes painting, sketchbooks, color, handmade supplies, visual inspiration, and expressive decor.",
+      "interests": [
+        "art",
+        "painting",
+        "creative",
+        "color",
+        "visual-art",
+        "handmade",
+        "sketching",
+        "design",
+        "canvas",
+        "stars"
+      ],
+      "preferred_categories": [
+        "art-design",
+        "books-stationery"
+      ],
+      "excluded_categories": [
+        "sports-outdoors"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Paint Kit",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Star Lamp",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Canvas Pack",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Artist Sketchbook",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "MrBeast",
+      "username": "mrbeast",
+      "email": "mrbeast@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Gaming / Tech Toys / Challenges",
+      "bio": "A creator-gamer persona who likes viral challenges, cameras, gaming gear, RGB setups, tech toys, collectibles, and gadgets.",
+      "interests": [
+        "gaming",
+        "challenge",
+        "creator",
+        "camera",
+        "rgb",
+        "tech-toys",
+        "youtube",
+        "streaming",
+        "collectible",
+        "fun"
+      ],
+      "preferred_categories": [
+        "gaming-tech-toys",
+        "electronics",
+        "collectibles-fan-culture"
+      ],
+      "excluded_categories": [
+        "books-stationery"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Galaxy Projector",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Gaming Controller",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Challenge Cards",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Lavalier Mic",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Kim Kardashian",
+      "username": "kim_kardashian",
+      "email": "kim_kardashian@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Fashion / Beauty / Lifestyle",
+      "bio": "A fashion-lifestyle persona who likes beauty products, fragrances, jewelry, camera-ready accessories, neutral aesthetics, and luxury-feeling gifts.",
+      "interests": [
+        "fashion",
+        "beauty",
+        "fragrance",
+        "jewelry",
+        "glam",
+        "lifestyle",
+        "skincare",
+        "neutral",
+        "camera",
+        "luxury"
+      ],
+      "preferred_categories": [
+        "fashion-streetwear",
+        "beauty-self-care"
+      ],
+      "excluded_categories": [
+        "sports-outdoors"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Fragrance Set",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Touch-Up Kit",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Vanity Organizer",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Gold Hoops",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Indiana Jones",
+      "username": "indiana_jones",
+      "email": "indiana_jones@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Travel / Adventure / Exploration",
+      "bio": "An adventure-explorer persona who likes maps, travel gear, practical outdoor tools, archaeology-inspired gifts, cameras, and rugged accessories.",
+      "interests": [
+        "travel",
+        "adventure",
+        "exploration",
+        "maps",
+        "camera",
+        "outdoor",
+        "archaeology",
+        "history",
+        "rugged",
+        "practical"
+      ],
+      "preferred_categories": [
+        "travel-experiences",
+        "sports-outdoors",
+        "electronics"
+      ],
+      "excluded_categories": [
+        "beauty-self-care"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Travel Journal",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Luggage Tracker",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Field Compass",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Camera Strap",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "John Lennon",
+      "username": "john_lennon",
+      "email": "john_lennon@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Music / Retro / Vinyl",
+      "bio": "A retro music-lover persona who likes vinyl records, guitar accessories, lyric writing, nostalgic collectibles, headphones, and home listening.",
+      "interests": [
+        "music",
+        "vinyl",
+        "guitar",
+        "retro",
+        "nostalgia",
+        "lyrics",
+        "peace",
+        "audio",
+        "collectible",
+        "songwriting"
+      ],
+      "preferred_categories": [
+        "music-audio",
+        "collectibles-fan-culture",
+        "books-stationery"
+      ],
+      "excluded_categories": [
+        "gaming-tech-toys"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Vinyl Stand",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Cassette Player",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Pick Case",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Lyric Cards",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    },
+    {
+      "name": "Sherlock Holmes",
+      "username": "sherlock_holmes",
+      "email": "sherlock_holmes@giftgraph-demo.com",
+      "password": "GiftGraphDemo2026!",
+      "persona_title": "Puzzles / Mystery / Strategy",
+      "bio": "A detective-strategy persona who likes mysteries, logic puzzles, board games, notebooks, clues, and thoughtful problem-solving gifts.",
+      "interests": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "detective",
+        "logic",
+        "books",
+        "board-games",
+        "clues",
+        "notebook",
+        "deduction"
+      ],
+      "preferred_categories": [
+        "puzzles-games",
+        "books-stationery",
+        "collectibles-fan-culture"
+      ],
+      "excluded_categories": [
+        "beauty-self-care"
+      ],
+      "wishlist": [
+        {
+          "product_name": "Puzzle Box",
+          "priority": 5,
+          "privacy": "public",
+          "note": "Top wishlist item for this persona."
+        },
+        {
+          "product_name": "Case Game",
+          "priority": 4,
+          "privacy": "public",
+          "note": "Strong match with the persona interests."
+        },
+        {
+          "product_name": "Clue Notebook",
+          "priority": 3,
+          "privacy": "public",
+          "note": "Useful secondary gift option."
+        },
+        {
+          "product_name": "Glass Bookmark",
+          "priority": 2,
+          "privacy": "private",
+          "note": "Private wishlist item for demo privacy."
+        }
+      ]
+    }
+  ]
+}

@@ -55,7 +55,7 @@ const ChatConversation = ({ sessionId }) => {
               <ChatMessage message={{ id: 'pending-user', role: 'user', content: stream.pendingUser }} />
             )}
             <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 1.5 }}>
-              <Paper elevation={0} sx={{ px: 1.5, py: 1, bgcolor: 'background.paper', borderRadius: 2 }}>
+              <Paper elevation={0} sx={{ px: 1.5, py: 1, bgcolor: 'chatSurface', borderRadius: 2 }}>
                 {stream.buffer
                   ? <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>{stream.buffer}</Typography>
                   : <CircularProgress size={18} />}

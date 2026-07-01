@@ -19,7 +19,7 @@ const RecommendationCard = ({ item, action, actionSx }) => {
           sx={{ height: 140, objectFit: 'cover' }}
         />
       ) : (
-        <Box sx={{ height: 140, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ height: 140, bgcolor: 'action.hover', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography variant="body2" color="text.secondary">No image</Typography>
         </Box>
       )}
@@ -27,7 +27,7 @@ const RecommendationCard = ({ item, action, actionSx }) => {
         <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ mb: 0.5 }}>
           {product.name}
         </Typography>
-        <Typography variant="body2" color="primary" fontWeight={600} sx={{ mb: 1.5 }}>
+        <Typography variant="body2" color="secondary" fontWeight={600} sx={{ mb: 1.5 }}>
           {formatCurrency(product.price)}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

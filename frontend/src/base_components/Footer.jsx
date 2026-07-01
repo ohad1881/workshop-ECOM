@@ -75,6 +75,9 @@ const Footer = () => {
           <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>
             &copy; {year} GiftGraph. All rights reserved.
           </Typography>
+          <Typography variant="caption" sx={{ color: 'text.secondary', textAlign: 'center', display: 'block', mt: 0.5 }}>
+            Built by Maya Aharon · Yuval Rosiner · Ohad Shushan · Itay Ebenspanger
+          </Typography>
         </Box>
       </Container>
     </Box>

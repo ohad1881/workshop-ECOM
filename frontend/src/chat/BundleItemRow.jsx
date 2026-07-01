@@ -18,7 +18,7 @@ const BundleItemRow = ({ item }) => {
           sx={{ width: 36, height: 36, borderRadius: 1, objectFit: 'cover', flexShrink: 0 }}
         />
       ) : (
-        <Box sx={{ width: 36, height: 36, borderRadius: 1, bgcolor: 'grey.100', flexShrink: 0 }} />
+        <Box sx={{ width: 36, height: 36, borderRadius: 1, bgcolor: 'action.hover', flexShrink: 0 }} />
       )}
       <Box sx={{ minWidth: 0, flexGrow: 1 }}>
         <Typography variant="body2" fontWeight={600} noWrap>{product.name}</Typography>

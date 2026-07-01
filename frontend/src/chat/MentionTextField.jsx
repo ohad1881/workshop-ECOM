@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import { gravatarUrl } from '../utils/gravatar';
 import { formatCurrency } from '../utils/formatters';
+import { avatarColorFor } from '../utils/avatarColor';
 
 // A text input wired to useMentions: renders an anchored dropdown of @user / #product
 // matches. `mentions` is the object returned by useMentions(); extra props pass to TextField.
@@ -33,7 +34,10 @@ const MentionTextField = ({ mentions, onKeyDown, ...textFieldProps }) => {
                 <ListItemButton key={item.id} onMouseDown={(e) => { e.preventDefault(); insert(item); }}>
                   {trigger === '@' && (
                     <ListItemAvatar sx={{ minWidth: 40 }}>
-                      <Avatar src={gravatarUrl(item.gravatar_hash, { size: 48 })} sx={{ width: 28, height: 28 }}>
+                      <Avatar
+                        src={gravatarUrl(item.gravatar_hash, { size: 48 })}
+                        sx={{ width: 28, height: 28, bgcolor: avatarColorFor(item.username) }}
+                      >
                         {item.username?.[0]?.toUpperCase()}
                       </Avatar>
                     </ListItemAvatar>

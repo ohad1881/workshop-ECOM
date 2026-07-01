@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Box, Typography, Stepper, Step, StepLabel,
+  Box, Paper, Typography, Stepper, Step, StepLabel,
   Tabs, Tab, Alert, Button, Grid,
 } from '@mui/material';
+import PageTitle from '../general_components/PageTitle';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useQuery } from '@tanstack/react-query';
 import { getGiftSuggestions } from '../api/recommendations';
@@ -308,17 +309,26 @@ const GiftBuilderPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3" sx={{ mb: 3 }}>Build a Gift</Typography>
+      <PageTitle>Build a Gift</PageTitle>
 
-      <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-        {STEPS.map((label, i) => (
-          <Step key={label} completed={i < activeStep}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, sm: 4 },
+          borderRadius: 3,
+          boxShadow: '0 0 40px rgba(139, 92, 246, 0.12)',
+        }}
+      >
+        <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+          {STEPS.map((label, i) => (
+            <Step key={label} completed={i < activeStep}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-      {renderStepContent()}
+        {renderStepContent()}
+      </Paper>
     </Box>
   );
 };

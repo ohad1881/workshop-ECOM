@@ -23,7 +23,7 @@ const TemporaryProfileCard = ({ profile }) => {
   if (!hasContent) return null;
 
   return (
-    <Paper variant="outlined" sx={{ p: 1.5, mt: 1, bgcolor: 'background.paper' }}>
+    <Paper variant="outlined" sx={{ p: 1.5, mt: 1, bgcolor: 'chatSurface' }}>
       <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5 }}>
         Temporary profile (my best guess)
       </Typography>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Avatar, Box, Button, IconButton, Stack, TextField, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { formatDate } from '../utils/formatters';
+import { avatarColorFor } from '../utils/avatarColor';
 
 const BIO_MAX = 500;
 
@@ -30,7 +31,7 @@ const ProfileSidebar = ({ profile, isOwner, profileEdit, onNotify }) => {
     <Stack spacing={2} alignItems="center" sx={{ textAlign: 'center', alignItems: 'center' }}>
       <Avatar
         src={profile.avatarUrl}
-        sx={{ width: 160, height: 160, fontSize: '3rem', bgcolor: 'primary.main', mx: 'auto' }}
+        sx={{ width: 160, height: 160, fontSize: '3rem', bgcolor: avatarColorFor(profile.username), mx: 'auto' }}
       >
         {profile.username?.charAt(0)?.toUpperCase()}
       </Avatar>

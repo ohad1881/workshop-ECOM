@@ -41,7 +41,7 @@ const ChatMessage = ({ message }) => {
           elevation={0}
           sx={{
             px: 1.5, py: 1,
-            bgcolor: isUser ? 'primary.main' : 'background.paper',
+            bgcolor: isUser ? 'primary.main' : 'chatSurface',
             color: isUser ? 'primary.contrastText' : 'text.primary',
             borderRadius: 2,
           }}
@@ -56,7 +56,7 @@ const ChatMessage = ({ message }) => {
         {bundles.map((bundle, i) => <BundleCard key={i} bundle={bundle} />)}
 
         {recommendations.length > 0 && (
-          <Paper variant="outlined" sx={{ mt: 1, px: 1.5, bgcolor: 'background.default' }}>
+          <Paper variant="outlined" sx={{ mt: 1, px: 1.5, bgcolor: 'chatSurface' }}>
             <Stack divider={<Divider flexItem />}>
               {recommendations.map((item) => (
                 <BundleItemRow key={item.product.id} item={item} />

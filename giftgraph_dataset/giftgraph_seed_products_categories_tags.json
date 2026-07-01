@@ -1,0 +1,3166 @@
+{
+  "categories": [
+    {
+      "name": "Electronics",
+      "slug": "electronics",
+      "icon": "💻"
+    },
+    {
+      "name": "Gaming & Tech Toys",
+      "slug": "gaming-tech-toys",
+      "icon": "🎮"
+    },
+    {
+      "name": "Sports & Outdoors",
+      "slug": "sports-outdoors",
+      "icon": "🏃"
+    },
+    {
+      "name": "Beauty & Self Care",
+      "slug": "beauty-self-care",
+      "icon": "✨"
+    },
+    {
+      "name": "Books & Stationery",
+      "slug": "books-stationery",
+      "icon": "📚"
+    },
+    {
+      "name": "Home & Kitchen",
+      "slug": "home-kitchen",
+      "icon": "🏠"
+    },
+    {
+      "name": "Food & Drink",
+      "slug": "food-drink",
+      "icon": "🍽️"
+    },
+    {
+      "name": "Art & Design",
+      "slug": "art-design",
+      "icon": "🎨"
+    },
+    {
+      "name": "Fashion & Streetwear",
+      "slug": "fashion-streetwear",
+      "icon": "👟"
+    },
+    {
+      "name": "Travel & Experiences",
+      "slug": "travel-experiences",
+      "icon": "🧳"
+    },
+    {
+      "name": "Music & Audio",
+      "slug": "music-audio",
+      "icon": "🎧"
+    },
+    {
+      "name": "Collectibles & Fan Culture",
+      "slug": "collectibles-fan-culture",
+      "icon": "⭐"
+    },
+    {
+      "name": "Puzzles & Games",
+      "slug": "puzzles-games",
+      "icon": "🧩"
+    }
+  ],
+  "tags": [
+    "adventure",
+    "ai",
+    "archaeology",
+    "art",
+    "audio",
+    "beauty",
+    "board-games",
+    "books",
+    "camera",
+    "canvas",
+    "cats",
+    "challenge",
+    "clues",
+    "coding",
+    "collectible",
+    "color",
+    "cooking",
+    "cozy",
+    "creative",
+    "creator",
+    "deduction",
+    "design",
+    "desk-setup",
+    "detective",
+    "discipline",
+    "exploration",
+    "family",
+    "fashion",
+    "fitness",
+    "football",
+    "fragrance",
+    "fresh",
+    "friendship",
+    "fun",
+    "gadgets",
+    "gaming",
+    "glam",
+    "gourmet",
+    "guitar",
+    "handmade",
+    "history",
+    "hosting",
+    "hydration",
+    "jewelry",
+    "journaling",
+    "kitchen",
+    "lifestyle",
+    "logic",
+    "luxury",
+    "lyrics",
+    "maps",
+    "mediterranean",
+    "minimalist",
+    "music",
+    "mystery",
+    "neutral",
+    "nostalgia",
+    "notebook",
+    "nutrition",
+    "olive-oil",
+    "outdoor",
+    "painting",
+    "peace",
+    "performance",
+    "practical",
+    "productivity",
+    "puzzles",
+    "recovery",
+    "retro",
+    "rgb",
+    "romantic",
+    "rugged",
+    "running",
+    "sketching",
+    "skincare",
+    "smart-home",
+    "songwriting",
+    "spices",
+    "stars",
+    "startup",
+    "storytelling",
+    "strategy",
+    "streaming",
+    "tea",
+    "tech",
+    "tech-toys",
+    "tomato",
+    "training",
+    "travel",
+    "vinyl",
+    "visual-art",
+    "wellness",
+    "youtube"
+  ],
+  "products": [
+    {
+      "name": "Smart Desk Hub",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 9.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "AI Notebook",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 14.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Charging Dock",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 17.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Webcam Light",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 22.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Laptop Stand",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 25.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Smart Plugs",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 30.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Desk Mat",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 33.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cable Clips",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 38.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Privacy Covers",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 41.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Pitch Cards",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 46.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mini Keyboard",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 49.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "USB Hub",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 10.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Focus Timer",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 13.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Laptop Sleeve",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 18.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Screen Cleaner",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 21.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Phone Stand",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 26.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Idea Cards",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 29.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Desk Lamp",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 34.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Wireless Mouse",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 37.99,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Smart Tracker",
+      "description": "A simple, demo-friendly gift for tech, gadgets interests.",
+      "price": 42.49,
+      "category_slug": "electronics",
+      "tags": [
+        "tech",
+        "gadgets",
+        "productivity",
+        "desk-setup"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Hydration Bottle",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 45.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Massage Gun",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 50.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Training Bands",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 9.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Protein Shaker",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 14.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Agility Cones",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 17.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cooling Towel",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 22.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Recovery Spray",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 25.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Meal Prep Box",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 30.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Running Belt",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 33.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Electrolyte Mix",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 38.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Yoga Mat",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 41.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gym Towel",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 46.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Foam Roller",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 49.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Jump Rope",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 10.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Grip Socks",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 13.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Workout Gloves",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 18.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Fitness Journal",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 21.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Recovery Balm",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 26.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Sports Duffel",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 29.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Healthy Snacks",
+      "description": "A simple, demo-friendly gift for fitness, training interests.",
+      "price": 34.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "fitness",
+        "training",
+        "performance",
+        "wellness"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Songwriting Journal",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 37.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cat Mug",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 42.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Bracelet Kit",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 45.99,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Memory Box",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 50.49,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Reading Blanket",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 9.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Book Tabs",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 14.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Writer Tea",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 17.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cat Stickers",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 22.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Prompt Cards",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 25.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Desk Speaker",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 30.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Poetry Book",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 33.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Tea Candle",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 38.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Vinyl Frame",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 41.99,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Letter Set",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 46.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cozy Socks",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 49.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Lyric Pens",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 10.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cat Bookmark",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 13.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Tea Infuser",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 18.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Story Dice",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 21.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mini Scrapbook",
+      "description": "A simple, demo-friendly gift for songwriting, journaling interests.",
+      "price": 26.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "songwriting",
+        "journaling",
+        "cozy",
+        "storytelling"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Olive Oil",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 29.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Tomato Bowl",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 34.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Chef Knife",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 37.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Spice Drawer",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 42.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1506368249639-73a05d6f6488?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Herb Kit",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 45.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Serving Board",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 50.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Tomato Seeds",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 9.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Serving Bowl",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 14.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gourmet Salt",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 17.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Wooden Spoons",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 22.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Pasta Kit",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 25.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Pizza Stone",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 30.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Market Basket",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 33.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Bread Knife",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 38.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Wine Glasses",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 41.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Apron Set",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 46.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Garlic Press",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 49.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Coffee Set",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 10.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Recipe Cards",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 13.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Snack Board",
+      "description": "A simple, demo-friendly gift for cooking, hosting interests.",
+      "price": 18.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "cooking",
+        "hosting",
+        "mediterranean",
+        "gourmet"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Paint Kit",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 21.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Star Lamp",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 26.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Canvas Pack",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 29.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Artist Sketchbook",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 34.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Color Cards",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 37.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Brush Roll",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 42.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Sunflower Prints",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 45.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Portable Easel",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 50.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Paint Markers",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 9.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Ceramic Palette",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 14.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Watercolor Set",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 17.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Drawing Pencils",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 22.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Art Apron",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 25.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Studio Poster",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 30.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Craft Scissors",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 33.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Clay Kit",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 38.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Art Book",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 41.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Brush Cleaner",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 46.49,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gallery Frame",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 49.99,
+      "category_slug": "art-design",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Color Notebook",
+      "description": "A simple, demo-friendly gift for art, painting interests.",
+      "price": 10.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "art",
+        "painting",
+        "creative",
+        "color"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Galaxy Projector",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 13.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gaming Controller",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 18.49,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Challenge Cards",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 21.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Lavalier Mic",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 26.49,
+      "category_slug": "electronics",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "LED Gadget",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 29.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Stream Light",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 34.49,
+      "category_slug": "electronics",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Prize Wheel",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 37.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mini Drone",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 42.49,
+      "category_slug": "electronics",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gaming Mat",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 45.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mystery Box",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 50.49,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "RGB Keyboard",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 9.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gaming Headset",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 14.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Snack Pack",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 17.99,
+      "category_slug": "food-drink",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Creator Tripod",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 22.49,
+      "category_slug": "electronics",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Ring Light",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 25.99,
+      "category_slug": "electronics",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Arcade Console",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 30.49,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Game Cards",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 33.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Controller Stand",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 38.49,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "RGB Mouse",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 41.99,
+      "category_slug": "gaming-tech-toys",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Creator Hoodie",
+      "description": "A simple, demo-friendly gift for gaming, challenge interests.",
+      "price": 46.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "gaming",
+        "challenge",
+        "creator",
+        "rgb"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Fragrance Set",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 49.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Touch-Up Kit",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 10.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Vanity Organizer",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 13.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Gold Hoops",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 18.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Minimal Sunglasses",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 21.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Skincare Pouch",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 26.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Silk Wrap",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 29.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Makeup Brushes",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 34.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Photo Frames",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 37.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Fashion Book",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 42.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Lip Trio",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 45.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Jewelry Box",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 50.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Perfume Tray",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 9.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Hair Clips",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 14.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Face Roller",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 17.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Makeup Mirror",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 22.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Travel Perfume",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 25.99,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Silk Scrunchies",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 30.49,
+      "category_slug": "beauty-self-care",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Neutral Tote",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 33.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Style Cards",
+      "description": "A simple, demo-friendly gift for fashion, beauty interests.",
+      "price": 38.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "fashion",
+        "beauty",
+        "glam",
+        "lifestyle"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Travel Journal",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 41.99,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Luggage Tracker",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 46.49,
+      "category_slug": "electronics",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Field Compass",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 49.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Camera Strap",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 10.49,
+      "category_slug": "electronics",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Packing Cubes",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 13.99,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Dig Kit",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 18.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Travel Flashlight",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 21.99,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Passport Cover",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 26.49,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Museum Pass",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 29.99,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "First Aid Kit",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 34.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Hiking Hat",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 37.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Travel Backpack",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 42.49,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Map Poster",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 45.99,
+      "category_slug": "art-design",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Binoculars Mini",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 50.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Travel Wallet",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 9.99,
+      "category_slug": "travel-experiences",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Camping Lantern",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 14.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "History Book",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 17.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Waterproof Pouch",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 22.49,
+      "category_slug": "sports-outdoors",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Adventure Socks",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 25.99,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Trail Snacks",
+      "description": "A simple, demo-friendly gift for travel, adventure interests.",
+      "price": 30.49,
+      "category_slug": "food-drink",
+      "tags": [
+        "travel",
+        "adventure",
+        "exploration",
+        "practical"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Vinyl Stand",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 33.99,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cassette Player",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 38.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Pick Case",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 41.99,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Lyric Cards",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 46.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Vinyl Cleaner",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 49.99,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Peace Pins",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 10.49,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Guitar Hook",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 13.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Round Sunglasses",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 18.49,
+      "category_slug": "fashion-streetwear",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Pocket Recorder",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 21.99,
+      "category_slug": "electronics",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Rock Puzzle",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 26.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Record Frame",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 29.99,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Guitar Strap",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 34.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Music Poster",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 37.99,
+      "category_slug": "art-design",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Headphone Stand",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 42.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Vinyl Crate",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 45.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Song Notebook",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 50.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Turntable Mat",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 9.99,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Beatles Book",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 14.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Guitar Mug",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 17.99,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Audio Cable",
+      "description": "A simple, demo-friendly gift for music, vinyl interests.",
+      "price": 22.49,
+      "category_slug": "music-audio",
+      "tags": [
+        "music",
+        "vinyl",
+        "retro",
+        "nostalgia"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Puzzle Box",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 25.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Case Game",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 30.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Clue Notebook",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 33.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Glass Bookmark",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 38.49,
+      "category_slug": "books-stationery",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Logic Calendar",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 41.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Escape Cards",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 46.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Desk Bell",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 49.99,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Deduction Board",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 10.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mystery Books",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 13.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Game Mat",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 18.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Chess Set",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 21.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Riddle Cards",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 26.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Cipher Wheel",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 29.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Detective Mug",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 34.49,
+      "category_slug": "home-kitchen",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Evidence Folder",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 37.99,
+      "category_slug": "books-stationery",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Strategy Cards",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 42.49,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Puzzle Timer",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 45.99,
+      "category_slug": "electronics",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Mystery Poster",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 50.49,
+      "category_slug": "art-design",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Brain Teasers",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 9.99,
+      "category_slug": "puzzles-games",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    },
+    {
+      "name": "Case Files",
+      "description": "A simple, demo-friendly gift for mystery, puzzles interests.",
+      "price": 14.49,
+      "category_slug": "collectibles-fan-culture",
+      "tags": [
+        "mystery",
+        "puzzles",
+        "strategy",
+        "logic"
+      ],
+      "image_url": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?auto=format&fit=crop&w=800&q=80",
+      "purchase_url": "",
+      "is_active": true
+    }
+  ]
+}
