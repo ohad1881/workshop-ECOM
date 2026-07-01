@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { TextField, Box, Typography, Grid, Alert } from '@mui/material';
+import { TextField, Box, Typography, Grid, Alert, Button } from '@mui/material';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useQuery } from '@tanstack/react-query';
 import { searchUsers } from '../api/users';
 import { useDebounce } from '../general_hooks/useDebounce';
 import UserCard from '../general_components/UserCard';
 import Spinner from '../general_components/Spinner';
+import { useChatWidget } from '../context/chatWidget/useChatWidget';
 
 const UserSearchPanel = ({ onSelect }) => {
+  const { startSession } = useChatWidget();
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 300);
 
@@ -15,6 +18,12 @@ const UserSearchPanel = ({ onSelect }) => {
     queryFn: () => searchUsers(debouncedQuery),
     enabled: debouncedQuery.trim().length >= 2,
   });
+
+  const askGiftBot = () => {
+    startSession({
+      stranger_description: `I'm looking for a gift for someone named "${debouncedQuery}" but couldn't find them on GiftGraph.`,
+    });
+  };
 
   return (
     <Box>
@@ -31,7 +40,23 @@ const UserSearchPanel = ({ onSelect }) => {
       />
       {isLoading && <Spinner />}
       {!isLoading && debouncedQuery.trim().length >= 2 && users.length === 0 && (
-        <Alert severity="info">No users found for &ldquo;{debouncedQuery}&rdquo;</Alert>
+        <Alert
+          severity="info"
+          action={
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              startIcon={<SmartToyIcon fontSize="small" />}
+              onClick={askGiftBot}
+              sx={{ whiteSpace: 'nowrap', fontWeight: 700 }}
+            >
+              Gift Bot can help
+            </Button>
+          }
+        >
+          No users found for &ldquo;{debouncedQuery}&rdquo;
+        </Alert>
       )}
       {!isLoading && debouncedQuery.trim().length < 2 && (
         <Typography variant="body2" color="text.secondary">

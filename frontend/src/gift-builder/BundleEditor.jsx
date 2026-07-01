@@ -22,12 +22,14 @@ import {
   TextField,
 } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RecommendationCard from './RecommendationCard';
 import { formatCurrency } from '../utils/formatters';
 import Spinner from '../general_components/Spinner';
+import PageTitle from '../general_components/PageTitle';
 import { useTheme } from '@mui/material/styles';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getGiftSuggestions, finalizeGiftBundle } from '../api/recommendations';
@@ -141,7 +143,7 @@ const BundleEditor = ({
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h5">Customize Your Gift Bundle</Typography>
+        <PageTitle variant="h5" sx={{ mb: 0 }}>Customize Your Gift Bundle</PageTitle>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Button
             variant="outlined"
@@ -234,11 +236,13 @@ const BundleEditor = ({
       <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap', mb: 2 }}>
         <Button
           variant="contained"
+          color="secondary"
+          startIcon={<SmartToyIcon />}
           onClick={onProceed}
           disabled={safeBundleItems.length === 0}
-          sx={{ borderRadius: '12px', textTransform: 'none' }}
+          sx={{ borderRadius: '12px', textTransform: 'none', fontWeight: 700 }}
         >
-          Edit with AI chat
+          Edit with Gift Bot
         </Button>
         <Button
           variant="outlined"

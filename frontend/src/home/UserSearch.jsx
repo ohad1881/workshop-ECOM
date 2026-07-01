@@ -1,15 +1,21 @@
 import { useState } from 'react';
-import { TextField, Paper, Typography, Grid, Alert } from '@mui/material';
+import { TextField, Paper, Typography, Grid, Alert, Button } from '@mui/material';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { searchUsers } from '../api/users';
 import { useDebounce } from '../general_hooks/useDebounce';
 import UserCard from '../general_components/UserCard';
 import Spinner from '../general_components/Spinner';
+import { useChatWidget } from '../context/chatWidget/useChatWidget';
 
-// Home-only user search: find a user and jump to their profile.
+// Home-only user search: find a user and jump to their profile. When nobody
+// matches, offers a shortcut into the AI assistant's "stranger mode" — it
+// interviews the giver (likes, budget, ...) and builds a bundle from that
+// instead of a registered profile.
 const UserSearch = () => {
   const navigate = useNavigate();
+  const { startSession } = useChatWidget();
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 300);
 
@@ -18,6 +24,12 @@ const UserSearch = () => {
     queryFn: () => searchUsers(debouncedQuery),
     enabled: debouncedQuery.trim().length >= 2,
   });
+
+  const askGiftBot = () => {
+    startSession({
+      stranger_description: `I'm looking for a gift for someone named "${debouncedQuery}" but couldn't find them on GiftGraph.`,
+    });
+  };
 
   return (
     <Paper
@@ -44,7 +56,23 @@ const UserSearch = () => {
       />
       {isLoading && <Spinner />}
       {!isLoading && debouncedQuery.trim().length >= 2 && users.length === 0 && (
-        <Alert severity="info">No users found for &ldquo;{debouncedQuery}&rdquo;</Alert>
+        <Alert
+          severity="info"
+          action={
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              startIcon={<SmartToyIcon fontSize="small" />}
+              onClick={askGiftBot}
+              sx={{ whiteSpace: 'nowrap', fontWeight: 700 }}
+            >
+              Gift Bot can help
+            </Button>
+          }
+        >
+          No users found for &ldquo;{debouncedQuery}&rdquo;
+        </Alert>
       )}
       <Grid container spacing={2} sx={{ mt: 1 }}>
         {users.map((user) => (
